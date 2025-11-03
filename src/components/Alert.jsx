@@ -1,3 +1,5 @@
+import React from "react";
+
 export default function Alert({ type = "primary", children }) {
   const colors = {
     primary: "bg-accentBackground text-white",

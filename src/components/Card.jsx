@@ -1,3 +1,5 @@
+import React from "react";
+
 export default function Card({ title = "Featured item", children }) {
   return (
     <article className="max-w-xl mx-auto bg-white rounded-lg shadow-md p-6">
