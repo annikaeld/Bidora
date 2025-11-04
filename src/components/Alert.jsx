@@ -1,11 +1,4 @@
-import React from "react";
+// Archived React component — project moved to vanilla JS.
+// Kept as an empty module to avoid accidental import errors.
 
-export default function Alert({ type = "primary", children }) {
-  const colors = {
-    primary: "bg-accentBackground text-white",
-    sucess: "bg-green-600 text-white",
-    error: "bg-red-600 text-white",
-    warning: "bg-yellow-400 text-blackText",
-  };
-  return <div className={`alert ${colors[type]}`}>{children}</div>;
-}
+export default null;

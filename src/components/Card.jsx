@@ -1,12 +1,4 @@
-import React from "react";
+// Archived React component — project moved to vanilla JS.
+// Kept as an empty module to avoid accidental import errors.
 
-export default function Card({ title = "Featured item", children }) {
-  return (
-    <article className="max-w-xl mx-auto bg-white rounded-lg shadow-md p-6">
-      <h3 className="text-xl font-semibold mb-2">{title}</h3>
-      <div className="text-gray-700">
-        {children ?? <p>This is a sample card. Replace with your content.</p>}
-      </div>
-    </article>
-  );
-}
+export default null;

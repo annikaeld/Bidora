@@ -1,9 +1,4 @@
-import React from "react";
+// Archived React component — project moved to vanilla JS.
+// Kept as an empty module to avoid accidental import errors.
 
-export default function Footer() {
-  return (
-    <footer className="footer">
-      <p>&copy; 2025 Bidora. All rights reserved.</p>
-    </footer>
-  );
-}
+export default null;

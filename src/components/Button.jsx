@@ -1,9 +1,4 @@
-import React from "react";
+// Archived React component — project moved to vanilla JS.
+// Kept as an empty module to avoid accidental import errors.
 
-export default function Button({ children, className, ...props }) {
-  return (
-    <button className={`btn ${className}`} {...props}>
-      {children}
-    </button>
-  );
-}
+export default null;
