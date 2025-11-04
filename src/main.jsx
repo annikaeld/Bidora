@@ -1,16 +1,5 @@
-import React from "react";
-import { createRoot } from "react-dom/client";
-import "./styles/globals.css";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
+// This file was an old React entry and has been archived.
+// Project now uses a vanilla JS entry (see /src/vanilla/).
+// If you need to restore React, replace this file with a proper entry.
 
-function App() {
-  return (
-    <>
-      <Navbar />
-      <Footer />
-    </>
-  );
-}
-
-createRoot(document.getElementById("app")).render(<App />);
+export default null;

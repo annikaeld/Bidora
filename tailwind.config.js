@@ -13,6 +13,8 @@ module.exports = {
         blackText: "#000000",
         accentBackground: "#8B5CF6",
         greyBackground: "#D9D9D9",
+        cta: "#B81BD0",
+        ctaHover: "#7E168E",
       },
       backgroundImage: {
         "gradient-background":
