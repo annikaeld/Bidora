@@ -1,6 +1,6 @@
 # Bidora
 
-![Project Logo]()
+![Project Logo](/public/img/logo.svg)
 
 Online Auctions
 
