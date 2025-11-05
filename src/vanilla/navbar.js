@@ -29,11 +29,21 @@ function createNavbar() {
     class: "navbar relative flex items-center justify-between p-4 bg-white",
   });
 
+  const logoImg = el("img", {
+    // use Vite's base URL so builds deployed under a subpath resolve correctly
+    src: import.meta.env.BASE_URL + "img/logo.svg",
+    alt: "Bidora",
+    class: "h-8 w-auto",
+  });
+
   const logo = el(
     "a",
-    { href: "#home", class: "logo font-semibold text-lg" },
-    "Bidora"
+    { href: "#home", class: "logo inline-flex items-center gap-2" },
+    logoImg,
+    // visually-hidden text for screen readers (keeps intent if image fails)
+    el("span", { class: "sr-only" }, "Bidora"),
   );
+
   nav.appendChild(logo);
 
   // Hamburger
@@ -56,7 +66,7 @@ function createNavbar() {
     { class: "links flex items-center gap-4" },
     el("a", { href: "#auctions", class: "hover:underline" }, "Auctions"),
     el("a", { href: "#howitworks", class: "hover:underline" }, "How it Works"),
-    el("a", { href: "#about", class: "hover:underline" }, "About")
+    el("a", { href: "#about", class: "hover:underline" }, "About"),
   );
   const desktopSignIn = el(
     "button",
@@ -66,7 +76,7 @@ function createNavbar() {
         "inline-block bg-indigo-600 text-white text-sm px-4 py-2 rounded-md hover:bg-indigo-700",
       "aria-label": "Sign in",
     },
-    "Sign in"
+    "Sign in",
   );
 
   desktop.appendChild(links);
@@ -83,22 +93,22 @@ function createNavbar() {
     el(
       "a",
       { href: "#auctions", class: "block py-2 px-2 hover:underline" },
-      "Auctions"
-    )
+      "Auctions",
+    ),
   );
   mobileMenu.appendChild(
     el(
       "a",
       { href: "#howitworks", class: "block py-2 px-2 hover:underline" },
-      "How it Works"
-    )
+      "How it Works",
+    ),
   );
   mobileMenu.appendChild(
     el(
       "a",
       { href: "#about", class: "block py-2 px-2 hover:underline" },
-      "About"
-    )
+      "About",
+    ),
   );
   const mobileSignIn = el(
     "button",
@@ -106,7 +116,7 @@ function createNavbar() {
       class:
         "mt-2 inline-block bg-indigo-600 text-white text-sm px-4 py-2 rounded-md text-center",
     },
-    "Sign in"
+    "Sign in",
   );
   mobileMenu.appendChild(mobileSignIn);
   nav.appendChild(mobileMenu);
@@ -114,7 +124,6 @@ function createNavbar() {
   // Shared modal instance
   const modal = createSignInModal({
     onSubmit(data) {
-      // eslint-disable-next-line no-console
       console.log("Sign in submitted", data);
     },
   });

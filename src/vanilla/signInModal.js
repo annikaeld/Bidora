@@ -31,29 +31,30 @@ export function createSignInModal(options = {}) {
 
   function build() {
     if (modalRoot) return modalRoot;
-    modalRoot = el("div", { class: "vanilla-signin-modal-root" });
 
     const overlay = el("div", {
       class: "fixed inset-0 bg-black/50",
       "data-role": "overlay",
     });
 
+    // inner dialog (the white box that holds content)
     dialog = el("div", {
       role: "dialog",
       "aria-modal": "true",
       class: "relative bg-white rounded-lg max-w-md w-full mx-4 p-6 shadow-lg",
     });
+
     const closeBtn = el(
       "button",
       {
         "aria-label": "Close sign in dialog",
         class: "absolute top-3 right-3 text-gray-500 hover:text-gray-800",
       },
-      "✕"
+      "✕",
     );
     dialog.appendChild(closeBtn);
     dialog.appendChild(
-      el("h2", { class: "text-xl font-semibold mb-4" }, "Sign in")
+      el("h2", { class: "text-xl font-semibold mb-4" }, "Sign in"),
     );
 
     const form = el("form", {});
@@ -83,7 +84,7 @@ export function createSignInModal(options = {}) {
     const cancel = el(
       "button",
       { type: "button", class: "px-4 py-2 rounded text-sm" },
-      "Cancel"
+      "Cancel",
     );
     const submit = el(
       "button",
@@ -92,7 +93,7 @@ export function createSignInModal(options = {}) {
         class:
           "px-4 py-2 rounded bg-indigo-600 text-white text-sm hover:bg-indigo-700",
       },
-      "Sign in"
+      "Sign in",
     );
     controls.appendChild(cancel);
     controls.appendChild(submit);
@@ -118,15 +119,15 @@ export function createSignInModal(options = {}) {
       close();
     });
 
-    return wrapper;
+    modalRoot = wrapper;
+    return modalRoot;
   }
 
   function focusableElements(container) {
-    if (!container) return [];
     return Array.from(
       container.querySelectorAll(
-        'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
-      )
+        'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])',
+      ),
     );
   }
 
@@ -157,8 +158,6 @@ export function createSignInModal(options = {}) {
   function open(opener = null) {
     if (!modalRoot) build();
     if (!modalRoot.parentNode) document.body.appendChild(modalRoot);
-    modalRoot.innerHTML = "";
-    modalRoot.appendChild(build());
     modalRoot.style.display = "";
     lastOpener = opener;
     // focus management
@@ -169,9 +168,8 @@ export function createSignInModal(options = {}) {
   }
 
   function close() {
-    if (modalRoot) {
-      modalRoot.innerHTML = "";
-      modalRoot.style.display = "none";
+    if (modalRoot && modalRoot.parentNode) {
+      modalRoot.parentNode.removeChild(modalRoot);
     }
     if (keyHandler) {
       document.removeEventListener("keydown", keyHandler);
