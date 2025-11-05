@@ -4,8 +4,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['"Open Sans"', "sans-serif"],
-        heading: ['"Outfit"', "system-ui", "sans-serif"],
+        sans: ["var(--sans-font-family, 'Open Sans')", "sans-serif"],
+        heading: ["var(--headings-font-family, 'Outfit')", "sans-serif"],
       },
       colors: {
         text: "var(--color-text, #1B3069)",
@@ -18,8 +18,7 @@ module.exports = {
         "cta-hover": "var(--color-cta-hover, #7E168E)",
       },
       backgroundImage: {
-        "gradient-background":
-          "linear-gradient(to bottom, #F7F7FD 0%, #F5F3FF 100%)",
+        "gradient-background": "var(--gradient-background, #F5F3FF)",
         "gradient-card": "linear-gradient(to bottom, #B81BD0 0%, #2563EB 100%)",
       },
     },

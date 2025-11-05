@@ -7,19 +7,54 @@
 
 :root {
     --gradient-card: linear-gradient(to bottom, #B81BD0, #2563EB);
+    --gradient-background: linear-gradient(to bottom, #F7F7FD 0%, #F5F3FF 100%);
 
     /* Color design tokens (canonical source-of-truth) */
     --color-headlines: #B81BD0;
     --color-text: #1B3069;
     --color-black-text: #000000;
-    --color-background-accent: #8B5CF6;
+    --color-background-accent: #DDD6FE;
     --color-card-background: #F7F7FD;
     --color-grey-background: #D9D9D9;
     --color-cta: #B81BD0;
     --color-cta-hover: #7E168E;
+    --menu-item-font-size: 15px;
+    --menu-sign-in-font-size: 18px;
+    --menu-sign-in-font-size-mobile: 15px;
+    --menu-item-font-weight: 400;
+    --menu-sign-in-font-weight: 500;
+    --headings-font-family: 'Outfit', sans-serif;
+    --sans-font-family: 'Open Sans', sans-serif;
 }
 
 .gradient-stroke {
     /* expose the gradient via --gradient for use with border-image */
     --gradient: var(--gradient-card);
+}
+
+/* Helper class that consumes the menu item tokens */
+.menu-item {
+    font-family: var(--headings-font-family);
+    font-weight: var(--menu-item-font-weight);
+    font-size: var(--menu-item-font-size);
+    color: var(--color-text);
+}
+
+.menu-sign-in {
+    font-family: var(--headings-font-family);
+    font-weight: var(--menu-sign-in-font-weight);
+    font-size: var(--menu-sign-in-font-size);
+    color: var(--color-text);
+}
+
+.menu-sign-in-mobile {
+    font-family: var(--headings-font-family);
+    font-weight: var(--menu-sign-in-font-weight);
+    font-size: var(--menu-sign-in-font-size-mobile);
+    color: var(--color-text);
+}
+
+button:hover .menu-sign-in,
+button:hover .menu-sign-in-mobile {
+    color: white;
 }

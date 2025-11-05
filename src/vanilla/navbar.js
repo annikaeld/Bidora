@@ -2,10 +2,6 @@
 // Usage: add <div id="vanilla-navbar"></div> and include
 // <script type="module" src="/src/vanilla/navbar.js"></script>
 
-// Lightweight vanilla JS navbar that uses the shared signIn modal
-// Usage: add <div id="vanilla-navbar"></div> and include
-// <script type="module" src="/src/vanilla/navbar.js"></script>
-
 import { createSignInModal } from "./signInModal.js";
 
 function el(tag, attrs = {}, ...children) {
@@ -26,14 +22,19 @@ function el(tag, attrs = {}, ...children) {
 
 function createNavbar() {
   const nav = el("nav", {
-    class: "navbar relative flex items-center justify-between p-4 bg-white",
+    class:
+      "navbar relative flex items-center sm:justify-around xs:justify-between p-4 bg-[var(--color-card-background)]",
   });
 
   const logoImg = el("img", {
     // use Vite's base URL so builds deployed under a subpath resolve correctly
     src: import.meta.env.BASE_URL + "img/logo.svg",
     alt: "Bidora",
-    class: "h-8 w-auto",
+    // desktop intrinsic size (helps reserve layout); CSS will override on small screens
+    width: "240",
+    height: "75",
+    // mobile-first: ~2/3 size on mobile, full size on md and up
+    class: "w-[160px] h-[50px] md:w-[240px] md:h-[75px] object-contain",
   });
 
   const logo = el(
@@ -64,19 +65,27 @@ function createNavbar() {
   const links = el(
     "div",
     { class: "links flex items-center gap-4" },
-    el("a", { href: "#auctions", class: "hover:underline" }, "Auctions"),
-    el("a", { href: "#howitworks", class: "hover:underline" }, "How it Works"),
-    el("a", { href: "#about", class: "hover:underline" }, "About"),
+    el(
+      "a",
+      { href: "#auctions", class: "hover:underline menu-item" },
+      "Auctions",
+    ),
+    el(
+      "a",
+      { href: "#howitworks", class: "hover:underline menu-item" },
+      "How it Works",
+    ),
+    el("a", { href: "#about", class: "hover:underline menu-item" }, "About"),
   );
   const desktopSignIn = el(
     "button",
     {
       type: "button",
       class:
-        "inline-block bg-indigo-600 text-white text-sm px-4 py-2 rounded-md hover:bg-indigo-700",
+        "inline-block bg-transparent px-4 py-2 rounded-full border-2 border-[var(--color-text)] hover:bg-[var(--color-text)] hover:text-white transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-text)] focus-visible:ring-offset-2",
       "aria-label": "Sign in",
     },
-    "Sign in",
+    el("span", { class: "menu-sign-in" }, "Sign in"),
   );
 
   desktop.appendChild(links);
@@ -87,26 +96,29 @@ function createNavbar() {
   const mobileMenu = el("div", {
     id: "mobile-menu",
     class:
-      "md:hidden hidden absolute top-full left-0 right-0 bg-white shadow-md p-4",
+      "md:hidden hidden absolute top-full left-0 right-0 bg-[var(--color-background-accent)] shadow-md p-4 text-center",
   });
   mobileMenu.appendChild(
     el(
       "a",
-      { href: "#auctions", class: "block py-2 px-2 hover:underline" },
+      { href: "#auctions", class: "block py-2 px-2 hover:underline menu-item" },
       "Auctions",
     ),
   );
   mobileMenu.appendChild(
     el(
       "a",
-      { href: "#howitworks", class: "block py-2 px-2 hover:underline" },
+      {
+        href: "#howitworks",
+        class: "block py-2 px-2 hover:underline menu-item",
+      },
       "How it Works",
     ),
   );
   mobileMenu.appendChild(
     el(
       "a",
-      { href: "#about", class: "block py-2 px-2 hover:underline" },
+      { href: "#about", class: "block py-2 px-2 hover:underline menu-item" },
       "About",
     ),
   );
@@ -114,9 +126,9 @@ function createNavbar() {
     "button",
     {
       class:
-        "mt-2 inline-block bg-indigo-600 text-white text-sm px-4 py-2 rounded-md text-center",
+        "mt-2 inline-block bg-transparent text-[var(--color-text)] text-sm px-4 py-2 rounded-full border-2 border-[var(--color-text)] hover:bg-[var(--color-text)] hover:text-white transition-colors duration-150 text-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-text)] focus-visible:ring-offset-2",
     },
-    "Sign in",
+    el("span", { class: "menu-sign-in-mobile" }, "Sign in"),
   );
   mobileMenu.appendChild(mobileSignIn);
   nav.appendChild(mobileMenu);
