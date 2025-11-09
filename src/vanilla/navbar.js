@@ -22,8 +22,10 @@ function el(tag, attrs = {}, ...children) {
 
 function createNavbar() {
   const nav = el("nav", {
+    // Fixed so we can hide/show on scroll. Spacer preserves flow when
+    // the nav is taken out of document flow.
     class:
-      "navbar relative flex items-center sm:justify-around xs:justify-between p-4 bg-[var(--color-card-background)]",
+      "navbar fixed w-full top-0 left-0 z-30 transform transition-transform duration-200 flex items-center sm:justify-around xs:justify-between p-4 bg-[var(--color-card-background)]",
   });
 
   const logoImg = el("img", {
@@ -39,13 +41,37 @@ function createNavbar() {
 
   const logo = el(
     "a",
-    { href: "#home", class: "logo inline-flex items-center gap-2" },
+    {
+      href: import.meta.env.BASE_URL,
+      class: "logo inline-flex items-center gap-2",
+    },
     logoImg,
     // visually-hidden text for screen readers (keeps intent if image fails)
     el("span", { class: "sr-only" }, "Bidora"),
   );
 
   nav.appendChild(logo);
+
+  // Smooth-scroll to top when clicking the logo while already on the homepage
+  // This prevents a full navigation reload and provides a nicer UX.
+  logo.addEventListener("click", (e) => {
+    try {
+      const base = import.meta.env.BASE_URL || "/";
+      const normalize = (p) =>
+        (p.replace(/\/index\.html$/, "").replace(/\/+$/, "") || "") + "/";
+      const current = normalize(window.location.pathname);
+      const basePath = normalize(
+        new URL(base, window.location.origin).pathname,
+      );
+      if (current === basePath) {
+        // already on homepage — prevent navigation and smooth-scroll to top
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    } catch {
+      // ignore and allow default navigation if anything goes wrong
+    }
+  });
 
   // Hamburger
   const burger = el("button", {
@@ -67,25 +93,38 @@ function createNavbar() {
     { class: "links flex items-center gap-4" },
     el(
       "a",
-      { href: "#auctions", class: "hover:underline menu-item" },
+      {
+        href: import.meta.env.BASE_URL + "auctions/",
+        class: "hover:underline menu-item px-10",
+      },
       "Auctions",
     ),
     el(
       "a",
-      { href: "#howitworks", class: "hover:underline menu-item" },
+      {
+        href: import.meta.env.BASE_URL + "#howitworks",
+        class: "hover:underline menu-item px-10",
+      },
       "How it Works",
     ),
-    el("a", { href: "#about", class: "hover:underline menu-item" }, "About"),
+    el(
+      "a",
+      {
+        href: import.meta.env.BASE_URL + "#about",
+        class: "hover:underline menu-item px-10",
+      },
+      "About",
+    ),
   );
   const desktopSignIn = el(
     "button",
     {
       type: "button",
       class:
-        "inline-block bg-transparent px-4 py-2 rounded-full border-2 border-[var(--color-text)] hover:bg-[var(--color-text)] hover:text-white transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-text)] focus-visible:ring-offset-2",
+        "inline-block bg-transparent px-10 py-2 rounded-full border-2 border-[var(--color-text)] hover:bg-[var(--color-text)] hover:text-white transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-text)] focus-visible:ring-offset-2",
       "aria-label": "Sign in",
     },
-    el("span", { class: "menu-sign-in" }, "Sign in"),
+    el("span", { class: "menu-sign-in text-xl" }, "Sign in"),
   );
 
   desktop.appendChild(links);
@@ -96,12 +135,15 @@ function createNavbar() {
   const mobileMenu = el("div", {
     id: "mobile-menu",
     class:
-      "md:hidden hidden absolute top-full left-0 right-0 bg-[var(--color-background-accent)] shadow-md p-4 text-center",
+      "md:hidden hidden absolute top-full left-0 right-0 bg-[var(--color-background-accent)] size shadow-md p-4 text-center",
   });
   mobileMenu.appendChild(
     el(
       "a",
-      { href: "#auctions", class: "block py-2 px-2 hover:underline menu-item" },
+      {
+        href: import.meta.env.BASE_URL + "auctions/",
+        class: "block py-2 px-2 hover:underline menu-item",
+      },
       "Auctions",
     ),
   );
@@ -109,7 +151,7 @@ function createNavbar() {
     el(
       "a",
       {
-        href: "#howitworks",
+        href: import.meta.env.BASE_URL + "#howitworks",
         class: "block py-2 px-2 hover:underline menu-item",
       },
       "How it Works",
@@ -118,7 +160,10 @@ function createNavbar() {
   mobileMenu.appendChild(
     el(
       "a",
-      { href: "#about", class: "block py-2 px-2 hover:underline menu-item" },
+      {
+        href: import.meta.env.BASE_URL + "#about",
+        class: "block py-2 px-2 hover:underline menu-item",
+      },
       "About",
     ),
   );
@@ -126,9 +171,9 @@ function createNavbar() {
     "button",
     {
       class:
-        "mt-2 inline-block bg-transparent text-[var(--color-text)] text-sm px-4 py-2 rounded-full border-2 border-[var(--color-text)] hover:bg-[var(--color-text)] hover:text-white transition-colors duration-150 text-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-text)] focus-visible:ring-offset-2",
+        "mt-2 inline-block bg-transparent text-[var(--color-text)] text-m px-4 py-2 rounded-full border-2 border-[var(--color-text)] hover:bg-[var(--color-text)] hover:text-white transition-colors duration-150 text-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-text)] focus-visible:ring-offset-2",
     },
-    el("span", { class: "menu-sign-in-mobile" }, "Sign in"),
+    el("span", { class: "menu-sign-in text-sm" }, "Sign in"),
   );
   mobileMenu.appendChild(mobileSignIn);
   nav.appendChild(mobileMenu);
@@ -139,6 +184,40 @@ function createNavbar() {
       console.log("Sign in submitted", data);
     },
   });
+
+  // Inject CTA buttons into the Auctions section if present
+  const auctionsCta = document.querySelector("#auctions-cta");
+  if (auctionsCta) {
+    // Mobile-only sign-in CTA (visible only below md)
+    const mobileCta = el(
+      "button",
+      {
+        class:
+          "block md:hidden mt-2 inline-block bg-transparent text-[var(--color-text)] text-m px-4 py-2 rounded-full border-2 border-[var(--color-text)] hover:bg-[var(--color-text)] hover:text-white transition-colors duration-150 text-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-text)] focus-visible:ring-offset-2",
+      },
+      el("span", { class: "menu-sign-in text-sm" }, "Sign in"),
+    );
+    mobileCta.addEventListener("click", (e) => {
+      // hide mobile menu if it's open, then open modal
+      mobileMenu.classList.add("hidden");
+      modal.open(e.currentTarget);
+    });
+
+    // Link to auctions (visible on all sizes)
+    const auctionsLink = el(
+      "a",
+      {
+        href: import.meta.env.BASE_URL + "auctions/",
+        class:
+          "inline-block mt-2 bg-transparent text-[var(--color-text)] px-4 py-2 rounded-full border-2 border-[var(--color-text)] hover:bg-[var(--color-text)] hover:text-white transition-colors duration-150 text-center",
+      },
+      "Browse Auctions",
+    );
+
+    // Append elements: link for all sizes, sign-in only for mobile
+    auctionsCta.appendChild(auctionsLink);
+    auctionsCta.appendChild(mobileCta);
+  }
 
   // Handlers
   burger.addEventListener("click", () => {
@@ -169,8 +248,43 @@ export default function initVanillaNavbar(selector = "#vanilla-navbar") {
   const container = document.querySelector(selector);
   if (!container) return null;
   const nav = createNavbar();
+  // When navbar is fixed we need a spacer to preserve layout flow so the
+  // page content doesn't jump under the fixed nav.
   container.innerHTML = "";
+  const spacer = document.createElement("div");
+  // Use a default then update after a paint if necessary.
+  spacer.style.height = "64px";
+  container.appendChild(spacer);
   container.appendChild(nav);
+
+  // After layout, set spacer height to the actual nav height.
+  requestAnimationFrame(() => {
+    spacer.style.height = nav.offsetHeight + "px";
+  });
+
+  // Show nav when scrolling up, hide when scrolling down.
+  let lastY = window.scrollY;
+  let ticking = false;
+  function onScroll() {
+    const currentY = window.scrollY;
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        if (currentY > lastY && currentY > 100) {
+          nav.classList.add("-translate-y-full");
+        } else {
+          nav.classList.remove("-translate-y-full");
+        }
+        lastY = currentY;
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", () => {
+    spacer.style.height = nav.offsetHeight + "px";
+  });
+
   return nav;
 }
 

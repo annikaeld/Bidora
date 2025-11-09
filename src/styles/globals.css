@@ -18,13 +18,12 @@
     --color-grey-background: #D9D9D9;
     --color-cta: #B81BD0;
     --color-cta-hover: #7E168E;
-    --menu-item-font-size: 15px;
-    --menu-sign-in-font-size: 18px;
-    --menu-sign-in-font-size-mobile: 15px;
+    --menu-item-font-size: 16px;
     --menu-item-font-weight: 400;
     --menu-sign-in-font-weight: 500;
     --headings-font-family: 'Outfit', sans-serif;
     --sans-font-family: 'Open Sans', sans-serif;
+    --H1-font-size: 48px;
 }
 
 .gradient-stroke {
@@ -32,7 +31,7 @@
     --gradient: var(--gradient-card);
 }
 
-/* Helper class that consumes the menu item tokens */
+/* Helper class menu item */
 .menu-item {
     font-family: var(--headings-font-family);
     font-weight: var(--menu-item-font-weight);
@@ -43,18 +42,27 @@
 .menu-sign-in {
     font-family: var(--headings-font-family);
     font-weight: var(--menu-sign-in-font-weight);
-    font-size: var(--menu-sign-in-font-size);
     color: var(--color-text);
 }
 
 .menu-sign-in-mobile {
     font-family: var(--headings-font-family);
     font-weight: var(--menu-sign-in-font-weight);
-    font-size: var(--menu-sign-in-font-size-mobile);
     color: var(--color-text);
 }
 
-button:hover .menu-sign-in,
-button:hover .menu-sign-in-mobile {
+/* When a button is hovered, make the sign-in text white. We only
+   target the unified .menu-sign-in class; mobile and desktop spans
+   should use that class and control sizing with Tailwind. */
+button:hover .menu-sign-in {
     color: white;
+}
+
+/* Reusable heading utility that consumes the design tokens.
+   Size should be controlled with Tailwind responsive classes
+   (e.g. `text-2xl md:text-4xl`). */
+.heading {
+    font-family: var(--headings-font-family);
+    color: var(--color-headlines);
+    font-weight: var(--menu-sign-in-font-weight);
 }
