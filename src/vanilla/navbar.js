@@ -1,6 +1,7 @@
 // Lightweight vanilla JS navbar that uses the shared signIn modal
 
 import { createSignInModal } from "./signInModal.js";
+import { handleLoginSubmit } from "../../js/ui/handleLoginSubmit.js";
 
 function el(tag, attrs = {}, ...children) {
   const node = document.createElement(tag);
@@ -195,6 +196,7 @@ function createNavbar() {
   const modal = createSignInModal({
     onSubmit(data) {
       console.log("Sign in submitted", data);
+      handleLoginSubmit(data.email, data.password);
     },
   });
 
