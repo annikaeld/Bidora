@@ -3,6 +3,8 @@ import { getAuctions } from "../api/auctions.js";
 export async function loadAuctions(auctions) {
   const auctionsContainer = document.getElementById("auctions-container");
   auctionsContainer.innerHTML = ""; // Clear existing auctions
+  // ensure the container uses the auctions grid layout
+  auctionsContainer.classList.add("auctions-grid");
   if (!auctions || !auctions.data || auctions.data.length === 0) {
     auctionsContainer.innerHTML =
       '<div class="text-center text-gray-500">No auctions available.</div>';
@@ -11,18 +13,19 @@ export async function loadAuctions(auctions) {
   try {
     auctions.data.forEach((auction) => {
       const auctionElement = document.createElement("div");
-      auctionElement.className = "auctionElement";
+      // use the CSS class we've defined in globals.css
+      auctionElement.className = "auction-element";
       const hasMedia = auction.media && auction.media.length > 0;
       const imgTag = hasMedia
-        ? `<img src="${auction.media[0].url}" alt="${auction.media[0].alt}" width="100"/>`
-        : `<div class="no-image" style="width:100px;height:100px;background:#eee;display:flex;align-items:center;justify-content:center;">No Image</div>`;
+        ? `<div class="auction-image-wrap"><img src="${auction.media[0].url}" alt="${(auction.media[0].alt || auction.title).replace(/"/g, "&quot;")}" class="auction-image"/></div>`
+        : `<div class="no-image">No Image</div>`;
       auctionElement.innerHTML = `
-                <p>id =${auction.id}</p>
-                <p>Title: ${auction.title}</p>
-                <p>Description: ${auction.description}</p>
                 ${imgTag}
-                <p>Ends at: ${new Date(auction.endsAt).toLocaleString()}</p>
-                <p>Number of bids: ${auction._count.bids}</p>
+                <h3>${auction.title}</h3>
+                <div class="auction-meta">
+                  <p><small>Ends at: ${new Date(auction.endsAt).toLocaleString()}</small></p>
+                  <p><small>Bids: ${auction._Count || (auction._count && auction._count.bids) || 0}</small></p>
+                </div>
             `;
       auctionsContainer.appendChild(auctionElement);
     });
