@@ -156,9 +156,17 @@ function createDesktopLinks(btnBase) {
       },
       "About",
     ),
-    // Profile link only if logged in
+    // 'Create listing' and 'Profile' links only if logged in
     ...(isLoggedIn()
       ? [
+          el(
+            "a",
+            {
+              href: import.meta.env.BASE_URL + "auctions/edit.html",
+              class: "hover:underline menu-item px-4 md:px-5",
+            },
+            "Create listing",
+          ),
           el(
             "a",
             {
@@ -223,8 +231,18 @@ function createMobileMenu(btnBase) {
       "About",
     ),
   );
-  // Profile link only if logged in
+  // 'Create listing' and 'Profile' links only if logged in
   if (isLoggedIn()) {
+    mobileMenu.appendChild(
+      el(
+        "a",
+        {
+          href: import.meta.env.BASE_URL + "auctions/edit.html",
+          class: "block py-2 px-2 hover:underline menu-item",
+        },
+        "Create listing",
+      ),
+    );
     mobileMenu.appendChild(
       el(
         "a",
