@@ -2,22 +2,7 @@
 
 import { createSignInModal } from "./signInModal.js";
 import { handleLoginSubmit } from "../../js/ui/handleLoginSubmit.js";
-
-function el(tag, attrs = {}, ...children) {
-  const node = document.createElement(tag);
-  for (const [k, v] of Object.entries(attrs)) {
-    if (k === "class") node.className = v;
-    else if (k.startsWith("data-")) node.setAttribute(k, v);
-    else if (k === "html") node.innerHTML = v;
-    else node.setAttribute(k, String(v));
-  }
-  for (const c of children) {
-    if (c == null) continue;
-    if (typeof c === "string") node.appendChild(document.createTextNode(c));
-    else node.appendChild(c);
-  }
-  return node;
-}
+import { load } from "../../js/storage/load.js";
 
 function createNavbar() {
   const inner = el("div", {
@@ -45,22 +30,46 @@ function createNavbar() {
   handleBurgerClick(burger, mobileMenu);
 
   const modal = createSignInModal({
-    onSubmit(data) {
+    async onSubmit(data) {
       console.log("Sign in submitted", data);
-      handleLoginSubmit(data.email, data.password);
+      await handleLoginSubmit(data.email, data.password);
+      // Rebuild navbar after login
+      if (typeof window !== "undefined") {
+        initVanillaNavbar();
+      }
     },
   });
 
-  desktopSignIn.addEventListener("click", (e) => {
-    modal.open(e.currentTarget);
-  });
+  if (desktopSignIn) {
+    desktopSignIn.addEventListener("click", (e) => {
+      modal.open(e.currentTarget);
+    });
+  }
 
-  mobileSignIn.addEventListener("click", (e) => {
-    mobileMenu.classList.add("hidden");
-    modal.open(e.currentTarget);
-  });
+  if (mobileSignIn) {
+    mobileSignIn.addEventListener("click", (e) => {
+      mobileMenu.classList.add("hidden");
+      modal.open(e.currentTarget);
+    });
+  }
 
   return nav;
+}
+
+function el(tag, attrs = {}, ...children) {
+  const node = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === "class") node.className = v;
+    else if (k.startsWith("data-")) node.setAttribute(k, v);
+    else if (k === "html") node.innerHTML = v;
+    else node.setAttribute(k, String(v));
+  }
+  for (const c of children) {
+    if (c == null) continue;
+    if (typeof c === "string") node.appendChild(document.createTextNode(c));
+    else node.appendChild(c);
+  }
+  return node;
 }
 
 function createLogo() {
@@ -147,18 +156,34 @@ function createDesktopLinks(btnBase) {
       },
       "About",
     ),
+    // Profile link only if logged in
+    ...(isLoggedIn()
+      ? [
+          el(
+            "a",
+            {
+              href: import.meta.env.BASE_URL + "profile.html",
+              class: "hover:underline menu-item px-4 md:px-5",
+            },
+            "Profile",
+          ),
+        ]
+      : []),
   );
-  const desktopSignIn = el(
-    "button",
-    {
-      type: "button",
-      class: `${btnBase} px-4 md:px-10`,
-      "aria-label": "Sign in",
-    },
-    el("span", { class: "menu-sign-in text-l" }, "Sign in"),
-  );
+  let desktopSignIn = null;
   desktop.appendChild(links);
-  desktop.appendChild(el("div", { class: "auth" }, desktopSignIn));
+  if (!isLoggedIn()) {
+    desktopSignIn = el(
+      "button",
+      {
+        type: "button",
+        class: `${btnBase} px-4 md:px-10`,
+        "aria-label": "Sign in",
+      },
+      el("span", { class: "menu-sign-in text-l" }, "Sign in"),
+    );
+    desktop.appendChild(el("div", { class: "auth" }, desktopSignIn));
+  }
   return { desktop, desktopSignIn };
 }
 
@@ -198,14 +223,30 @@ function createMobileMenu(btnBase) {
       "About",
     ),
   );
-  const mobileSignIn = el(
-    "button",
-    {
-      class: `${btnBase} btn-signin-lg mt-2 text-m px-10 text-center`,
-    },
-    el("span", { class: "menu-sign-in text-md" }, "Sign in"),
-  );
-  mobileMenu.appendChild(mobileSignIn);
+  // Profile link only if logged in
+  if (isLoggedIn()) {
+    mobileMenu.appendChild(
+      el(
+        "a",
+        {
+          href: import.meta.env.BASE_URL + "profile.html",
+          class: "block py-2 px-2 hover:underline menu-item",
+        },
+        "Profile",
+      ),
+    );
+  }
+  let mobileSignIn = null;
+  if (!isLoggedIn()) {
+    mobileSignIn = el(
+      "button",
+      {
+        class: `${btnBase} btn-signin-lg mt-2 text-m px-10 text-center`,
+      },
+      el("span", { class: "menu-sign-in text-md" }, " "),
+    );
+    mobileMenu.appendChild(mobileSignIn);
+  }
   return { mobileMenu, mobileSignIn };
 }
 
@@ -262,6 +303,10 @@ export default function initVanillaNavbar(selector = "#vanilla-navbar") {
   });
 
   return nav;
+}
+
+function isLoggedIn() {
+  return Boolean(load("token"));
 }
 
 // auto-run when loaded as a module in the browser
