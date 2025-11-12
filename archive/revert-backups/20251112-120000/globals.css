@@ -1,3 +1,9 @@
+/* Backup of src/styles/globals.css before reverting How-it-works md+ grid/display:contents changes
+   Created: 2025-11-12 12:00:00 (approx)
+
+   Original file contents follow for safe-keeping.
+*/
+
 /* Import Google Fonts */
 @import url(https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Outfit:wght@100..900&display=swap);
 
@@ -215,34 +221,37 @@ h3 {
     padding-right: 1rem;
 }
 
-/* How it Works layout */
+/* Layout for the How it Works section */
+@media (min-width: 768px) {
+    #howitworks .text-black.grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        grid-template-rows: auto auto auto;
+        grid-auto-flow: column;
+        gap: 1.5rem 3rem;
+        /* row-gap column-gap */
+        align-items: start;
+    }
 
-#howitworks .text-black.grid .flex>.w-full[class*="max-w-"] {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
+    /* promote children (img, h3, p) of each feature wrapper to become grid items so they line up into rows. The DOM structure is:
+         .grid > .flex > .w-full.max-w-[160px] > (img,h3,p)
+         So we must make the inner wrapper disappear (display:contents) so img/h3/p become direct children of the grid. */
+    #howitworks .text-black.grid>.flex>div {
+        display: contents;
+    }
 
-#howitworks .text-black.grid .flex>.w-full[class*="max-w-"] img {
-    max-width: 100px;
-    /* change this value to control visual size */
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-}
+    /* center images but keep their max width */
+    #howitworks .text-black.grid img {
+        justify-self: center;
+        max-width: 160px;
+        width: 100%;
+        height: auto;
+    }
 
-.heading-color {
-    color: var(--color-headlines);
-}
-
-.btn-primary {
-    background: var(--color-headlines);
-    color: white;
-}
-
-.btn-primary:hover {
-    background: var(--color-cta-hover);
+    /* Align headings and paragraphs in their rows */
+    #howitworks .text-black.grid h3,
+    #howitworks .text-black.grid p {
+        justify-self: start;
+        margin: 0;
+    }
 }
