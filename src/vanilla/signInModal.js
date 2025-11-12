@@ -54,7 +54,18 @@ export function createSignInModal(options = {}) {
     );
     dialog.appendChild(closeBtn);
     dialog.appendChild(
-      el("h2", { class: "text-xl font-semibold mb-4" }, "Sign in"),
+      el(
+        "h2",
+        { class: "text-xl font-semibold mb-4 heading-color" },
+        "Welcome to Bidora",
+      ),
+    );
+    dialog.appendChild(
+      el(
+        "p",
+        { class: "text-sm text-gray-700 mb-4" },
+        "Sign in to your account or create a new one to start bidding on amazing items.",
+      ),
     );
 
     const form = el("form", {});
@@ -81,6 +92,16 @@ export function createSignInModal(options = {}) {
     const controls = el("div", {
       class: "flex items-center justify-end gap-3",
     });
+
+    const signupLink = el(
+      "a",
+      {
+        href: "/signup",
+        class: "heading-color mr-auto text-sm hover:underline",
+      },
+      "Create an account.",
+    );
+    controls.appendChild(signupLink);
     const cancel = el(
       "button",
       { type: "button", class: "px-4 py-2 rounded text-sm" },
@@ -90,8 +111,7 @@ export function createSignInModal(options = {}) {
       "button",
       {
         type: "submit",
-        class:
-          "px-4 py-2 rounded bg-indigo-600 text-white text-sm hover:bg-indigo-700",
+        class: "px-4 py-2 rounded btn-primary text-sm hover:btn-primary:hover",
       },
       "Sign in",
     );
