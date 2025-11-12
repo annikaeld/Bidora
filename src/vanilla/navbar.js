@@ -3,6 +3,7 @@
 import { createSignInModal } from "./signInModal.js";
 import { handleLoginSubmit } from "../../js/ui/handleLoginSubmit.js";
 import { load } from "../../js/storage/load.js";
+import { remove } from "../../js/storage/remove.js";
 
 function createNavbar() {
   const inner = el("div", {
@@ -167,14 +168,89 @@ function createDesktopLinks(btnBase) {
             },
             "Create listing",
           ),
-          el(
-            "a",
-            {
-              href: import.meta.env.BASE_URL + "profile.html",
-              class: "hover:underline menu-item px-4 md:px-5",
-            },
-            "Profile",
-          ),
+          // User dropdown
+          (() => {
+            const dropdown = el("div", {
+              class:
+                "relative inline-block text-left user-dropdown px-0 md:px-2 focus-within:z-50",
+            });
+            const button = el(
+              "button",
+              {
+                class:
+                  "hover:underline menu-item px-4 md:px-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-text)] focus-visible:ring-offset-2",
+                "aria-haspopup": "true",
+                "aria-expanded": "false",
+                type: "button",
+                tabIndex: 0,
+              },
+              "User \u25BC",
+            );
+            const menu = el(
+              "div",
+              {
+                class:
+                  "hidden absolute left-0 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50 user-dropdown-menu",
+              },
+              el(
+                "a",
+                {
+                  href: import.meta.env.BASE_URL + "profile.html",
+                  class:
+                    "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100",
+                },
+                "Portfolio",
+              ),
+              (() => {
+                const logout = el(
+                  "button",
+                  {
+                    type: "button",
+                    class:
+                      "block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100",
+                  },
+                  "Log out",
+                );
+                logout.addEventListener("click", logoutUser);
+                return logout;
+              })(),
+            );
+            // Show/hide menu on mouseenter/mouseleave for both button and menu
+            let menuVisible = false;
+            function showMenu() {
+              menu.classList.remove("hidden");
+              button.setAttribute("aria-expanded", "true");
+              menuVisible = true;
+            }
+            function hideMenu() {
+              menu.classList.add("hidden");
+              button.setAttribute("aria-expanded", "false");
+              menuVisible = false;
+            }
+            button.addEventListener("mouseenter", showMenu);
+            button.addEventListener("focus", showMenu);
+            button.addEventListener("mouseleave", () => {
+              setTimeout(() => {
+                if (!menuVisible) hideMenu();
+              }, 100);
+            });
+            button.addEventListener("blur", () => {
+              setTimeout(() => {
+                if (!menuVisible) hideMenu();
+              }, 100);
+            });
+            menu.addEventListener("mouseenter", () => {
+              menuVisible = true;
+              showMenu();
+            });
+            menu.addEventListener("mouseleave", () => {
+              menuVisible = false;
+              hideMenu();
+            });
+            dropdown.appendChild(button);
+            dropdown.appendChild(menu);
+            return dropdown;
+          })(),
         ]
       : []),
   );
@@ -243,16 +319,41 @@ function createMobileMenu(btnBase) {
         "Create listing",
       ),
     );
-    mobileMenu.appendChild(
+    // User dropdown for mobile
+    const userSection = el(
+      "div",
+      { class: "user-dropdown-mobile mt-2" },
+      el(
+        "span",
+        { class: "block font-semibold text-gray-700 px-2 pt-2 pb-1" },
+        "User",
+      ),
       el(
         "a",
         {
           href: import.meta.env.BASE_URL + "profile.html",
           class: "block py-2 px-2 hover:underline menu-item",
         },
-        "Profile",
+        "Portfolio",
       ),
+      (() => {
+        const logout = el(
+          "button",
+          {
+            type: "button",
+            // Match anchor styling: block, centered, same padding, hover underline
+            class:
+              "block py-2 px-2 w-full text-center hover:underline menu-item",
+            style:
+              "background:none;border:none;color:inherit;font:inherit;cursor:pointer;outline:inherit;",
+          },
+          "Log out",
+        );
+        logout.addEventListener("click", logoutUser);
+        return logout;
+      })(),
     );
+    mobileMenu.appendChild(userSection);
   }
   let mobileSignIn = null;
   if (!isLoggedIn()) {
@@ -325,6 +426,14 @@ export default function initVanillaNavbar(selector = "#vanilla-navbar") {
 
 function isLoggedIn() {
   return Boolean(load("token"));
+}
+
+function logoutUser() {
+  remove("token");
+  remove("profile");
+  if (typeof window !== "undefined") {
+    initVanillaNavbar();
+  }
 }
 
 // auto-run when loaded as a module in the browser
