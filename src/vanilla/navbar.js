@@ -20,34 +20,58 @@ function el(tag, attrs = {}, ...children) {
 }
 
 function createNavbar() {
+  const inner = el("div", {
+    class: "site-container flex items-center justify-between w-full",
+  });
+  const logo = createLogo();
+  inner.appendChild(logo);
+
+  const burger = createBurger();
+  inner.appendChild(burger);
+
+  const btnBase =
+    "btn-signin inline-block bg-transparent text-[var(--color-text)] py-2 rounded-full border-2 border-[var(--color-text)] hover:bg-[var(--color-text)] hover:text-white transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-text)] focus-visible:ring-offset-2";
+  const { desktop, desktopSignIn } = createDesktopLinks(btnBase);
+  inner.appendChild(desktop);
+
   const nav = el("nav", {
     class:
       "navbar fixed w-full top-0 left-0 z-30 transform transition-transform duration-200 flex items-center justify-between sm:justify-around md:justify-between p-4 bg-[var(--color-card-background)]",
   });
+  nav.appendChild(inner);
 
-  // inner container constrains navbar content to the site width while leaving
-  // the nav background full-bleed. Use the shared `.site-container` class
-  // defined in `src/styles/globals.css` so nav aligns with page content.
-  const inner = el("div", {
-    class: "site-container flex items-center justify-between w-full",
+  const { mobileMenu, mobileSignIn } = createMobileMenu(btnBase);
+  nav.appendChild(mobileMenu);
+  handleBurgerClick(burger, mobileMenu);
+
+  const modal = createSignInModal({
+    onSubmit(data) {
+      console.log("Sign in submitted", data);
+      handleLoginSubmit(data.email, data.password);
+    },
   });
 
-  // Common button base used across sign-in buttons so styling stays DRY.
-  const btnBase =
-    "btn-signin inline-block bg-transparent text-[var(--color-text)] py-2 rounded-full border-2 border-[var(--color-text)] hover:bg-[var(--color-text)] hover:text-white transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-text)] focus-visible:ring-offset-2";
+  desktopSignIn.addEventListener("click", (e) => {
+    modal.open(e.currentTarget);
+  });
 
+  mobileSignIn.addEventListener("click", (e) => {
+    mobileMenu.classList.add("hidden");
+    modal.open(e.currentTarget);
+  });
+
+  return nav;
+}
+
+function createLogo() {
   const logoImg = el("img", {
-    // use Vite's base URL so builds deployed under a subpath resolve correctly
     src: import.meta.env.BASE_URL + "img/logo.svg",
     alt: "Bidora",
-    // desktop intrinsic size (helps reserve layout); CSS will override on small screens
     width: "240",
     height: "75",
-    // mobile-first: constrained min/max and responsive sizes
     class:
       "min-w-[120px] max-w-[240px] w-[140px] h-[44px] md:w-[200px] md:h-[60px] lg:w-[240px] lg:h-[75px] object-contain",
   });
-
   const logo = el(
     "a",
     {
@@ -55,14 +79,8 @@ function createNavbar() {
       class: "logo inline-flex items-center gap-2",
     },
     logoImg,
-    // visually-hidden text for screen readers (keeps intent if image fails)
     el("span", { class: "sr-only" }, "Bidora"),
   );
-
-  // append core interactive elements inside the centered container
-  inner.appendChild(logo);
-
-  // Smooth-scroll to top when clicking the logo while already on the homepage
   logo.addEventListener("click", (e) => {
     try {
       const base = import.meta.env.BASE_URL || "/";
@@ -73,7 +91,6 @@ function createNavbar() {
         new URL(base, window.location.origin).pathname,
       );
       if (current === basePath) {
-        // already on homepage — prevent navigation and smooth-scroll to top
         e.preventDefault();
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
@@ -81,8 +98,10 @@ function createNavbar() {
       // ignore and allow default navigation if anything goes wrong
     }
   });
+  return logo;
+}
 
-  // Hamburger
+function createBurger() {
   const burger = el("button", {
     class:
       "md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:bg-gray-100",
@@ -91,12 +110,10 @@ function createNavbar() {
     "aria-label": "Open main menu",
   });
   burger.innerHTML = `<svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">\n    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />\n  </svg>`;
-  // place hamburger inside the centered inner container so it lines up with
-  // the rest of the nav content (logo, links, auth) instead of floating
-  // outside the site width.
-  inner.appendChild(burger);
+  return burger;
+}
 
-  // Desktop links
+function createDesktopLinks(btnBase) {
   const desktop = el("div", {
     class: "nav-links hidden md:flex items-center gap-6",
   });
@@ -140,13 +157,12 @@ function createNavbar() {
     },
     el("span", { class: "menu-sign-in text-l" }, "Sign in"),
   );
-
   desktop.appendChild(links);
   desktop.appendChild(el("div", { class: "auth" }, desktopSignIn));
-  inner.appendChild(desktop);
-  nav.appendChild(inner);
+  return { desktop, desktopSignIn };
+}
 
-  // Mobile menu (hidden by default)
+function createMobileMenu(btnBase) {
   const mobileMenu = el("div", {
     id: "mobile-menu",
     class:
@@ -190,50 +206,10 @@ function createNavbar() {
     el("span", { class: "menu-sign-in text-md" }, "Sign in"),
   );
   mobileMenu.appendChild(mobileSignIn);
-  nav.appendChild(mobileMenu);
+  return { mobileMenu, mobileSignIn };
+}
 
-  // Shared modal instance
-  const modal = createSignInModal({
-    onSubmit(data) {
-      console.log("Sign in submitted", data);
-      handleLoginSubmit(data.email, data.password);
-    },
-  });
-
-  // Inject CTA buttons into the Auctions section if present
-  const auctionsCta = document.querySelector("#auctions-cta");
-  if (auctionsCta) {
-    // Mobile-only sign-in CTA (visible only below md)
-    const mobileCta = el(
-      "button",
-      {
-        class: `${btnBase} btn-signin-lg block md:hidden mt-2 text-m px-10 text-center`,
-      },
-      el("span", { class: "menu-sign-in text-md" }, "Sign in"),
-    );
-    mobileCta.addEventListener("click", (e) => {
-      // hide mobile menu if it's open, then open modal
-      mobileMenu.classList.add("hidden");
-      modal.open(e.currentTarget);
-    });
-
-    // Link to auctions (visible on all sizes)
-    const auctionsLink = el(
-      "a",
-      {
-        href: import.meta.env.BASE_URL + "auctions/",
-        class:
-          "inline-block mt-2 bg-transparent text-[var(--color-text)] px-4 py-2 rounded-full border-2 border-[var(--color-text)] hover:bg-[var(--color-text)] hover:text-white transition-colors duration-150 text-center",
-      },
-      "Browse Auctions",
-    );
-
-    // Append elements: link for all sizes, sign-in only for mobile
-    auctionsCta.appendChild(auctionsLink);
-    auctionsCta.appendChild(mobileCta);
-  }
-
-  // Handlers
+function handleBurgerClick(burger, mobileMenu) {
   burger.addEventListener("click", () => {
     const isOpen = mobileMenu.classList.contains("hidden");
     if (isOpen) {
@@ -244,17 +220,6 @@ function createNavbar() {
       burger.setAttribute("aria-expanded", "false");
     }
   });
-
-  desktopSignIn.addEventListener("click", (e) => {
-    modal.open(e.currentTarget);
-  });
-
-  mobileSignIn.addEventListener("click", (e) => {
-    mobileMenu.classList.add("hidden");
-    modal.open(e.currentTarget);
-  });
-
-  return nav;
 }
 
 // Auto-mount: look for #vanilla-navbar and render into it
