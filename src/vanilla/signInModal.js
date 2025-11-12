@@ -99,7 +99,7 @@ export function createSignInModal(options = {}) {
         href: "/signup",
         class: "heading-color mr-auto text-sm hover:underline",
       },
-      "Create an account.",
+      "Create an account",
     );
     controls.appendChild(signupLink);
     const cancel = el(
