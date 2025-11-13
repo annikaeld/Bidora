@@ -19,14 +19,25 @@ export async function loadAuctions(auctions) {
       const imgTag = hasMedia
         ? `<div class="auction-image-wrap"><img src="${auction.media[0].url}" alt="${(auction.media[0].alt || auction.title).replace(/"/g, "&quot;")}" class="auction-image"/></div>`
         : `<div class="no-image">No Image</div>`;
+
+      // determine a sensible id property from possible API shapes
+      const auctionId =
+        auction.id || auction._id || auction.uuid || auction._uuid || "";
+      const detailsUrl = auctionId
+        ? `details.html?id=${encodeURIComponent(auctionId)}`
+        : "details.html";
+
+      // Wrap the card content in a link so clicking anywhere navigates to the details page
       auctionElement.innerHTML = `
-                ${imgTag}
-                <h3>${auction.title}</h3>
-                <div class="auction-meta">
-                  <p><small>Ends at: ${new Date(auction.endsAt).toLocaleString()}</small></p>
-                  <p><small>Bids: ${auction._Count || (auction._count && auction._count.bids) || 0}</small></p>
-                  <p><small>${auction.bids && auction.bids.length > 0 ? `Highest Bid: ${Math.max(...auction.bids.map((bid) => bid.amount))} tokens` : "No bids yet"}</small></p>
-                </div>
+                <a href="${detailsUrl}" class="block h-full no-underline text-inherit">
+                  ${imgTag}
+                  <h3 class="mt-2">${auction.title}</h3>
+                  <div class="auction-meta">
+                    <p><small>Ends at: ${new Date(auction.endsAt).toLocaleString()}</small></p>
+                    <p><small>Bids: ${auction._Count || (auction._count && auction._count.bids) || 0}</small></p>
+                    <p><small>${auction.bids && auction.bids.length > 0 ? `Highest Bid: ${Math.max(...auction.bids.map((bid) => bid.amount))} tokens` : "No bids yet"}</small></p>
+                  </div>
+                </a>
             `;
       auctionsContainer.appendChild(auctionElement);
     });
