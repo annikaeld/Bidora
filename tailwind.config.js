@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx,html}"],
+  content: ["./index.html", "./*.html", "./src/**/*.{js,jsx,ts,tsx,html}"],
   theme: {
     extend: {
       fontFamily: {
@@ -16,10 +16,13 @@ module.exports = {
         "grey-background": "var(--color-grey-background, #D9D9D9)",
         cta: "var(--color-cta, #B81BD0)",
         "cta-hover": "var(--color-cta-hover, #7E168E)",
+        "color-border": "var(--color-border, #2563EB)",
       },
       backgroundImage: {
-        "gradient-background": "var(--gradient-background, #F5F3FF)",
-        "gradient-card": "linear-gradient(to bottom, #B81BD0 0%, #2563EB 100%)",
+        "gradient-background":
+          "var(--gradient-background, linear-gradient(to bottom, #F7F7FD 0%, #F5F3FF 100%))",
+        "gradient-card":
+          "var(--gradient-card, linear-gradient(to bottom, #B81BD0, #2563EB))",
       },
     },
     screens: {

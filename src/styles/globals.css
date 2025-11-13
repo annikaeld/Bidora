@@ -6,11 +6,12 @@
 @tailwind utilities;
 
 :root {
-    --gradient-card: linear-gradient(to bottom, #B81BD0, #2563EB);
     --gradient-background: linear-gradient(to bottom, #F7F7FD 0%, #F5F3FF 100%);
+    --gradient-card: linear-gradient(to bottom, #B81BD0, #2563EB);
 
-    /* Color design tokens (canonical source-of-truth) */
+    /* Color design*/
     --color-headlines: #B81BD0;
+    --color-border: #2563EB;
     --color-text: #1B3069;
     --color-black-text: #000000;
     --color-background-accent: #DDD6FE;
@@ -20,6 +21,84 @@
     --color-cta-hover: #7E168E;
     --headings-font-family: 'Outfit', sans-serif;
     --sans-font-family: 'Open Sans', sans-serif;
+}
+
+/* Typography */
+p {
+    font-family: var(--sans-font-family);
+    color: var(--color-text);
+    @apply text-base;
+}
+
+h1,
+h2,
+h3 {
+    font-family: var(--headings-font-family);
+    font-weight: 700;
+}
+
+h1 {
+    color: var(--color-headlines);
+    @apply text-2xl;
+}
+
+h2,
+h3 {
+    color: var(--color-text);
+}
+
+h2 {
+    @apply text-xl;
+}
+
+h3 {
+    @apply text-lg;
+}
+
+/* Larger type on md and up */
+@screen md {
+    p {
+        @apply text-lg;
+    }
+
+    h1 {
+        @apply text-4xl;
+    }
+
+    h2 {
+        @apply text-2xl;
+    }
+
+    h3 {
+        @apply text-xl;
+    }
+}
+
+.border-color-border {
+    border-color: var(--color-headlines);
+    border-style: solid;
+}
+
+.heading-color {
+    color: var(--color-headlines);
+}
+
+.btn-primary {
+    background: var(--color-headlines);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--color-cta-hover);
+}
+
+.border-gradient-stroke {
+    border: 1px solid transparent;
+    border-radius: 0.5rem;
+    /* inner layer (content/bg) then outer gradient for border-box */
+    background-image: linear-gradient(var(--color-card-background), var(--color-card-background)), var(--gradient-card);
+    background-origin: padding-box, border-box;
+    background-clip: padding-box, border-box;
 }
 
 /* Auctions grid layout */
@@ -113,65 +192,7 @@
     margin: 0 0 0.35rem 0;
 }
 
-p {
-    font-family: var(--sans-font-family);
-    color: var(--color-text);
-    @apply text-base;
-}
 
-@screen md {
-    p {
-        @apply text-lg;
-    }
-}
-
-h1 {
-    font-family: var(--headings-font-family);
-    color: var(--color-headlines);
-    font-weight: 700;
-}
-
-h2,
-h3 {
-    font-family: var(--headings-font-family);
-    color: var(--color-text);
-    font-weight: 700;
-}
-
-h1 {
-    @apply text-2xl;
-}
-
-@screen md {
-    h1 {
-        @apply text-4xl;
-    }
-}
-
-h2 {
-    @apply text-xl;
-}
-
-@screen md {
-    h2 {
-        @apply text-2xl;
-    }
-}
-
-h3 {
-    @apply text-lg;
-}
-
-@screen md {
-    h3 {
-        @apply text-xl;
-    }
-}
-
-.gradient-stroke {
-    /* expose the gradient via --gradient for use with border-image */
-    --gradient: var(--gradient-card);
-}
 
 /* Only change the sign-in label to white when the sign-in buttons are hovered.
    Use an explicit `.btn-signin` class so other buttons are unaffected. */
@@ -232,17 +253,4 @@ h3 {
     display: block;
     margin-left: auto;
     margin-right: auto;
-}
-
-.heading-color {
-    color: var(--color-headlines);
-}
-
-.btn-primary {
-    background: var(--color-headlines);
-    color: white;
-}
-
-.btn-primary:hover {
-    background: var(--color-cta-hover);
 }
