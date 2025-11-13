@@ -1,5 +1,11 @@
-export function displayError(message = "Unknown error") {
-  return `<div class="error">${message}</div>`;
+export function displayError(errorContainer, errors) {
+  if (errors && Array.isArray(errors)) {
+    errors.forEach((error) => {
+      const errorItem = document.createElement("div");
+      errorItem.textContent = error.message;
+      errorContainer.appendChild(errorItem);
+    });
+  } else {
+    errorContainer.textContent = "An unknown error occurred.";
+  }
 }
-
-//todo: Add to pages that fetch data from the API

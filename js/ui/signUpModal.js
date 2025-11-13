@@ -1,5 +1,8 @@
 import { createBaseModal } from "./baseModal.js";
 import { el } from "./createElement.js";
+import { registerUser } from "../api/auth/registerUser.js";
+import { displayError } from "./displayError.js";
+import { createSignInModal } from "./signInModal.js";
 
 function createSignUpNodes(onSubmit, close) {
   const nodes = [];
@@ -18,7 +21,22 @@ function createSignUpNodes(onSubmit, close) {
     ),
   );
 
+  // Error message container
+  const errorContainer = el("p", { class: "text-red-600 mb-2" });
+  nodes.push(errorContainer);
+
   const form = el("form", {});
+
+  const nameLabel = el("label", { class: "block text-sm mb-2" });
+  nameLabel.appendChild(el("span", { class: "text-gray-700" }, "Name"));
+  const nameInput = el("input", {
+    type: "text",
+    required: "true",
+    class: "mt-1 block w-full border rounded px-3 py-2",
+  });
+  nameLabel.appendChild(nameInput);
+  form.appendChild(nameLabel);
+
   const emailLabel = el("label", { class: "block text-sm mb-2" });
   emailLabel.appendChild(el("span", { class: "text-gray-700" }, "Email"));
   const emailInput = el("input", {
@@ -60,11 +78,33 @@ function createSignUpNodes(onSubmit, close) {
   controls.appendChild(submit);
   form.appendChild(controls);
 
-  form.addEventListener("submit", (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const data = { email: emailInput.value, password: pwInput.value };
-    if (typeof onSubmit === "function") onSubmit(data);
-    close();
+    errorContainer.textContent = "";
+    const name = nameInput.value;
+    const email = emailInput.value;
+    const password = pwInput.value;
+    try {
+      const result = await registerUser(name, email, password);
+      if (
+        result &&
+        result.data &&
+        Array.isArray(result.data.errors) &&
+        result.data.errors.length > 0
+      ) {
+        console.log("Displaying errors", result.data.errors);
+        displayError(errorContainer, result.data.errors);
+        return;
+      }
+      if (typeof onSubmit === "function") onSubmit(result);
+      // Open sign in modal after successful sign up
+      const signInModal = createSignInModal();
+      signInModal.openSignInModal();
+      close();
+    } catch (error) {
+      errorContainer.textContent = "Registration failed. Please try again.";
+      console.error("Registration failed", error);
+    }
   });
 
   cancel.addEventListener("click", close);

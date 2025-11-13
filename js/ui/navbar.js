@@ -1,6 +1,6 @@
 // Lightweight vanilla JS navbar that uses the shared signIn modal
 
-import { createSignInModal_ } from "./signInModal.js";
+import { createSignInModal } from "./signInModal.js";
 import { handleLoginSubmit } from "../../js/ui/handleLoginSubmit.js";
 import { load } from "../../js/storage/load.js";
 import { remove } from "../../js/storage/remove.js";
@@ -30,7 +30,7 @@ function createNavbar() {
   nav.appendChild(mobileMenu);
   handleBurgerClick(burger, mobileMenu);
 
-  const modal = createSignInModal_({
+  const modal = createSignInModal({
     async onSubmit(data) {
       console.log("Sign in submitted", data);
       await handleLoginSubmit(data.email, data.password);

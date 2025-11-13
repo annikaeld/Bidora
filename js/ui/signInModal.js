@@ -152,7 +152,7 @@ export function createBaseModal(options = {}) {
   return { openSignInModal, close };
 }
 
-export function createSignInModal_(options = {}) {
+export function createSignInModal(options = {}) {
   console.log("Creating sign-in modal with options", options);
   const { openSignInModal, close } = createBaseModal(options);
   // Create a dialog element to append signInNodes to
