@@ -50,6 +50,14 @@ npm run build
 Note: Tailwind utilities and CSS tokens live in `src/styles/globals.css` and the
 Tailwind configuration is in `tailwind.config.js`.
 
+## Environment variables & API keys
+
+- Copy `.env.example` to `.env` and fill in any required values for local development.
+- For Vite-based frontend code, prefix client-facing variables with `VITE_` (for
+  example `VITE_API_KEY` and `VITE_API_BASE`) so they are available as
+  `import.meta.env.VITE_API_KEY`.
+- Do NOT commit your `.env` file. `.env` is included in `.gitignore` by default.
+
 ## Usage
 
 ### ESLint

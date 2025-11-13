@@ -9,7 +9,7 @@ import { authFetch } from "./fetch.js";
 export async function getAuctions() {
   try {
     const response = await authFetch(
-      `${API_BASE}${API_AUCTION}${API_LISTINGS}?sort=created`,
+      `${API_BASE}${API_AUCTION}${API_LISTINGS}?sort=created&_seller=true&_bids=true&_active=true`,
     );
 
     if (!response.ok) {

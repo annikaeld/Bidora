@@ -25,6 +25,7 @@ export async function loadAuctions(auctions) {
                 <div class="auction-meta">
                   <p><small>Ends at: ${new Date(auction.endsAt).toLocaleString()}</small></p>
                   <p><small>Bids: ${auction._Count || (auction._count && auction._count.bids) || 0}</small></p>
+                  <p><small>${auction.bids && auction.bids.length > 0 ? `Highest Bid: ${Math.max(...auction.bids.map((bid) => bid.amount))} tokens` : "No bids yet"}</small></p>
                 </div>
             `;
       auctionsContainer.appendChild(auctionElement);
