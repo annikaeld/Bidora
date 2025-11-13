@@ -1,6 +1,6 @@
 // Plain JS SignIn modal module
 // Usage:
-// import { createSignInModal } from '/src/vanilla/signInModal.js';
+// import { createSignInModal } from '/js/ui/signInModal.js';
 // const modal = openSignInModal({ onSubmit: (data)=>{...} });
 // open with modal.open(openerElement);
 // close with modal.close();
