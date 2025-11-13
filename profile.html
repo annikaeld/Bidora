@@ -10,13 +10,38 @@
   </head>
 
   <body class="min-h-screen bg-gradient-background">
-    <header id="home">
-      <!-- optional hero / top of page -->
+    <header>
+      <div id="vanilla-navbar"></div>
     </header>
-    <div id="vanilla-navbar"></div>
 
-    <main>
-      <h1 class="sr-only">Main content</h1>
+    <main class="site-container">
+      <h1 class="sr-only">Profile</h1>
+      <div
+        id="profile-container"
+        class="border-gradient-stroke p-6 rounded-lg mt-8"
+      >
+        <!-- Profile content will be dynamically loaded here -->
+        <!-- Example avatar block (replace src with the user's photo URL) -->
+        <div class="flex items-center gap-4">
+          <div
+            class="rounded-full overflow-hidden w-24 h-24 bg-gray-100 flex items-center justify-center"
+          >
+            <img
+              src="https://example.com/path/to/photo.jpg"
+              alt="Profile photo"
+              class="w-full h-full object-cover"
+              onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'96\' height=\'96\'><rect fill=\'%23F3F4F6\' width=\'100%25\' height=\'100%25\'/><text x=\'50%25\' y=\'50%25\' font-size=\'20\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%239CA3AF\'>?</text></svg>';"
+            />
+          </div>
+          <div>
+            <h2 class="text-xl font-semibold">Annika</h2>
+            <p class="text-sm text-gray-600">Member since 2024</p>
+          </div>
+        </div>
+      </div>
+      <div id="listings-container" class="border-gradient-stroke p-6 mt-8">
+        <!-- Listings content will be dynamically loaded here -->
+      </div>
     </main>
 
     <script type="module" src="/src/vanilla/navbar.js"></script>

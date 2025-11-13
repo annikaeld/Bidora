@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bidora | Auction Item</title>
+    <link rel="icon" type="image/svg+xml" href="/img/favicon.svg" />
+    <link rel="alternate icon" href="/img/favicon.svg" />
+    <link rel="stylesheet" href="/src/styles/globals.css" />
+    <script type="module" src="/js/ui/loadAuctions.js" defer></script>
+  </head>
+
+  <body class="min-h-screen bg-gradient-background">
+    <header>
+      <div id="vanilla-navbar"></div>
+    </header>
+    <main>
+      <h1 class="sr-only">*title*</h1>
+      <div id="gallery" class="flex flex-col gap-x-10 gap-y-10">
+        <div
+          id="main-image"
+          class="w-full h-auto object-cover rounded-lg aspect-w-16 aspect-w-9"
+        >
+          <!-- Main auction image will be dynamically loaded here -->
+          <div id="thumbnail-images" class="flex gap-x-4 overflow-x-auto">
+            <img
+              class="w-20 h-20 object-cover rounded-md cursor-pointer border-2 border-transparent active:border-indigo-500"
+              src="/public/img/browse.png"
+            />
+
+            <!-- Thumbnail images will be dynamically loaded here -->
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script type="module" src="/src/vanilla/navbar.js"></script>
+  </body>
+</html>
+
+//Add Interactivity (Optional, requires JavaScript): Implement JavaScript to
+handle clicking on thumbnails. When a thumbnail is clicked, update the src
+attribute of the main featured image to the src of the clicked thumbnail. Add or
+remove classes to visually indicate the active thumbnail (e.g., changing border
+color). //Give title name dynamically with JS based on auction item loaded.
