@@ -36,6 +36,7 @@ for, so that they can be used by someone else instead of being thrown away.
 - **Husky** – Git hooks for enforcing code quality before commits and pushes.
 - **Vitest** – Unit testing framework for modern JavaScript projects.
 - **Playwright** – End-to-end testing framework for web apps.
+- **Vite** - dev server and build tool
 
 ## Setup
 
@@ -97,6 +98,35 @@ npx --no-install lint-staged
   - To auto-fix safe problems across the project: `npm run lint:fix`
   - To run the same staged-file process manually: `npx --no-install lint-staged`
   - To bypass hooks temporarily (not recommended): `git commit --no-verify`
+
+  ### Testing
+
+  This project uses Vitest for unit tests. The test script (`npm test`) runs
+  Vitest in watch mode by default. Below are common commands and tips for
+  running tests locally and in CI.
+  - Install dependencies (once):
+
+  ```powershell
+  npm install
+  ```
+
+  - Run tests in watch/dev mode (default):
+
+  ```powershell
+  npm test
+  ```
+
+  - Run tests once (CI / non-interactive):
+
+  ```powershell
+  npx vitest run
+  ```
+
+  - Run a single test file:
+
+  ```powershell
+  npx vitest run tests/formValidation.test.js
+  ```
 
 ## Live site
 
