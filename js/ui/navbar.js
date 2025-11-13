@@ -33,11 +33,17 @@ function createNavbar() {
   const modal = createSignInModal({
     async onSubmit(data) {
       console.log("Sign in submitted", data);
-      await handleLoginSubmit(data.email, data.password);
-      // Rebuild navbar after login
-      if (typeof window !== "undefined") {
+      const result = await handleLoginSubmit(data.email, data.password);
+      // Only rebuild navbar if login is successful
+      if (
+        result &&
+        result.response &&
+        result.response.ok &&
+        typeof window !== "undefined"
+      ) {
         initVanillaNavbar();
       }
+      return result;
     },
   });
 

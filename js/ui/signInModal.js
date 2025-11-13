@@ -6,6 +6,7 @@
 // close with modal.close();
 import { el } from "./createElement.js";
 import { createSignUpModal } from "./signUpModal.js";
+import { displayError } from "./displayError.js";
 
 let storedModal;
 function addModalContent(dialog, content) {
@@ -182,6 +183,9 @@ function createSignInNodes(onSubmit, close) {
     ),
   );
 
+  const errorContainer = el("p", { class: "text-red-600 mb-2" });
+  nodes.push(errorContainer);
+
   const form = el("form", {});
   const emailLabel = el("label", { class: "block text-sm mb-2" });
   emailLabel.appendChild(el("span", { class: "text-gray-700" }, "Email"));
@@ -245,11 +249,32 @@ function createSignInNodes(onSubmit, close) {
   controls.appendChild(cancel);
   controls.appendChild(submit);
   form.appendChild(controls);
-  form.addEventListener("submit", (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
+    errorContainer.textContent = "";
     const data = { email: emailInput.value, password: pwInput.value };
-    if (typeof onSubmit === "function") onSubmit(data);
-    close();
+    if (typeof onSubmit === "function") {
+      let result = null;
+      try {
+        result = await onSubmit(data);
+      } catch (error) {
+        errorContainer.textContent =
+          "Sign in failed. Please check your credentials.";
+        console.error("Sign in failed", error);
+        return;
+      }
+      // If onSubmit returns a result with errors, display them and do NOT close modal
+      if (
+        result &&
+        result.data &&
+        Array.isArray(result.data.errors) &&
+        result.data.errors.length > 0
+      ) {
+        displayError(errorContainer, result.data.errors);
+        return;
+      }
+      close();
+    }
   });
   nodes.push(form);
   return nodes;

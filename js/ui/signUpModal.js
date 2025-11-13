@@ -100,7 +100,7 @@ function createSignUpNodes(onSubmit, close) {
       // Open sign in modal after successful sign up
       const signInModal = createSignInModal();
       signInModal.openSignInModal();
-      close();
+      close(); //TODO: After the closing, the sign in modal "sign in" button does nothing. Fix it.
     } catch (error) {
       errorContainer.textContent = "Registration failed. Please try again.";
       console.error("Registration failed", error);
