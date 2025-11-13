@@ -1,11 +1,29 @@
 // Plain JS SignIn modal module
 // Usage:
 // import { createSignInModal } from '/src/vanilla/signInModal.js';
-// const modal = createSignInModal({ onSubmit: (data)=>{...} });
+// const modal = openSignInModal({ onSubmit: (data)=>{...} });
 // open with modal.open(openerElement);
 // close with modal.close();
+import { el } from "./createElement.js";
+import { createSignUpModal } from "./signUpModal.js";
 
-export function createSignInModal(options = {}) {
+let storedModal;
+function addModalContent(dialog, content) {
+  console.log("Adding modal content", content);
+  if (Array.isArray(content) && content.length > 0) {
+    content.forEach((node) => {
+      if (node instanceof Node) {
+        dialog.appendChild(node);
+        console.log("Appended node", node);
+      }
+    });
+  }
+  storedModal = dialog;
+  console.log("Stored modal dialog", storedModal);
+}
+
+export function createBaseModal(options = {}) {
+  console.log("Creating base modal with options", options);
   const { onSubmit } = options;
 
   let modalRoot = null;
@@ -13,36 +31,34 @@ export function createSignInModal(options = {}) {
   let lastOpener = null;
   let keyHandler = null;
 
-  function el(tag, attrs = {}, ...children) {
-    const node = document.createElement(tag);
-    for (const [k, v] of Object.entries(attrs)) {
-      if (k === "class") node.className = v;
-      else if (k.startsWith("data-")) node.setAttribute(k, v);
-      else if (k === "html") node.innerHTML = v;
-      else node.setAttribute(k, String(v));
+  function build(content) {
+    // Remove previous modalRoot if it exists
+    console.log("Build");
+    if (modalRoot && modalRoot.parentNode) {
+      modalRoot.parentNode.removeChild(modalRoot);
     }
-    for (const c of children) {
-      if (c == null) continue;
-      if (typeof c === "string") node.appendChild(document.createTextNode(c));
-      else node.appendChild(c);
-    }
-    return node;
-  }
-
-  function build() {
-    if (modalRoot) return modalRoot;
+    modalRoot = null;
+    dialog = null;
 
     const overlay = el("div", {
       class: "fixed inset-0 bg-black/50",
       "data-role": "overlay",
     });
 
-    // inner dialog (the white box that holds content)
     dialog = el("div", {
       role: "dialog",
       "aria-modal": "true",
       class: "relative bg-white rounded-lg max-w-md w-full mx-4 p-6 shadow-lg",
     });
+
+    if (Array.isArray(content) && content.length > 0) {
+      content.forEach((node) => {
+        if (node instanceof Node) {
+          dialog.appendChild(node);
+          console.log("Appended node", node);
+        }
+      });
+    }
 
     const closeBtn = el(
       "button",
@@ -53,73 +69,6 @@ export function createSignInModal(options = {}) {
       "✕",
     );
     dialog.appendChild(closeBtn);
-    dialog.appendChild(
-      el(
-        "h2",
-        { class: "text-xl font-semibold mb-4 heading-color" },
-        "Welcome to Bidora",
-      ),
-    );
-    dialog.appendChild(
-      el(
-        "p",
-        { class: "text-sm text-gray-700 mb-4" },
-        "Sign in to your account or create a new one to start bidding on amazing items.",
-      ),
-    );
-
-    const form = el("form", {});
-    const emailLabel = el("label", { class: "block text-sm mb-2" });
-    emailLabel.appendChild(el("span", { class: "text-gray-700" }, "Email"));
-    const emailInput = el("input", {
-      type: "email",
-      required: "true",
-      class: "mt-1 block w-full border rounded px-3 py-2",
-    });
-    emailLabel.appendChild(emailInput);
-    form.appendChild(emailLabel);
-
-    const pwLabel = el("label", { class: "block text-sm mb-4" });
-    pwLabel.appendChild(el("span", { class: "text-gray-700" }, "Password"));
-    const pwInput = el("input", {
-      type: "password",
-      required: "true",
-      class: "mt-1 block w-full border rounded px-3 py-2",
-    });
-    pwLabel.appendChild(pwInput);
-    form.appendChild(pwLabel);
-
-    const controls = el("div", {
-      class: "flex items-center justify-end gap-3",
-    });
-
-    const signupLink = el(
-      "a",
-      {
-        href: "/signup",
-        class: "heading-color mr-auto text-sm hover:underline",
-      },
-      "Create an account",
-    );
-    controls.appendChild(signupLink);
-    const cancel = el(
-      "button",
-      { type: "button", class: "px-4 py-2 rounded text-sm" },
-      "Cancel",
-    );
-    const submit = el(
-      "button",
-      {
-        type: "submit",
-        class: "px-4 py-2 rounded btn-primary text-sm hover:btn-primary:hover",
-      },
-      "Sign in",
-    );
-    controls.appendChild(cancel);
-    controls.appendChild(submit);
-    form.appendChild(controls);
-
-    dialog.appendChild(form);
 
     const wrapper = el("div", {
       class: "fixed inset-0 z-50 flex items-center justify-center",
@@ -130,17 +79,10 @@ export function createSignInModal(options = {}) {
     // events
     overlay.addEventListener("click", close);
     closeBtn.addEventListener("click", close);
-    cancel.addEventListener("click", close);
-
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const data = { email: emailInput.value, password: pwInput.value };
-      if (typeof onSubmit === "function") onSubmit(data);
-      close();
-    });
 
     modalRoot = wrapper;
-    return modalRoot;
+    console.log("Built modal elements", { modalRoot, dialog });
+    return { modalRoot, dialog };
   }
 
   function focusableElements(container) {
@@ -175,16 +117,24 @@ export function createSignInModal(options = {}) {
     else trapFocus(e);
   }
 
-  function open(opener = null) {
-    if (!modalRoot) build();
+  function openSignInModal(opener = null) {
+    console.log("Opening sign-in modal");
+    const content = createSignInNodes(onSubmit, close);
+    const built = build(content);
+    modalRoot = built.modalRoot;
+    dialog = built.dialog;
     if (!modalRoot.parentNode) document.body.appendChild(modalRoot);
-    modalRoot.style.display = "";
+    makeVisible();
     lastOpener = opener;
     // focus management
     const focusables = focusableElements(dialog);
     if (focusables.length) focusables[0].focus();
     keyHandler = onKey;
     document.addEventListener("keydown", keyHandler);
+  }
+
+  function makeVisible() {
+    if (modalRoot) modalRoot.style.display = "";
   }
 
   function close() {
@@ -199,5 +149,108 @@ export function createSignInModal(options = {}) {
       lastOpener.focus();
   }
 
-  return { open, close };
+  return { openSignInModal, close };
+}
+
+export function createSignInModal_(options = {}) {
+  console.log("Creating sign-in modal with options", options);
+  const { openSignInModal, close } = createBaseModal(options);
+  // Create a dialog element to append signInNodes to
+  const dialog = document.createElement("div");
+  dialog.className =
+    "relative bg-white rounded-lg max-w-md w-full mx-4 p-6 shadow-lg";
+  const signInNodes = createSignInNodes(options.onSubmit, close);
+  addModalContent(dialog, signInNodes);
+  return { openSignInModal, close, dialog };
+}
+
+function createSignInNodes(onSubmit, close) {
+  console.log("Creating sign-in nodes");
+  const nodes = [];
+  nodes.push(
+    el(
+      "h2",
+      { class: "text-xl font-semibold mb-4 heading-color" },
+      "Welcome to Bidora",
+    ),
+  );
+  nodes.push(
+    el(
+      "p",
+      { class: "text-sm text-gray-700 mb-4" },
+      "Sign in to your account or create a new one to start bidding on amazing items.",
+    ),
+  );
+
+  const form = el("form", {});
+  const emailLabel = el("label", { class: "block text-sm mb-2" });
+  emailLabel.appendChild(el("span", { class: "text-gray-700" }, "Email"));
+  const emailInput = el("input", {
+    type: "email",
+    required: "true",
+    class: "mt-1 block w-full border rounded px-3 py-2",
+  });
+  emailLabel.appendChild(emailInput);
+  form.appendChild(emailLabel);
+
+  const pwLabel = el("label", { class: "block text-sm mb-4" });
+  pwLabel.appendChild(el("span", { class: "text-gray-700" }, "Password"));
+  const pwInput = el("input", {
+    type: "password",
+    required: "true",
+    class: "mt-1 block w-full border rounded px-3 py-2",
+  });
+  pwLabel.appendChild(pwInput);
+  form.appendChild(pwLabel);
+
+  const controls = el("div", {
+    class: "flex items-center justify-end gap-3",
+  });
+
+  const signupLink = el(
+    "a",
+    {
+      href: "#",
+      class: "heading-color mr-auto text-sm hover:underline",
+    },
+    "Create an account",
+  );
+  signupLink.addEventListener("click", (e) => {
+    e.preventDefault();
+    close();
+    // Open the sign-up modal
+    const { openModal } = createSignUpModal({
+      onSubmit: (data) => {
+        // You can handle sign-up data here
+        console.log("Sign up submitted", data);
+      },
+    });
+    openModal();
+  });
+  controls.appendChild(signupLink);
+  const cancel = el(
+    "button",
+    { type: "button", class: "px-4 py-2 rounded text-sm" },
+    "Cancel",
+  );
+  const submit = el(
+    "button",
+    {
+      type: "submit",
+      class: "px-4 py-2 rounded btn-primary text-sm hover:btn-primary:hover",
+    },
+    "Sign in",
+  );
+  cancel.addEventListener("click", close);
+  controls.appendChild(cancel);
+  controls.appendChild(submit);
+  form.appendChild(controls);
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const data = { email: emailInput.value, password: pwInput.value };
+    if (typeof onSubmit === "function") onSubmit(data);
+    close();
+  });
+  nodes.push(form);
+  return nodes;
 }

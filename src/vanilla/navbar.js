@@ -1,6 +1,6 @@
 // Lightweight vanilla JS navbar that uses the shared signIn modal
 
-import { createSignInModal } from "./signInModal.js";
+import { createSignInModal_ } from "./signInModal.js";
 import { handleLoginSubmit } from "../../js/ui/handleLoginSubmit.js";
 import { load } from "../../js/storage/load.js";
 import { remove } from "../../js/storage/remove.js";
@@ -30,7 +30,7 @@ function createNavbar() {
   nav.appendChild(mobileMenu);
   handleBurgerClick(burger, mobileMenu);
 
-  const modal = createSignInModal({
+  const modal = createSignInModal_({
     async onSubmit(data) {
       console.log("Sign in submitted", data);
       await handleLoginSubmit(data.email, data.password);
@@ -43,14 +43,14 @@ function createNavbar() {
 
   if (desktopSignIn) {
     desktopSignIn.addEventListener("click", (e) => {
-      modal.open(e.currentTarget);
+      modal.openSignInModal(e.currentTarget);
     });
   }
 
   if (mobileSignIn) {
     mobileSignIn.addEventListener("click", (e) => {
       mobileMenu.classList.add("hidden");
-      modal.open(e.currentTarget);
+      modal.openSignInModal(e.currentTarget);
     });
   }
 
@@ -199,7 +199,7 @@ function createDesktopLinks(btnBase) {
                   class:
                     "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100",
                 },
-                "Portfolio",
+                "Profile",
               ),
               (() => {
                 const logout = el(
@@ -334,7 +334,7 @@ function createMobileMenu(btnBase) {
           href: import.meta.env.BASE_URL + "profile.html",
           class: "block py-2 px-2 hover:underline menu-item",
         },
-        "Portfolio",
+        "Profile",
       ),
       (() => {
         const logout = el(

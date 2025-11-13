@@ -1,0 +1,83 @@
+import { createBaseModal } from "./baseModal.js";
+import { el } from "./createElement.js";
+
+function createSignUpNodes(onSubmit, close) {
+  const nodes = [];
+  nodes.push(
+    el(
+      "h2",
+      { class: "text-xl font-semibold mb-4 heading-color" },
+      "Create your Bidora account",
+    ),
+  );
+  nodes.push(
+    el(
+      "p",
+      { class: "text-sm text-gray-700 mb-4" },
+      "Sign up to start bidding on amazing items.",
+    ),
+  );
+
+  const form = el("form", {});
+  const emailLabel = el("label", { class: "block text-sm mb-2" });
+  emailLabel.appendChild(el("span", { class: "text-gray-700" }, "Email"));
+  const emailInput = el("input", {
+    type: "email",
+    required: "true",
+    class: "mt-1 block w-full border rounded px-3 py-2",
+  });
+  emailLabel.appendChild(emailInput);
+  form.appendChild(emailLabel);
+
+  const pwLabel = el("label", { class: "block text-sm mb-4" });
+  pwLabel.appendChild(el("span", { class: "text-gray-700" }, "Password"));
+  const pwInput = el("input", {
+    type: "password",
+    required: "true",
+    class: "mt-1 block w-full border rounded px-3 py-2",
+  });
+  pwLabel.appendChild(pwInput);
+  form.appendChild(pwLabel);
+
+  const controls = el("div", {
+    class: "flex items-center justify-end gap-3",
+  });
+
+  const cancel = el(
+    "button",
+    { type: "button", class: "px-4 py-2 rounded text-sm" },
+    "Cancel",
+  );
+  const submit = el(
+    "button",
+    {
+      type: "submit",
+      class: "px-4 py-2 rounded btn-primary text-sm hover:btn-primary:hover",
+    },
+    "Sign up",
+  );
+  controls.appendChild(cancel);
+  controls.appendChild(submit);
+  form.appendChild(controls);
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const data = { email: emailInput.value, password: pwInput.value };
+    if (typeof onSubmit === "function") onSubmit(data);
+    close();
+  });
+
+  cancel.addEventListener("click", close);
+
+  nodes.push(form);
+  return nodes;
+}
+
+export function createSignUpModal(options = {}) {
+  const { openModal, close } = createBaseModal(
+    { ...options },
+    createSignUpNodes,
+  );
+  // Optionally, you can return dialog if needed for direct DOM manipulation
+  return { openModal, close };
+}
