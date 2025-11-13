@@ -7,6 +7,10 @@
     <link rel="icon" type="image/svg+xml" href="/img/favicon.svg" />
     <link rel="alternate icon" href="/img/favicon.svg" />
     <link rel="stylesheet" href="/src/styles/globals.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
   </head>
 
   <body class="min-h-screen bg-gradient-background">
@@ -20,17 +24,15 @@
         id="profile-container"
         class="border-gradient-stroke p-6 rounded-lg mt-8"
       >
-        <!-- Profile content will be dynamically loaded here -->
-        <!-- Example avatar block (replace src with the user's photo URL) -->
         <div class="flex items-center gap-4">
           <div
             class="rounded-full overflow-hidden w-24 h-24 bg-gray-100 flex items-center justify-center"
           >
             <img
-              src="https://example.com/path/to/photo.jpg"
+              src=""
               alt="Profile photo"
               class="w-full h-full object-cover"
-              onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'96\' height=\'96\'><rect fill=\'%23F3F4F6\' width=\'100%25\' height=\'100%25\'/><text x=\'50%25\' y=\'50%25\' font-size=\'20\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%239CA3AF\'>?</text></svg>';"
+              onerror="this.onerror=null;const s=document.createElement('span');s.className='material-symbols-outlined avatar-icon';s.setAttribute('role','img');s.setAttribute('aria-label','Default avatar');s.textContent='face';this.replaceWith(s);"
             />
           </div>
           <div>

@@ -1,6 +1,7 @@
 /* Import Google Fonts */
 @import url(https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Outfit:wght@100..900&display=swap);
 
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -170,6 +171,22 @@ h3 {
        then use object-position: var(--object-position, center center);
     */
     object-position: var(--object-position, center center);
+}
+
+/* Avatar icon fallback for Material Symbols*/
+.material-symbols-outlined.avatar-icon,
+.avatar-icon.material-symbols-outlined {
+    font-size: 96px !important;
+    /* ensure it overrides other font-size rules */
+    width: 96px;
+    height: 96px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* Material Symbols variable axes — opsz (optical size) helps visual weight
+       when scaling icons. Adjust wght if you need thicker strokes. */
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
 }
 
 .auction-meta {
