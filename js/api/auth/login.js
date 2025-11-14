@@ -8,7 +8,6 @@ import { request } from "../request.js";
  * @returns {Promise<{response: A successful response will return a 200 OK status code and the user profile}>}
  */
 export async function login(email, password) {
-  console.log(`Log in for ${email}`);
   return await request(API_BASE + API_AUTH + API_LOGIN, "POST", {
     email,
     password,

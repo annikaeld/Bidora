@@ -1,9 +1,9 @@
 // Lightweight vanilla JS navbar that uses the shared signIn modal
 
 import { createSignInModal } from "./signInModal.js";
-import { handleLoginSubmit } from "../../js/ui/handleLoginSubmit.js";
-import { load } from "../../js/storage/load.js";
-import { remove } from "../../js/storage/remove.js";
+import { handleLoginSubmit } from "../ui/handleLoginSubmit.js";
+import { load } from "../storage/load.js";
+import { logoutUser as logoutUserStorage } from "../storage/loggedIn.js";
 
 function createNavbar() {
   const inner = el("div", {
@@ -32,7 +32,6 @@ function createNavbar() {
 
   const modal = createSignInModal({
     async onSubmit(data) {
-      console.log("Sign in submitted", data);
       const result = await handleLoginSubmit(data.email, data.password);
       // Only rebuild navbar if login is successful
       if (
@@ -435,8 +434,7 @@ function isLoggedIn() {
 }
 
 function logoutUser() {
-  remove("token");
-  remove("profile");
+  logoutUserStorage();
   if (typeof window !== "undefined") {
     initVanillaNavbar();
   }

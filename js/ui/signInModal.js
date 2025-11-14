@@ -8,23 +8,17 @@ import { el } from "./createElement.js";
 import { createSignUpModal } from "./signUpModal.js";
 import { displayError } from "./displayError.js";
 
-let storedModal;
 function addModalContent(dialog, content) {
-  console.log("Adding modal content", content);
   if (Array.isArray(content) && content.length > 0) {
     content.forEach((node) => {
       if (node instanceof Node) {
         dialog.appendChild(node);
-        console.log("Appended node", node);
       }
     });
   }
-  storedModal = dialog;
-  console.log("Stored modal dialog", storedModal);
 }
 
 export function createBaseModal(options = {}) {
-  console.log("Creating base modal with options", options);
   const { onSubmit } = options;
 
   let modalRoot = null;
@@ -34,7 +28,6 @@ export function createBaseModal(options = {}) {
 
   function build(content) {
     // Remove previous modalRoot if it exists
-    console.log("Build");
     if (modalRoot && modalRoot.parentNode) {
       modalRoot.parentNode.removeChild(modalRoot);
     }
@@ -56,7 +49,6 @@ export function createBaseModal(options = {}) {
       content.forEach((node) => {
         if (node instanceof Node) {
           dialog.appendChild(node);
-          console.log("Appended node", node);
         }
       });
     }
@@ -82,7 +74,6 @@ export function createBaseModal(options = {}) {
     closeBtn.addEventListener("click", close);
 
     modalRoot = wrapper;
-    console.log("Built modal elements", { modalRoot, dialog });
     return { modalRoot, dialog };
   }
 
@@ -119,7 +110,6 @@ export function createBaseModal(options = {}) {
   }
 
   function openSignInModal(opener = null) {
-    console.log("Opening sign-in modal");
     const content = createSignInNodes(onSubmit, close);
     const built = build(content);
     modalRoot = built.modalRoot;
@@ -154,7 +144,6 @@ export function createBaseModal(options = {}) {
 }
 
 export function createSignInModal(options = {}) {
-  console.log("Creating sign-in modal with options", options);
   const { openSignInModal, close } = createBaseModal(options);
   // Create a dialog element to append signInNodes to
   const dialog = document.createElement("div");
@@ -166,7 +155,6 @@ export function createSignInModal(options = {}) {
 }
 
 function createSignInNodes(onSubmit, close) {
-  console.log("Creating sign-in nodes");
   const nodes = [];
   nodes.push(
     el(
@@ -224,9 +212,8 @@ function createSignInNodes(onSubmit, close) {
     close();
     // Open the sign-up modal
     const { openModal } = createSignUpModal({
-      onSubmit: (data) => {
+      onSubmit: () => {
         // You can handle sign-up data here
-        console.log("Sign up submitted", data);
       },
     });
     openModal();
@@ -258,8 +245,7 @@ function createSignInNodes(onSubmit, close) {
       try {
         result = await onSubmit(data);
       } catch (error) {
-        errorContainer.textContent =
-          "Sign in failed. Please check your credentials.";
+        displayError(errorContainer, error);
         console.error("Sign in failed", error);
         return;
       }

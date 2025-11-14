@@ -11,6 +11,7 @@
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
       rel="stylesheet"
     />
+    <script type="module" src="/js/ui/loadProfile.js" defer></script>
   </head>
 
   <body class="min-h-screen bg-gradient-background">
@@ -36,11 +37,12 @@
             />
           </div>
           <div>
-            <h2 class="text-xl font-semibold">Annika</h2>
-            <p class="text-sm text-gray-600">Member since 2024</p>
+            <h2 id="profile-name" class="text-xl font-semibold">Username</h2>
+            <p id="profile-email" class="text-sm text-gray-600"></p>
           </div>
         </div>
       </div>
+      <div id="error-container" class="mt-4 text-red-600"></div>
       <div id="listings-container" class="border-gradient-stroke p-6 mt-8">
         <!-- Listings content will be dynamically loaded here -->
       </div>

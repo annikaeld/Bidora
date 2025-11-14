@@ -24,7 +24,6 @@ export function insertItemText(item) {
   if (!container) return;
   container.innerHTML = "";
   const title = item?.data.title || "Untitled";
-  console.log(item);
   const description = item?.data.description || "";
   const html = `
     <h1 class="text-2xl font-bold">${escapeHtml(title)}</h1>

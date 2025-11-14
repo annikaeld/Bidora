@@ -92,7 +92,6 @@ function createSignUpNodes(onSubmit, close) {
         Array.isArray(result.data.errors) &&
         result.data.errors.length > 0
       ) {
-        console.log("Displaying errors", result.data.errors);
         displayError(errorContainer, result.data.errors);
         return;
       }
@@ -100,7 +99,7 @@ function createSignUpNodes(onSubmit, close) {
       // Open sign in modal after successful sign up
       const signInModal = createSignInModal();
       signInModal.openSignInModal();
-      close(); //TODO: After the closing, the sign in modal "sign in" button does nothing. Fix it.
+      close(); //TODO: After closing, the sign in modal "sign in" button does nothing. Fix it.
     } catch (error) {
       errorContainer.textContent = "Registration failed. Please try again.";
       console.error("Registration failed", error);

@@ -1,7 +1,6 @@
 import { el } from "./createElement.js";
 
 export function createBaseModal(options = {}, createNodes) {
-  console.log("Creating base modal with options", options);
   const { onSubmit } = options;
 
   let modalRoot = null;
@@ -11,7 +10,6 @@ export function createBaseModal(options = {}, createNodes) {
 
   function build(content) {
     // Remove previous modalRoot if it exists
-    console.log("Build");
     if (modalRoot && modalRoot.parentNode) {
       modalRoot.parentNode.removeChild(modalRoot);
     }
@@ -33,7 +31,6 @@ export function createBaseModal(options = {}, createNodes) {
       content.forEach((node) => {
         if (node instanceof Node) {
           dialog.appendChild(node);
-          console.log("Appended node", node);
         }
       });
     }
@@ -59,7 +56,6 @@ export function createBaseModal(options = {}, createNodes) {
     closeBtn.addEventListener("click", close);
 
     modalRoot = wrapper;
-    console.log("Built modal elements", { modalRoot, dialog });
     return { modalRoot, dialog };
   }
 
@@ -96,7 +92,6 @@ export function createBaseModal(options = {}, createNodes) {
   }
 
   function openModal(opener = null) {
-    console.log("Opening modal");
     if (typeof createNodes !== "function") {
       throw new Error(
         "createNodes function must be provided to createBaseModal",
