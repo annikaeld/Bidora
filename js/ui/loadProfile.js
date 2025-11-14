@@ -9,6 +9,7 @@ async function loadProfile() {
     }
     setElementContent("profile-name", profile.name);
     setElementContent("profile-email", profile.email);
+    setElementContent("profile-credits", profile.credits);
   } catch (error) {
     console.error("Failed to load profile:", error);
     const errorContainer = document.getElementById("error-container");

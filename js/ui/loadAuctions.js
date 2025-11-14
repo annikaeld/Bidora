@@ -24,8 +24,8 @@ export async function loadAuctions(auctions) {
       const auctionId =
         auction.id || auction._id || auction.uuid || auction._uuid || "";
       const detailsUrl = auctionId
-        ? `details.html?id=${encodeURIComponent(auctionId)}`
-        : "details.html";
+        ? `listing.html?id=${encodeURIComponent(auctionId)}`
+        : "listing.html";
 
       // Wrap the card content in a link so clicking anywhere navigates to the details page
       auctionElement.innerHTML = `

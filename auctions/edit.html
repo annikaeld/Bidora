@@ -11,6 +11,7 @@
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
       rel="stylesheet"
     />
+    <script type="module" src="/js/ui/loadEditItem.js" defer></script>
   </head>
 
   <body class="min-h-screen bg-gradient-background">
@@ -23,7 +24,62 @@
         id="post-container"
         class="bg-white border-indigo-950 border-2 dark:bg-zinc-200 p-6 rounded-lg shadow-md"
       >
-        <!-- Post content will be dynamically loaded here -->
+        <h1>Create listing</h1>
+        <form id="edit-listing-form">
+          <div>
+            <label for="title">Title</label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              class="w-full border"
+              required
+            />
+          </div>
+          <div>
+            <label for="description">Description</label>
+            <textarea
+              id="description"
+              name="description"
+              rows="4"
+              class="w-full border"
+              required
+            ></textarea>
+          </div>
+          <div>
+            <label for="ends-at">Auction end date and time</label>
+            <input
+              type="datetime-local"
+              id="ends-at"
+              name="ends-at"
+              class="w-full border"
+              required
+            />
+          </div>
+          <div id="add-images-container">
+            <label for="image-url-1">Image URL</label>
+            <input
+              type="url"
+              id="image-url-1"
+              name="image-url-1"
+              class="w-full border"
+              required
+            />
+            <label for="image-alt-text-1">Image alt-text</label>
+            <input
+              type="text"
+              id="image-alt-text-1"
+              name="image-alt-text-1"
+              class="w-full border"
+            />
+          </div>
+          <div>
+            <button id="add-image-button">Add image</button>
+          </div>
+          <div>
+            <button type="submit">Create Listing</button>
+          </div>
+        </form>
       </div>
     </main>
     <script type="module" src="/js/ui/navbar.js"></script>
