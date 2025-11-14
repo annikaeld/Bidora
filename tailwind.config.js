@@ -17,6 +17,7 @@ module.exports = {
         cta: "var(--color-cta, #B81BD0)",
         "cta-hover": "var(--color-cta-hover, #7E168E)",
         "color-border": "var(--color-border, #2563EB)",
+        accent: "var(--accent-color, #8B5CF6)",
       },
       backgroundImage: {
         "gradient-background":

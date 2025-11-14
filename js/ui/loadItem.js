@@ -5,6 +5,7 @@ import { setPageTitle } from "./setPageTitle.js";
 
 const id = getIdQueryParameter();
 const item = await itemFromApi(id);
+console.log("Fetched item:", item);
 // Handle missing/404 item gracefully
 if (!item) {
   // Set a clear page title
