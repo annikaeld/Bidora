@@ -200,7 +200,7 @@ function createDesktopLinks(btnBase) {
               el(
                 "a",
                 {
-                  href: import.meta.env.BASE_URL + "profile.html",
+                  href: import.meta.env.BASE_URL + "profile/",
                   class:
                     "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100",
                 },
@@ -336,7 +336,7 @@ function createMobileMenu(btnBase) {
       el(
         "a",
         {
-          href: import.meta.env.BASE_URL + "profile.html",
+          href: import.meta.env.BASE_URL + "profile/",
           class: "block py-2 px-2 hover:underline menu-item",
         },
         "Profile",
