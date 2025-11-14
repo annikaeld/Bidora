@@ -37,6 +37,7 @@ for, so that they can be used by someone else instead of being thrown away.
 - **Vitest** – Unit testing framework for modern JavaScript projects.
 - **Playwright** – End-to-end testing framework for web apps.
 - **Vite** - dev server and build tool
+- **E2E (Playwright) note**: Test tool that verifies that items returned from the API are rendered into the page.
 
 ## Setup
 
@@ -120,6 +121,12 @@ npx --no-install lint-staged
 
   ```powershell
   npx vitest run
+  ```
+
+  - Run the Playwright E2E suite (single run):
+
+  ```bash
+  npm run e2e
   ```
 
   - Run a single test file:
