@@ -7,6 +7,7 @@
 import { el } from "./createElement.js";
 import { createSignUpModal } from "./signUpModal.js";
 import { displayError } from "./displayError.js";
+import { validateEmail } from "./formValidation.js";
 
 function addModalContent(dialog, content) {
   if (Array.isArray(content) && content.length > 0) {
@@ -174,13 +175,14 @@ function createSignInNodes(onSubmit, close) {
   const errorContainer = el("p", { class: "text-red-600 mb-2" });
   nodes.push(errorContainer);
 
-  const form = el("form", {});
+  const form = el("form", { novalidate: true });
   const emailLabel = el("label", { class: "block text-sm mb-2" });
   emailLabel.appendChild(el("span", { class: "text-gray-700" }, "Email"));
   const emailInput = el("input", {
     type: "email",
     required: "true",
     class: "mt-1 block w-full border rounded px-3 py-2",
+    autocomplete: "email",
   });
   emailLabel.appendChild(emailInput);
   form.appendChild(emailLabel);
@@ -239,6 +241,11 @@ function createSignInNodes(onSubmit, close) {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     errorContainer.textContent = "";
+    if (!validateEmail(emailInput.value)) {
+      displayError(errorContainer, "Please enter a valid email address.");
+      emailInput.focus();
+      return;
+    }
     const data = { email: emailInput.value, password: pwInput.value };
     if (typeof onSubmit === "function") {
       let result = null;

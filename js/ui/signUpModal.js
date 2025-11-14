@@ -3,6 +3,7 @@ import { el } from "./createElement.js";
 import { registerUser } from "../api/auth/registerUser.js";
 import { displayError } from "./displayError.js";
 import { createSignInModal } from "./signInModal.js";
+import { validateEmail } from "./formValidation.js";
 
 function createSignUpNodes(onSubmit, close) {
   const nodes = [];
@@ -25,7 +26,7 @@ function createSignUpNodes(onSubmit, close) {
   const errorContainer = el("p", { class: "text-red-600 mb-2" });
   nodes.push(errorContainer);
 
-  const form = el("form", {});
+  const form = el("form", { novalidate: true });
 
   const nameLabel = el("label", { class: "block text-sm mb-2" });
   nameLabel.appendChild(el("span", { class: "text-gray-700" }, "Name"));
@@ -43,6 +44,7 @@ function createSignUpNodes(onSubmit, close) {
     type: "email",
     required: "true",
     class: "mt-1 block w-full border rounded px-3 py-2",
+    autocomplete: "email",
   });
   emailLabel.appendChild(emailInput);
   form.appendChild(emailLabel);
@@ -84,6 +86,11 @@ function createSignUpNodes(onSubmit, close) {
     const name = nameInput.value;
     const email = emailInput.value;
     const password = pwInput.value;
+    if (!validateEmail(email)) {
+      displayError(errorContainer, "Please enter a valid email address.");
+      emailInput.focus();
+      return;
+    }
     try {
       const result = await registerUser(name, email, password);
       if (

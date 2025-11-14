@@ -6,7 +6,7 @@ export function displayError(errorContainer, errors) {
       errorItem.textContent = error.message;
       errorContainer.appendChild(errorItem);
     });
-  } else if (typeof errors === "object") {
+  } else if (typeof errors === "string" || typeof errors === "object") {
     errorContainer.textContent = errors;
   } else {
     errorContainer.textContent = "An unknown error occurred.";
