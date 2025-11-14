@@ -20,6 +20,7 @@
     --color-grey-background: #D9D9D9;
     --color-cta: #B81BD0;
     --color-cta-hover: #7E168E;
+    --accent-color: #8B5CF6;
     --headings-font-family: 'Outfit', sans-serif;
     --sans-font-family: 'Open Sans', sans-serif;
 }
@@ -185,7 +186,7 @@ h3 {
     align-items: center;
     justify-content: center;
     /* Material Symbols variable axes — opsz (optical size) helps visual weight
-       when scaling icons. Adjust wght if you need thicker strokes. */
+       when scaling icons. */
     font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
 }
 
@@ -211,7 +212,7 @@ h3 {
 
 
 
-/* Only change the sign-in label to white when the sign-in buttons are hovered.
+/* change the sign-in label to white when the sign-in buttons are hovered.
    Use an explicit `.btn-signin` class so other buttons are unaffected. */
 .btn-signin:hover .menu-sign-in {
     color: white;
@@ -232,10 +233,7 @@ h3 {
 
 }
 
-/* Helper to force larger mobile sign-in buttons when desired. Use this on
-   mobile-only CTAs (e.g. `btn-signin btn-signin-lg`) to restore the larger
-   horizontal padding. The !important flags ensure it overrides the
-   responsive shrink rule above. */
+/* Helper to force larger mobile sign-in buttons when desired. */
 .btn-signin-lg {
     padding-left: 2.5rem !important;
     /* px-10 */
@@ -245,12 +243,29 @@ h3 {
 
 /* Reusable site container to center page content consistently across pages */
 .site-container {
-    max-width: 1000px;
-    margin-left: auto;
-    margin-right: auto;
+    /* Full-width on small screens; keep internal horizontal padding */
     width: 100%;
     padding-left: 1rem;
     padding-right: 1rem;
+}
+
+@screen md {
+    .site-container {
+        /* Constrain and center on medium+ viewports */
+        max-width: 1000px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+/* Make the profile row use flex starting at 500px; below that it will stack naturally */
+@media (min-width: 500px) {
+    .profile-row {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        /* matches Tailwind gap-4 */
+    }
 }
 
 /* How it Works layout */

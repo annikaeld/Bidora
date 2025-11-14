@@ -14,7 +14,7 @@
     <script type="module" src="/js/ui/loadProfile.js" defer></script>
   </head>
 
-  <body class="min-h-screen bg-gradient-background">
+  <body class="min-h-screen w-full bg-gradient-background">
     <header>
       <div id="vanilla-navbar"></div>
     </header>
@@ -25,22 +25,68 @@
         id="profile-container"
         class="border-gradient-stroke p-6 rounded-lg mt-8"
       >
-        <div class="flex items-center gap-4">
+        <div class="profile-row">
           <div
-            class="rounded-full overflow-hidden w-24 h-24 bg-gray-100 flex items-center justify-center"
+            class="relative rounded-full w-24 h-24 flex items-center justify-center"
           >
-            <img
-              src=""
-              alt="Profile photo"
-              class="w-full h-full object-cover"
-              onerror="this.onerror=null;const s=document.createElement('span');s.className='material-symbols-outlined avatar-icon';s.setAttribute('role','img');s.setAttribute('aria-label','Default avatar');s.textContent='face';this.replaceWith(s);"
-            />
+            <!-- Inner wrapper clips the image while outer container stays visible for the button -->
+            <div class="overflow-hidden rounded-full w-full h-full">
+              <img
+                src=""
+                alt="Profile photo"
+                class="w-full h-full object-cover"
+                onerror="this.onerror=null;const s=document.createElement('span');s.className='material-symbols-outlined avatar-icon';s.setAttribute('role','img');s.setAttribute('aria-label','Default avatar');s.textContent='face';this.replaceWith(s);"
+              />
+            </div>
+
+            <!-- Google/Material edit icon positioned over avatar (not clipped) -->
+            <button
+              id="edit-avatar-btn"
+              type="button"
+              aria-label="Edit profile photo"
+              class="absolute -bottom-1 -right-1 bg-[var(--accent-color)] text-white rounded-full w-8 h-8 flex items-center justify-center shadow-md hover:bg-[var(--color-cta-hover)] focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-indigo-300 leading-none"
+            >
+              <span class="material-symbols-outlined text-[14px]">stylus</span>
+            </button>
           </div>
           <div>
-            <h2 id="profile-name" class="text-xl font-semibold">Username</h2>
-            <p id="profile-email" class="text-sm text-gray-600"></p>
+            <h2 id="profile-name">Username</h2>
+            <p id="profile-email"></p>
+            <div class="flex items-center">
+              <!-- Token image shown alongside credits -->
+              <img
+                id="token-img"
+                src="/img/Token.png"
+                alt="Token icon"
+                class="w-6 h-6 mr-3"
+                loading="eager"
+              />
+              <p id="profile-credits" class="font-bold"></p>
+            </div>
           </div>
         </div>
+      </div>
+      <div
+        class="flex flex-row justify-evenly bg-[var(--color-grey-background)] rounded-lg mt-5"
+      >
+        <a
+          href="#"
+          class="flex-none w-fit-content sm:w-36 mx-2 text-center block px-3 sm:px-0 py-1 rounded-lg hover:bg-white"
+        >
+          <p class="font-bold text-sm">My Listings</p>
+        </a>
+        <a
+          href="#"
+          class="flex-none w-fit-content sm:w-36 mx-2 text-center block px-3 sm:px-0 py-1 rounded-lg hover:bg-white"
+        >
+          <p class="font-bold text-sm">Bid History</p>
+        </a>
+        <a
+          href="#"
+          class="flex-none w-fit-content sm:w-36 mx-2 text-center block px-3 sm:px-0 py-1 rounded-lg hover:bg-white"
+        >
+          <p class="font-bold text-sm">Winnings</p>
+        </a>
       </div>
       <div id="error-container" class="mt-4 text-red-600"></div>
       <div id="listings-container" class="border-gradient-stroke p-6 mt-8">
