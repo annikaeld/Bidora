@@ -87,7 +87,10 @@ function createSignUpNodes(onSubmit, close) {
     const email = emailInput.value;
     const password = pwInput.value;
     if (!validateEmail(email)) {
-      displayError(errorContainer, "Please enter a valid email address.");
+      displayError(
+        errorContainer,
+        "Please enter a valid stud.noroff.no email address.",
+      );
       emailInput.focus();
       return;
     }

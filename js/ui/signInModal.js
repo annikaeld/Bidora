@@ -19,7 +19,7 @@ function addModalContent(dialog, content) {
   }
 }
 
-export function createBaseModal(options = {}) {
+function createBaseModal(options = {}) {
   const { onSubmit } = options;
 
   let modalRoot = null;
@@ -242,7 +242,10 @@ function createSignInNodes(onSubmit, close) {
     e.preventDefault();
     errorContainer.textContent = "";
     if (!validateEmail(emailInput.value)) {
-      displayError(errorContainer, "Please enter a valid email address.");
+      displayError(
+        errorContainer,
+        "Please enter a valid stud.noroff.no email address.",
+      );
       emailInput.focus();
       return;
     }
