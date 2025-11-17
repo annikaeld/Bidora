@@ -1,0 +1,288 @@
+/* Import Google Fonts */
+@import url(https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Outfit:wght@100..900&display=swap);
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --gradient-background: linear-gradient(to bottom, #F7F7FD 0%, #F5F3FF 100%);
+    --gradient-card: linear-gradient(to bottom, #B81BD0, #2563EB);
+
+    /* Color design*/
+    --color-headlines: #B81BD0;
+    --color-border: #2563EB;
+    --color-text: #1B3069;
+    --color-black-text: #000000;
+    --color-background-accent: #DDD6FE;
+    --color-card-background: #F7F7FD;
+    --color-grey-background: #D9D9D9;
+    --color-cta: #B81BD0;
+    --color-cta-hover: #7E168E;
+    --accent-color: #8B5CF6;
+    --headings-font-family: 'Outfit', sans-serif;
+    --sans-font-family: 'Open Sans', sans-serif;
+}
+
+/* Typography */
+p {
+    font-family: var(--sans-font-family);
+    color: var(--color-text);
+    @apply text-base;
+}
+
+h1,
+h2,
+h3 {
+    font-family: var(--headings-font-family);
+    font-weight: 700;
+}
+
+h1 {
+    color: var(--color-headlines);
+    @apply text-2xl;
+}
+
+h2,
+h3 {
+    color: var(--color-text);
+}
+
+h2 {
+    @apply text-xl;
+}
+
+h3 {
+    @apply text-lg;
+}
+
+/* Larger type on md and up */
+@screen md {
+    p {
+        @apply text-lg;
+    }
+
+    h1 {
+        @apply text-4xl;
+    }
+
+    h2 {
+        @apply text-2xl;
+    }
+
+    h3 {
+        @apply text-xl;
+    }
+}
+
+.border-color-border {
+    border-color: var(--color-headlines);
+    border-style: solid;
+}
+
+.heading-color {
+    color: var(--color-headlines);
+}
+
+.btn-primary {
+    background: var(--color-headlines);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: var(--color-cta-hover);
+}
+
+.border-gradient-stroke {
+    border: 1px solid transparent;
+    border-radius: 0.5rem;
+    /* inner layer (content/bg) then outer gradient for border-box */
+    background-image: linear-gradient(var(--color-card-background), var(--color-card-background)), var(--gradient-card);
+    background-origin: padding-box, border-box;
+    background-clip: padding-box, border-box;
+}
+
+/* Auctions grid layout */
+.auctions-grid {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    grid-auto-rows: 1fr;
+    gap: 1rem;
+    align-items: stretch;
+    padding: 2rem;
+}
+
+@screen sm {
+    .auctions-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
+@screen md {
+    .auctions-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Auction card styling: transparent background, dark-blue border, rounded corners */
+.auction-element {
+    background: transparent;
+    border: 1px solid var(--color-text);
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    color: var(--color-text);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.auction-element:hover,
+.auction-element:focus-within {
+    box-shadow: 0 10px 30px rgba(27, 48, 105, 0.12), 0 4px 12px rgba(27, 48, 105, 0.06);
+    transform: translateY(-4px);
+    background: var(--color-background-accent);
+    transition: box-shadow 220ms ease, transform 220ms ease, background-color 160ms ease;
+    cursor: pointer;
+}
+
+.auction-image-wrap {
+    width: 100%;
+    height: 200px;
+    /* fixed image area height */
+    overflow: hidden;
+    border-radius: 0.375rem;
+    margin: 0 0 0.5rem 0;
+}
+
+.auction-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* center the focal point of the image inside the container by default */
+    object-position: center center;
+    /* allow per-image overrides via inline style or data attribute by setting
+       the CSS custom property --object-position, e.g.
+       <img style="--object-position:30% 40%;" class="auction-image" ...>
+       then use object-position: var(--object-position, center center);
+    */
+    object-position: var(--object-position, center center);
+}
+
+/* Avatar icon fallback for Material Symbols*/
+.material-symbols-outlined.avatar-icon,
+.avatar-icon.material-symbols-outlined {
+    font-size: 96px !important;
+    /* ensure it overrides other font-size rules */
+    width: 96px;
+    height: 96px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    /* Material Symbols variable axes — opsz (optical size) helps visual weight
+       when scaling icons. */
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+}
+
+.auction-meta {
+    margin-top: auto;
+
+}
+
+.no-image {
+    width: 100%;
+    height: 200px;
+    background: #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.375rem;
+    color: #666;
+}
+
+.auction-element p {
+    margin: 0 0 0.35rem 0;
+}
+
+
+
+/* change the sign-in label to white when the sign-in buttons are hovered.
+   Use an explicit `.btn-signin` class so other buttons are unaffected. */
+.btn-signin:hover .menu-sign-in {
+    color: white;
+}
+
+/* Reduce sign-in button outline & horizontal padding on small widths (<895px)
+   so the border and button can shrink and avoid pushing layout. */
+@media (max-width: 895px) {
+    .btn-signin {
+        padding-left: 0.5rem;
+        /* px-2 */
+        padding-right: 0.5rem;
+    }
+
+    .btn-signin .menu-sign-in {
+        font-size: 0.95rem;
+    }
+
+}
+
+/* Helper to force larger mobile sign-in buttons when desired. */
+.btn-signin-lg {
+    padding-left: 2.5rem !important;
+    /* px-10 */
+    padding-right: 2.5rem !important;
+    /* px-10 */
+}
+
+/* Reusable site container to center page content consistently across pages */
+.site-container {
+    /* Full-width on small screens; keep internal horizontal padding */
+    width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+@screen md {
+    .site-container {
+        /* Constrain and center on medium+ viewports */
+        max-width: 1000px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+/* Make the profile row use flex starting at 500px; below that it will stack naturally */
+@media (min-width: 500px) {
+    .profile-row {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        /* matches Tailwind gap-4 */
+    }
+}
+
+/* How it Works layout */
+
+#howitworks .text-black.grid .flex>.w-full[class*="max-w-"] {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#howitworks .text-black.grid .flex>.w-full[class*="max-w-"] img {
+    max-width: 100px;
+    /* change this value to control visual size */
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}

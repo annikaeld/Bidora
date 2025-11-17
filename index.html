@@ -1,17 +1,159 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bidora | Official Homepage</title>
+    <link rel="icon" type="image/svg+xml" href="/img/favicon.svg" />
+    <link rel="alternate icon" href="/img/favicon.svg" />
+    <link rel="stylesheet" href="/src/styles/globals.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+  </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+  <body class="min-h-screen w-full bg-gradient-background">
+    <header>
+      <div id="vanilla-navbar"></div>
+    </header>
+    <div class="site-container">
+      <main>
+        <section class="py-20 bg-[var(--color-background-accent)]">
+          <div class="container mx-auto px-4"></div>
+          <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row-reverse items-center gap-8">
+              <div class="w-full md:w-1/2">
+                <img
+                  src="/img/arjan-van-den-berg-vwP3ti8qNwE-unsplash-1.jpg"
+                  alt="Illustration of an auction item"
+                  class="mx-auto w-full h-auto rounded-lg shadow-md"
+                />
+              </div>
 
-<body>
-    <main>
-        <h1>Hello World</h1>
-    </main>
+              <div class="w-full md:w-1/2">
+                <h1 class="heading mb-4">
+                  Discover Rare Treasures at Live Auctions
+                </h1>
+                <p class="text-black">
+                  Join thousands of collectors and enthusiasts in the hunt for
+                  extraordinary items. Bid on unique items and discover your
+                  next treasure.
+                </p>
 
-</body>
+                <!-- CTA container: desktop shows sign-in under text, mobile shows mobile sign-in + link -->
+                <div
+                  id="auctions-cta"
+                  class="mt-6 flex flex-col items-center md:items-start gap-3"
+                ></div>
+              </div>
+            </div>
+          </div>
+        </section>
 
+        <section
+          id="howitworks"
+          class="py-20 bg-[var(--color-card-background)]"
+        >
+          <div class="container mx-auto px-4">
+            <h1 class="heading mb-4">How it works</h1>
+            <div
+              class="text-black w-full mx-auto grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12"
+            >
+              <div class="flex justify-center w-full">
+                <div class="w-full max-w-[160px] space-y-4">
+                  <img
+                    src="/img/create-account.png"
+                    alt="Create Account"
+                    class="rounded-md w-full h-auto mx-auto"
+                  />
+                  <h3 class="font-semibold text-left min-h-[3rem] leading-snug">
+                    Create an Account
+                  </h3>
+                  <p class="text-left">
+                    Create a free account to get the possibility to bid on our
+                    items.
+                  </p>
+                </div>
+              </div>
+              <div class="flex justify-center w-full">
+                <div class="w-full max-w-[160px] space-y-4">
+                  <img
+                    src="/img/browse.png"
+                    alt="Browse Items"
+                    class="rounded-md w-full h-auto mx-auto"
+                  />
+                  <h3 class="font-semibold text-left min-h-[3rem] leading-snug">
+                    Browse Auctions
+                  </h3>
+                  <p class="text-left">
+                    Explore our colection of rare and unique items.
+                  </p>
+                </div>
+              </div>
+              <div class="flex justify-center w-full">
+                <div class="w-full max-w-[160px] space-y-4">
+                  <img
+                    src="/img/place-bid.png"
+                    alt="Place Bid"
+                    class="rounded-md w-full h-auto mx-auto"
+                  />
+                  <h3 class="font-semibold text-left min-h-[3rem] leading-snug">
+                    Place Your Bid
+                  </h3>
+                  <p class="text-left">
+                    Anyone with an account can place a bid with our online
+                    bidding system.
+                  </p>
+                </div>
+              </div>
+              <div class="flex justify-center w-full">
+                <div class="w-full max-w-[160px] space-y-4">
+                  <img
+                    src="/img/win-and-recieve.png"
+                    alt="Win and Receive"
+                    class="rounded-md w-full h-auto mx-auto"
+                  />
+                  <h3 class="font-semibold text-left min-h-[3rem] leading-snug">
+                    Win and Receive
+                  </h3>
+                  <p class="text-left">
+                    Celebrate your win and receive your treasure.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="about" class="py-20 bg-[var(--color-background-accent)]">
+          <div class="container mx-auto px-4 space-y-6">
+            <h1 class="heading mb-4">About</h1>
+            <p class="text-black">
+              It all started with a simple thought: What if the things we no
+              longer loved could become treasures for someone else?
+            </p>
+
+            <p class="text-black">
+              Born from a love of both the planet and the treasures that make
+              life beautiful, our platform was created for those who care deeply
+              about what they own — and where it comes from. A space where
+              pre-loved items could find new homes, where people could change
+              their style without harming the environment, and where quality
+              would matter more than quantity.
+            </p>
+
+            <p class="text-black">
+              We believe that when you pass something on, you’re not just
+              letting go—you’re giving it another chance to shine. And in that
+              way, we can all treasure more, waste less, and keep beauty moving
+              from one home to the next.
+            </p>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="/js/ui/navbar.js"></script>
+  </body>
 </html>

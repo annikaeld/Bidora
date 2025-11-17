@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bidora | My Profile</title>
+    <link rel="icon" type="image/svg+xml" href="/img/favicon.svg" />
+    <link rel="alternate icon" href="/img/favicon.svg" />
+    <link rel="stylesheet" href="/src/styles/globals.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+      rel="stylesheet"
+    />
+    <script type="module" src="/js/ui/loadProfile.js" defer></script>
+  </head>
+
+  <body class="min-h-screen w-full bg-gradient-background">
+    <header>
+      <div id="vanilla-navbar"></div>
+    </header>
+
+    <main class="site-container">
+      <h1 class="sr-only">Profile</h1>
+      <div
+        id="profile-container"
+        class="border-gradient-stroke p-6 rounded-lg mt-8"
+      >
+        <div class="profile-row">
+          <div
+            class="relative rounded-full w-24 h-24 flex items-center justify-center"
+          >
+            <!-- Inner wrapper clips the image while outer container stays visible for the button -->
+            <div class="overflow-hidden rounded-full w-full h-full">
+              <img
+                src=""
+                alt="Profile photo"
+                class="w-full h-full object-cover"
+                onerror="this.onerror=null;const s=document.createElement('span');s.className='material-symbols-outlined avatar-icon';s.setAttribute('role','img');s.setAttribute('aria-label','Default avatar');s.textContent='face';this.replaceWith(s);"
+              />
+            </div>
+
+            <!-- Google/Material edit icon positioned over avatar (not clipped) -->
+            <button
+              id="edit-avatar-btn"
+              type="button"
+              aria-label="Edit profile photo"
+              class="absolute -bottom-1 -right-1 bg-[var(--accent-color)] text-white rounded-full w-8 h-8 flex items-center justify-center shadow-md hover:bg-[var(--color-cta-hover)] focus:outline-none focus:ring-1 focus:ring-offset-1 focus:ring-indigo-300 leading-none"
+            >
+              <span class="material-symbols-outlined text-[14px]">stylus</span>
+            </button>
+          </div>
+          <div>
+            <h2 id="profile-name">Username</h2>
+            <p id="profile-email"></p>
+            <div class="flex items-center">
+              <!-- Token image shown alongside credits -->
+              <img
+                id="token-img"
+                src="/img/Token.png"
+                alt="Token icon"
+                class="w-6 h-6 mr-3"
+                loading="eager"
+              />
+              <p id="profile-credits" class="font-bold"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="flex flex-row justify-evenly bg-[var(--color-grey-background)] rounded-lg mt-5"
+      >
+        <a
+          href="#"
+          class="flex-none w-fit-content sm:w-36 mx-2 text-center block px-3 sm:px-0 py-1 rounded-lg hover:bg-white"
+        >
+          <p class="font-bold text-sm">My Listings</p>
+        </a>
+        <a
+          href="#"
+          class="flex-none w-fit-content sm:w-36 mx-2 text-center block px-3 sm:px-0 py-1 rounded-lg hover:bg-white"
+        >
+          <p class="font-bold text-sm">Bid History</p>
+        </a>
+        <a
+          href="#"
+          class="flex-none w-fit-content sm:w-36 mx-2 text-center block px-3 sm:px-0 py-1 rounded-lg hover:bg-white"
+        >
+          <p class="font-bold text-sm">Winnings</p>
+        </a>
+      </div>
+      <div id="error-container" class="mt-4 text-red-600"></div>
+      <div id="listings-container" class="border-gradient-stroke p-6 mt-8">
+        <!-- Listings content will be dynamically loaded here -->
+      </div>
+    </main>
+
+    <script type="module" src="/js/ui/navbar.js"></script>
+  </body>
+</html>
