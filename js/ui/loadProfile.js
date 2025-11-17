@@ -1,5 +1,7 @@
 import { getCurrentProfile } from "../api/profile.js";
 import { displayError } from "./displayError.js";
+import { setAvatarModal } from "./setAvatarModal.js";
+import { updateAvatar } from "../api/profile.js";
 
 async function loadProfile() {
   try {
@@ -25,3 +27,15 @@ async function setElementContent(elementId, value) {
 }
 
 loadProfile();
+
+// Add event listener for avatar edit button
+document.addEventListener("DOMContentLoaded", () => {
+  const editBtn = document.getElementById("edit-avatar-btn");
+  if (editBtn) {
+    editBtn.addEventListener("click", () => {
+      setAvatarModal((avatarUrl) => {
+        updateAvatar(avatarUrl);
+      });
+    });
+  }
+});

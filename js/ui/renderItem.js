@@ -24,12 +24,62 @@ export function insertItemText(item) {
   if (!container) return;
   container.innerHTML = "";
   const title = item?.data.title || "Untitled";
+
   const description = item?.data.description || "";
+  const avatarUrl = item?.data.seller.avatar.url || "";
+  const avatarAlt = item?.data.seller.avatar.alt || "";
+  const seller = item?.data.seller.name || "";
+  const endsAt = item?.data.endsAt || "";
+  const endsIn = endsAt ? formatRemaining(endsAt) : "";
+  const bids = Array.isArray(item?.data?.bids) ? item.data.bids : [];
+  const sorted = [...bids].sort((a, b) => {
+    const ta = a?.created ? new Date(a.created).getTime() : 0;
+    const tb = b?.created ? new Date(b.created).getTime() : 0;
+    return tb - ta; // tb - ta => newest first
+  });
   const html = `
-    <h1 class="text-2xl font-bold">${escapeHtml(title)}</h1>
-    <p class="mt-2 text-gray-700">${escapeHtml(description)}</p>
+    <p>Auction ends in: ${escapeHtml(endsIn)}</p>
+    <h1>${escapeHtml(title)}</h1>
+    <h2>${bids && bids.length > 0 ? `${Math.max(...bids.map((bid) => bid.amount))} tokens` : "No bids yet"}</h2>
+    <p class="mt-2">${escapeHtml(description)}</p>
+    <img src="${escapeHtml(avatarUrl)}" alt="${escapeHtml(avatarAlt)}" class="w-10 h-10 rounded-full mt-4" />
+    <p>${escapeHtml(seller)}</p>
+    
   `;
-  container.innerHTML = html;
+  const bidsHtml = sorted
+    .map((b) => {
+      const bidder = b?.bidder?.name || b?.bidder?.email || "Anonymous";
+      const amount = b?.amount ?? b?.value ?? "";
+      const created = b?.created ? formatAge(b.created) : "";
+      const timePart = created
+        ? ` <small class="text-gray-500">• ${escapeHtml(created)}</small>`
+        : "";
+      const bidderAvatar = b?.bidder?.avatar?.url || "";
+      const bidderInitials =
+        (bidder.split &&
+          bidder
+            .split(" ")
+            .map((s) => s[0])
+            .slice(0, 2)
+            .join("")) ||
+        "";
+
+      const bidderLeft = bidderAvatar
+        ? `<img src="${escapeHtml(bidderAvatar)}" alt="${escapeHtml(bidder)}" class="w-6 h-6 rounded-full mr-2 object-cover" />`
+        : `<div class="w-6 h-6 rounded-full mr-2 flex items-center justify-center text-xs">${escapeHtml(bidderInitials)}</div>`;
+
+      return `<li class="flex justify-between items-center py-1">
+      <div class="flex items-center"><span class="inline-block">${bidderLeft}</span><span>${escapeHtml(bidder)}${timePart}</span></div>
+      <span>${escapeHtml(String(amount))}</span>
+    </li>`;
+    })
+    .join("");
+
+  const bidsSection = bidsHtml
+    ? `<div class="mt-4"><h3 class="font-semibold">Bids</h3><ul class="mt-2">${bidsHtml}</ul></div>`
+    : `<p class="mt-4 text-sm text-gray-500">No bids yet</p>`;
+
+  container.innerHTML = html + bidsSection;
 }
 
 function escapeHtml(str) {
@@ -40,4 +90,35 @@ function escapeHtml(str) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+}
+
+function formatAge(isoDate) {
+  if (!isoDate) return "";
+  const then = new Date(isoDate).getTime();
+  if (Number.isNaN(then)) return "";
+  const now = Date.now();
+  const diffSec = Math.floor((now - then) / 1000);
+  if (diffSec < 60) return "just now";
+  const diffMin = Math.floor(diffSec / 60);
+  if (diffMin < 60) return `${diffMin} minute${diffMin === 1 ? "" : "s"} ago`;
+  const diffHours = Math.floor(diffMin / 60);
+  if (diffHours < 24)
+    return `${diffHours} hour${diffHours === 1 ? "" : "s"} ago`;
+  const diffDays = Math.floor(diffHours / 24);
+  return `${diffDays} day${diffDays === 1 ? "" : "s"} ago`;
+}
+
+function formatRemaining(isoDate) {
+  if (!isoDate) return "";
+  const then = new Date(isoDate).getTime();
+  if (Number.isNaN(then)) return "";
+  const now = Date.now();
+  let diffSec = Math.floor((then - now) / 1000);
+  if (diffSec <= 0) return "ended";
+  const days = Math.floor(diffSec / 86400);
+  diffSec -= days * 86400;
+  const hours = Math.floor(diffSec / 3600);
+  diffSec -= hours * 3600;
+  const minutes = Math.floor(diffSec / 60);
+  return `${days} day${days === 1 ? "" : "s"}  ${hours} hour${hours === 1 ? "" : "s"}  ${minutes} minute${minutes === 1 ? "" : "s"}`;
 }

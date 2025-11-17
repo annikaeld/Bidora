@@ -27,3 +27,24 @@ export async function getCurrentProfile() {
   console.log("Profile:", profile);
   return profile;
 }
+
+export async function updateAvatar(avatar) {
+  console.log("Updating avatar to:", avatar);
+  const profile = await getCurrentProfile();
+  if (!profile || !profile.name) {
+    throw new Error("No current profile found");
+  }
+  profile.avatar = avatar;
+  await saveProfile(profile);
+}
+
+export async function saveProfile(profile) {
+  const response = await authFetch(
+    `${API_BASE}${API_AUCTION}${API_PROFILES}/${profile.name}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(profile),
+    },
+  );
+  return response.json;
+}

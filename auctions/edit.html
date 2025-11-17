@@ -22,10 +22,10 @@
     <main class="max-w-4xl mx-auto mt-8 p-4">
       <div
         id="post-container"
-        class="bg-white border-indigo-950 border-2 dark:bg-zinc-200 p-6 rounded-lg shadow-md"
+        class="border-gradient-stroke p-6 rounded-lg mt-8"
       >
-        <h1>Create listing</h1>
-        <form id="edit-listing-form">
+        <h1>Create New Listing</h1>
+        <form id="edit-listing-form" class="p-4">
           <div>
             <label for="title">Title</label>
             <input
@@ -36,7 +36,7 @@
               required
             />
           </div>
-          <div>
+          <div class="mt-4">
             <label for="description">Description</label>
             <textarea
               id="description"
@@ -46,7 +46,7 @@
               required
             ></textarea>
           </div>
-          <div>
+          <div class="mt-4">
             <label for="ends-at">Auction end date and time</label>
             <input
               type="datetime-local"
@@ -56,7 +56,7 @@
               required
             />
           </div>
-          <div id="add-images-container">
+          <div id="add-images-container" class="mt-4">
             <label for="image-url-1">Image URL</label>
             <input
               type="url"
@@ -65,7 +65,9 @@
               class="w-full border"
               required
             />
-            <label for="image-alt-text-1">Image alt-text</label>
+            <label for="image-alt-text-1" class="block mt-2"
+              >Image alt-text</label
+            >
             <input
               type="text"
               id="image-alt-text-1"
@@ -73,11 +75,20 @@
               class="w-full border"
             />
           </div>
-          <div>
-            <button id="add-image-button">Add image</button>
-          </div>
-          <div>
-            <button type="submit">Create Listing</button>
+          <div class="flex items-center justify-between mt-6">
+            <button
+              id="add-image-button"
+              type="button"
+              class="border-2 border-cta text-text-primary bg-transparent px-3 py-2 rounded hover:bg-cta hover:text-white focus:outline-none focus:ring-2 focus:ring-cta"
+            >
+              Add image
+            </button>
+            <button
+              type="submit"
+              class="bg-cta hover:bg-cta-hover text-white px-3 py-2 rounded"
+            >
+              Create Listing
+            </button>
           </div>
         </form>
       </div>
