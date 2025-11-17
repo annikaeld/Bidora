@@ -119,7 +119,7 @@ function createLogo() {
 function createBurger() {
   const burger = el("button", {
     class:
-      "md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:bg-gray-100",
+      "md:hidden inline-flex items-center justify-center p-2 rounded-md text-[var(--color-text)] hover:bg-[var(--color-cta-hover)]",
     "aria-controls": "mobile-menu",
     "aria-expanded": "false",
     "aria-label": "Open main menu",
@@ -210,7 +210,7 @@ function createDesktopLinks(btnBase) {
                 {
                   href: import.meta.env.BASE_URL + "profile/",
                   class:
-                    "block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100",
+                    "block px-4 py-2 text-sm text-[var(--color-text)] hover:bg-gray-100",
                 },
                 "Profile",
               ),
@@ -220,7 +220,7 @@ function createDesktopLinks(btnBase) {
                   {
                     type: "button",
                     class:
-                      "block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100",
+                      "block w-full text-left px-4 py-2 text-sm text-[var(--color-text)] hover:bg-gray-100",
                   },
                   "Log out",
                 );
@@ -338,7 +338,9 @@ function createMobileMenu(btnBase) {
       { class: "user-dropdown-mobile mt-2" },
       el(
         "span",
-        { class: "block font-semibold text-gray-700 px-2 pt-2 pb-1" },
+        {
+          class: "block font-semibold text-[var(--color-text)] px-2 pt-2 pb-1",
+        },
         "User",
       ),
       el(

@@ -27,7 +27,7 @@ function createSignInNodes(onSubmit, close) {
   nodes.push(
     el(
       "p",
-      { class: "text-sm text-gray-700 mb-4" },
+      { class: "text-sm text-[var(--color-text)] mb-4" },
       "Sign in to your account or create a new one to start bidding on amazing items.",
     ),
   );
@@ -37,7 +37,9 @@ function createSignInNodes(onSubmit, close) {
 
   const form = el("form", { novalidate: true });
   const emailLabel = el("label", { class: "block text-sm mb-2" });
-  emailLabel.appendChild(el("span", { class: "text-gray-700" }, "Email"));
+  emailLabel.appendChild(
+    el("span", { class: "text-[var(--color-text)]" }, "Email"),
+  );
   const emailInput = el("input", {
     type: "email",
     required: "true",
@@ -48,7 +50,9 @@ function createSignInNodes(onSubmit, close) {
   form.appendChild(emailLabel);
 
   const pwLabel = el("label", { class: "block text-sm mb-4" });
-  pwLabel.appendChild(el("span", { class: "text-gray-700" }, "Password"));
+  pwLabel.appendChild(
+    el("span", { class: "text-[var(--color-text)]" }, "Password"),
+  );
   const pwInput = el("input", {
     type: "password",
     required: "true",

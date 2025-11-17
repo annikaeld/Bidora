@@ -17,7 +17,7 @@ function createSignUpNodes(onSubmit, close) {
   nodes.push(
     el(
       "p",
-      { class: "text-sm text-gray-700 mb-4" },
+      { class: "text-sm text-[var(--color-text)] mb-4" },
       "Sign up to start bidding on amazing items.",
     ),
   );
@@ -29,7 +29,9 @@ function createSignUpNodes(onSubmit, close) {
   const form = el("form", { novalidate: true });
 
   const nameLabel = el("label", { class: "block text-sm mb-2" });
-  nameLabel.appendChild(el("span", { class: "text-gray-700" }, "Name"));
+  nameLabel.appendChild(
+    el("span", { class: "text-[var(--color-text)]" }, "Name"),
+  );
   const nameInput = el("input", {
     type: "text",
     required: "true",
@@ -39,7 +41,9 @@ function createSignUpNodes(onSubmit, close) {
   form.appendChild(nameLabel);
 
   const emailLabel = el("label", { class: "block text-sm mb-2" });
-  emailLabel.appendChild(el("span", { class: "text-gray-700" }, "Email"));
+  emailLabel.appendChild(
+    el("span", { class: "text-[var(--color-text)]" }, "Email"),
+  );
   const emailInput = el("input", {
     type: "email",
     required: "true",
@@ -50,7 +54,9 @@ function createSignUpNodes(onSubmit, close) {
   form.appendChild(emailLabel);
 
   const pwLabel = el("label", { class: "block text-sm mb-4" });
-  pwLabel.appendChild(el("span", { class: "text-gray-700" }, "Password"));
+  pwLabel.appendChild(
+    el("span", { class: "text-[var(--color-text)]" }, "Password"),
+  );
   const pwInput = el("input", {
     type: "password",
     required: "true",
