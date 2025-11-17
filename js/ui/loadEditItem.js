@@ -14,7 +14,15 @@ function getFormValues(formId) {
   }
   const title = form.querySelector('[name="title"]')?.value || "";
   const description = form.querySelector('[name="description"]')?.value || "";
-  const endsAt = form.querySelector('[name="ends-at"]')?.value || "";
+  
+  let endsAt = form.querySelector('[name="ends-at"]')?.value || "";
+  // Convert local datetime to UTC ISO string if value exists
+  if (endsAt) {
+    const localDate = new Date(endsAt);
+    console.log("Local date for endsAt:", localDate);
+    endsAt = localDate.toISOString();
+    console.log("Converted endsAt to ISO string:", endsAt);
+  }
   // Collect all image-url and image-alt-text pairs
   const media = [];
   let i = 1;

@@ -3,6 +3,7 @@ import { displayError } from "./displayError.js";
 import { setAvatarModal } from "./setAvatarModal.js";
 import { updateAvatar } from "../api/profile.js";
 import { createListingHtml } from "./createListingHtml.js";
+import { createWinningsHtml } from "./createWinningsHtml.js";
 
 async function loadProfile() {
   try {
@@ -50,11 +51,29 @@ async function loadMyListings(profile) {
   }
 }
 
-let profile = await loadProfile();
-await loadMyListings(profile);
+async function loadWinnings(profile) {
+  try {
+    console.log("Loading winnings for profile:", profile);
+    const winningsContainer = document.getElementById("winnings-container");
+    if (!winningsContainer) return;
+    if (!profile || !Array.isArray(profile.wins)) {
+      winningsContainer.innerHTML =
+        '<p class="text-gray-500">No winnings found.</p>';
+      return;
+    }
+    let html = "";
+    for (const winning of profile.wins) {
+      html += createWinningsHtml(winning);
+    }
+    winningsContainer.innerHTML = html;
+  } catch (error) {
+    console.error("Failed to load winnings:", error);
+    const errorContainer = document.getElementById("error-container");
+    displayError(errorContainer, error);
+  }
+}
 
-// Add event listener for avatar edit button
-document.addEventListener("DOMContentLoaded", () => {
+function setupAvatarEditButton() {
   const editBtn = document.getElementById("edit-avatar-btn");
   if (editBtn) {
     editBtn.addEventListener("click", () => {
@@ -63,4 +82,47 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   }
-});
+}
+
+function setupWinningsToggleButton() {
+  const navLinks = document.querySelectorAll(".flex-row a");
+  const listingsBtn = navLinks[0];
+  const winningsBtn = navLinks[2];
+  const winningsContainer = document.getElementById("winnings-container");
+  const listingsContainer = document.getElementById("my-listings-container");
+  if (winningsBtn && winningsContainer && listingsContainer) {
+    winningsBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      winningsContainer.classList.remove("hidden");
+      listingsContainer.classList.add("hidden");
+    });
+  }
+  if (listingsBtn && winningsContainer && listingsContainer) {
+    listingsBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      listingsContainer.classList.remove("hidden");
+      winningsContainer.classList.add("hidden");
+    });
+  }
+}
+
+function setupProfilePageInteractions() {
+  setupAvatarEditButton();
+  setupWinningsToggleButton();
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", async () => {
+    let profile = await loadProfile();
+    await loadMyListings(profile);
+    await loadWinnings(profile);
+    setupProfilePageInteractions();
+  });
+} else {
+  (async () => {
+    let profile = await loadProfile();
+    await loadMyListings(profile);
+    await loadWinnings(profile);
+    setupProfilePageInteractions();
+  })();
+}
