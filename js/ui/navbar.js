@@ -130,7 +130,8 @@ function createBurger() {
 
 function createDesktopLinks(btnBase) {
   const desktop = el("div", {
-    class: "nav-links hidden md:flex items-center gap-6",
+    class:
+      "nav-links hidden md:flex items-center gap-6 text-[var(--color-text)] font-semibold",
   });
   const links = el(
     "div",
@@ -169,9 +170,16 @@ function createDesktopLinks(btnBase) {
             "a",
             {
               href: import.meta.env.BASE_URL + "auctions/edit.html",
-              class: "hover:underline menu-item px-4 md:px-5",
+              class:
+                "inline-flex items-center justify-center w-9 h-9 rounded-full bg-[var(--color-cta)] hover:bg-[var(--color-cta-hover)] text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta)]",
+              title: "Create listing",
+              "aria-label": "Create listing",
             },
-            "Create listing",
+            el(
+              "span",
+              { class: "material-symbols-outlined text-[20px] leading-none" },
+              "add_2",
+            ),
           ),
           // User dropdown
           (() => {
