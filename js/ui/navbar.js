@@ -33,14 +33,14 @@ function createNavbar() {
   const modal = createSignInModal({
     async onSubmit(data) {
       const result = await handleLoginSubmit(data.email, data.password);
-      // Only rebuild navbar if login is successful
+      // Reload page if login is successful
       if (
         result &&
         result.response &&
         result.response.ok &&
         typeof window !== "undefined"
       ) {
-        initVanillaNavbar();
+        window.location.reload();
       }
       return result;
     },
@@ -55,6 +55,17 @@ function createNavbar() {
   if (mobileSignIn) {
     mobileSignIn.addEventListener("click", (e) => {
       mobileMenu.classList.add("hidden");
+      modal.openSignInModal(e.currentTarget);
+    });
+  }
+
+  const homepageMobileBtn = document.getElementById("homepage-mobile-signin");
+  if (homepageMobileBtn) {
+    homepageMobileBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      // hide mobile menu if visible
+      const mobileMenuEl = document.getElementById("mobile-menu");
+      if (mobileMenuEl) mobileMenuEl.classList.add("hidden");
       modal.openSignInModal(e.currentTarget);
     });
   }
@@ -94,7 +105,7 @@ function createLogo() {
       class: "logo inline-flex items-center gap-2",
     },
     logoImg,
-    el("span", { class: "sr-only" }, "Bidora"),
+    el("span", { class: "sr-only" }, "Bidora")
   );
   logo.addEventListener("click", (e) => {
     try {
@@ -103,7 +114,7 @@ function createLogo() {
         (p.replace(/\/index\.html$/, "").replace(/\/+$/, "") || "") + "/";
       const current = normalize(window.location.pathname);
       const basePath = normalize(
-        new URL(base, window.location.origin).pathname,
+        new URL(base, window.location.origin).pathname
       );
       if (current === basePath) {
         e.preventDefault();
@@ -119,7 +130,7 @@ function createLogo() {
 function createBurger() {
   const burger = el("button", {
     class:
-      "md:hidden inline-flex items-center justify-center p-2 rounded-md text-[var(--color-text)] hover:bg-[var(--color-cta-hover)]",
+      "md:hidden inline-flex items-center justify-center p-2 rounded-md text-[var(--color-text)]",
     "aria-controls": "mobile-menu",
     "aria-expanded": "false",
     "aria-label": "Open main menu",
@@ -145,7 +156,7 @@ function createDesktopLinks(btnBase) {
         href: import.meta.env.BASE_URL + "auctions/",
         class: "hover:underline menu-item px-4 md:px-5",
       },
-      "Auctions",
+      "Auctions"
     ),
     el(
       "a",
@@ -153,7 +164,7 @@ function createDesktopLinks(btnBase) {
         href: import.meta.env.BASE_URL + "#howitworks",
         class: "hover:underline menu-item px-4 md:px-5",
       },
-      "How it Works",
+      "How it Works"
     ),
     el(
       "a",
@@ -161,7 +172,7 @@ function createDesktopLinks(btnBase) {
         href: import.meta.env.BASE_URL + "#about",
         class: "hover:underline menu-item px-4 md:px-5",
       },
-      "About",
+      "About"
     ),
     // 'Create listing' and 'Profile' links only if logged in
     ...(isLoggedIn()
@@ -178,8 +189,8 @@ function createDesktopLinks(btnBase) {
             el(
               "span",
               { class: "material-symbols-outlined text-[20px] leading-none" },
-              "add_2",
-            ),
+              "add_2"
+            )
           ),
           // User dropdown
           (() => {
@@ -197,7 +208,7 @@ function createDesktopLinks(btnBase) {
                 type: "button",
                 tabIndex: 0,
               },
-              "User \u25BC",
+              "User \u25BC"
             );
             const menu = el(
               "div",
@@ -212,7 +223,7 @@ function createDesktopLinks(btnBase) {
                   class:
                     "block px-4 py-2 text-sm text-[var(--color-text)] hover:bg-gray-100",
                 },
-                "Profile",
+                "Profile"
               ),
               (() => {
                 const logout = el(
@@ -222,11 +233,11 @@ function createDesktopLinks(btnBase) {
                     class:
                       "block w-full text-left px-4 py-2 text-sm text-[var(--color-text)] hover:bg-gray-100",
                   },
-                  "Log out",
+                  "Log out"
                 );
                 logout.addEventListener("click", logoutUser);
                 return logout;
-              })(),
+              })()
             );
             // Show/hide menu on mouseenter/mouseleave for both button and menu
             let menuVisible = false;
@@ -265,7 +276,7 @@ function createDesktopLinks(btnBase) {
             return dropdown;
           })(),
         ]
-      : []),
+      : [])
   );
   let desktopSignIn = null;
   desktop.appendChild(links);
@@ -277,7 +288,7 @@ function createDesktopLinks(btnBase) {
         class: `${btnBase} px-4 md:px-10`,
         "aria-label": "Sign in",
       },
-      el("span", { class: "menu-sign-in text-l" }, "Sign in"),
+      el("span", { class: "menu-sign-in text-l" }, "Sign in")
     );
     desktop.appendChild(el("div", { class: "auth" }, desktopSignIn));
   }
@@ -297,8 +308,8 @@ function createMobileMenu(btnBase) {
         href: import.meta.env.BASE_URL + "auctions/",
         class: "block py-2 px-2 hover:underline menu-item",
       },
-      "Auctions",
-    ),
+      "Auctions"
+    )
   );
   mobileMenu.appendChild(
     el(
@@ -307,8 +318,8 @@ function createMobileMenu(btnBase) {
         href: import.meta.env.BASE_URL + "#howitworks",
         class: "block py-2 px-2 hover:underline menu-item",
       },
-      "How it Works",
-    ),
+      "How it Works"
+    )
   );
   mobileMenu.appendChild(
     el(
@@ -317,8 +328,8 @@ function createMobileMenu(btnBase) {
         href: import.meta.env.BASE_URL + "#about",
         class: "block py-2 px-2 hover:underline menu-item",
       },
-      "About",
-    ),
+      "About"
+    )
   );
   // 'Create listing' and 'Profile' links only if logged in
   if (isLoggedIn()) {
@@ -329,8 +340,8 @@ function createMobileMenu(btnBase) {
           href: import.meta.env.BASE_URL + "auctions/edit.html",
           class: "block py-2 px-2 hover:underline menu-item",
         },
-        "Create listing",
-      ),
+        "Create listing"
+      )
     );
     // User dropdown for mobile
     const userSection = el(
@@ -341,7 +352,7 @@ function createMobileMenu(btnBase) {
         {
           class: "block font-semibold text-[var(--color-text)] px-2 pt-2 pb-1",
         },
-        "User",
+        "User"
       ),
       el(
         "a",
@@ -349,7 +360,7 @@ function createMobileMenu(btnBase) {
           href: import.meta.env.BASE_URL + "profile/",
           class: "block py-2 px-2 hover:underline menu-item",
         },
-        "Profile",
+        "Profile"
       ),
       (() => {
         const logout = el(
@@ -362,11 +373,11 @@ function createMobileMenu(btnBase) {
             style:
               "background:none;border:none;color:inherit;font:inherit;cursor:pointer;outline:inherit;",
           },
-          "Log out",
+          "Log out"
         );
         logout.addEventListener("click", logoutUser);
         return logout;
-      })(),
+      })()
     );
     mobileMenu.appendChild(userSection);
   }
@@ -377,7 +388,7 @@ function createMobileMenu(btnBase) {
       {
         class: `${btnBase} btn-signin-lg mt-2 text-m px-10 text-center`,
       },
-      el("span", { class: "menu-sign-in text-md" }, " "),
+      el("span", { class: "menu-sign-in text-md" }, "Sign In")
     );
     mobileMenu.appendChild(mobileSignIn);
   }
@@ -446,7 +457,7 @@ function isLoggedIn() {
 function logoutUser() {
   logoutUserStorage();
   if (typeof window !== "undefined") {
-    initVanillaNavbar();
+    window.location.href = "/";
   }
 }
 
