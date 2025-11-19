@@ -94,6 +94,14 @@ h3 {
     background: var(--color-cta-hover);
 }
 
+/* Make sign-in style buttons a little wider and center their content consistently */
+.btn-signin {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 8rem;
+}
+
 .border-gradient-stroke {
     border: 1px solid transparent;
     border-radius: 0.5rem;
@@ -148,6 +156,14 @@ h3 {
     background: var(--color-background-accent);
     transition: box-shadow 220ms ease, transform 220ms ease, background-color 160ms ease;
     cursor: pointer;
+}
+
+/* Ensure the clickable card link fills the card and lays out content in a column
+   so .auction-meta { margin-top: auto } can push itself to the bottom. */
+.auction-element>a {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .auction-image-wrap {

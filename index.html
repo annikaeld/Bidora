@@ -11,12 +11,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 </head>
 
-<body class="min-h-screen w-full bg-gradient-background">
+<body class="min-h-screen w-full bg-gradient-background flex flex-col">
   <header>
     <div id="vanilla-navbar"></div>
   </header>
-  <div class="site-container">
-    <main>
+  <div class="site-container flex flex-col flex-1">
+    <main class="flex-1">
       <section class="py-20 bg-[var(--color-background-accent)]">
         <div class="container mx-auto px-4"></div>
         <div class="container mx-auto px-4">
@@ -132,8 +132,17 @@
         </div>
       </section>
     </main>
+    <footer class="site-footer py-8">
+      <div class="container mx-auto text-center md:flex md:items-center md:justify-between">
+        <div>
+          <p>&copy; 2025 Bidora. All rights reserved.</p>
+        </div>
+        <div>
+          <img class="inline pt-4 md:pt-0" src="/img/social media.png" alt="Social Media Icons" />
+        </div>
+      </div>
+    </footer>
   </div>
-
   <script type="module" src="/js/ui/navbar.js"></script>
 </body>
 

@@ -9,12 +9,27 @@ export function createListingHtml(listing) {
   const imgUrl = media?.url || "";
   const imgAlt = media?.alt || title;
   const endsAt = listing.endsAt || "";
+  // determine a sensible id property from possible API shapes
+  const listingId =
+    listing.id || listing._id || listing.uuid || listing._uuid || "";
+  const detailsUrl = listingId
+    ? `listing.html?id=${encodeURIComponent(listingId)}`
+    : "listing.html";
+
+  const imgTag = imgUrl
+    ? `<div class="auction-image-wrap"><img src="${imgUrl}" alt="${imgAlt.replace(/"/g, "&quot;")}" class="auction-image"/></div>`
+    : `<div class="no-image">No Image</div>`;
+
   return `
-    <div class="listing-card border rounded-lg p-4 mb-4 bg-white shadow">
-      <img src="${imgUrl}" alt="${imgAlt}" class="w-full h-40 object-cover rounded mb-2" />
-      <h3 class="font-bold text-lg mb-1">${title}</h3>
-      <p class="text-gray-700 text-sm mb-2">${description}</p>
-      <p class="text-xs text-gray-500">Ends: ${endsAt}</p>
+    <div class="auction-element">
+      <a href="${detailsUrl}" class="block h-full no-underline text-inherit">
+        ${imgTag}
+        <h3 class="mt-2">${title}</h3>
+        <div class="auction-meta">
+          <p><small>${description}</small></p>
+          <p><small>Ends: ${endsAt ? new Date(endsAt).toLocaleString() : "-"}</small></p>
+        </div>
+      </a>
     </div>
   `;
 }

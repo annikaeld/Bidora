@@ -221,7 +221,7 @@ function createDesktopLinks(btnBase) {
                 src: avatarUrl,
                 alt: avatarAlt,
                 class:
-                  "inline-block w-9 h-9 rounded-full object-cover align-middle",
+                  "inline-block w-9 h-9 rounded-full object-cover align-middle border-2 border-[var(--color-cta)]",
                 onerror: function () {
                   this.replaceWith(
                     el(
