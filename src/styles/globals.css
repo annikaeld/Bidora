@@ -238,9 +238,8 @@ h3 {
    so the border and button can shrink and avoid pushing layout. */
 @media (max-width: 895px) {
     .btn-signin {
-        padding-left: 0.5rem;
-        /* px-2 */
-        padding-right: 0.5rem;
+        padding-left: 0.7rem;
+        padding-right: 0.7rem;
     }
 
     .btn-signin .menu-sign-in {

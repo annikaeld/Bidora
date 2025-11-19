@@ -74,7 +74,9 @@ export function insertItemText(item) {
     .join("");
 
   const topOfBidsSectionHtml = `
-    <p>Auction ends in: ${escapeHtml(endsIn)}</p>
+    <p>Auction ends in:</p>
+    <p>${escapeHtml(endsIn)}</p>
+    <br />
     <h2>${bids && bids.length > 0 ? `${Math.max(...bids.map((bid) => bid.amount))} tokens` : "No bids yet"}</h2>
     <form id="place-bid-form" class="mt-3 flex items-center gap-2" aria-label="Place a bid">
       <label for="bid-amount" class="sr-only">Bid amount</label>

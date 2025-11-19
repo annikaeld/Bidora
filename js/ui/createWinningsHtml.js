@@ -15,16 +15,15 @@ export function createWinningsHtml(win) {
   const imageAlt = win.media?.[0]?.alt || win.title || "";
 
   return `
-    <div class="bg-white rounded-lg shadow p-4 flex flex-col">
-      <div class="flex items-center mb-2">
-        <img src="${imageUrl}" alt="${imageAlt}" class="w-20 h-20 object-cover rounded mr-4" />
-        <div>
-          <h3 class="font-bold text-lg mb-1">${win.title || "Untitled"}</h3>
-          <p class="text-xs text-gray-500">Ended: ${win.endsAt ? new Date(win.endsAt).toLocaleString() : "-"}</p>
-        </div>
+    <div class="auction-element mt-2">
+      <a href="/auctions/listing.html?id=${win.id}">
+      <div class="auction-image-wrap">
+        <img src="${imageUrl}" alt="${imageAlt}"/>
       </div>
-      <p class="text-gray-700 mb-2">${win.description || ""}</p>
-      <a href="/auctions/listing.html?id=${win.id}" class="text-blue-600 hover:underline text-sm mt-auto">View details</a>
+      <h3 class="mt-2">${win.title || "Untitled"}</h3>
+      <p class="auction-meta">Ended: ${win.endsAt ? new Date(win.endsAt).toLocaleString() : "-"}</p>
+      <p class="auction-meta mb-2">${win.description || ""}</p>
+      </a>
     </div>
   `;
 }

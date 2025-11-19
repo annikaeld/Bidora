@@ -29,7 +29,7 @@ export function setAvatarModal(onSubmit) {
       />
       <div class="flex justify-end gap-2">
         <button type="button" class="cancel-btn px-4 py-2 rounded bg-gray-200 hover:bg-gray-300">Cancel</button>
-        <button type="submit" class="submit-btn px-4 py-2 rounded bg-[var(--accent-color)] text-white hover:bg-[var(--color-cta-hover)]">Save</button>
+        <button type="submit" class="submit-btn px-4 py-2 rounded bg-[var(--color-cta)] text-white hover:bg-[var(--color-cta-hover)]">Save</button>
       </div>
     `;
 

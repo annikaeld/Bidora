@@ -13,9 +13,8 @@ export function createListingHtml(listing) {
   const listingId =
     listing.id || listing._id || listing.uuid || listing._uuid || "";
   const detailsUrl = listingId
-    ? `listing.html?id=${encodeURIComponent(listingId)}`
-    : "listing.html";
-
+    ? `/auctions/listing.html?id=${encodeURIComponent(listingId)}`
+    : "/auctions/listing.html";
   const imgTag = imgUrl
     ? `<div class="auction-image-wrap"><img src="${imgUrl}" alt="${imgAlt.replace(/"/g, "&quot;")}" class="auction-image"/></div>`
     : `<div class="no-image">No Image</div>`;
