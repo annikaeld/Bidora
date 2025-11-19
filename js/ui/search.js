@@ -1,5 +1,5 @@
 import { getFormValues } from "./getFormValues.js";
-import { itemFromApi } from "/js/api/item.js";
+import { itemsFromApi } from "/js/api/item.js";
 import { loadAuctions } from "./loadAuctions.js";
 
 /**
@@ -9,22 +9,22 @@ import { loadAuctions } from "./loadAuctions.js";
  */
 async function doSearch() {
   const { searchFor } = getFormValues("searchForm");
-  const searchType = getSearchType();
-  const auctions = await itemFromApi(searchFor, searchType);
+  const sortBy = getSortBy();
+  const auctions = await itemsFromApi(searchFor, sortBy);
   await loadAuctions(auctions);
 }
 
 /**
  * Returns the value of the selected radio button in the dropdownRadioForm.
- * @returns {string|null} The selected search type, or null if none selected.
+ * @returns {string|null} The selected sort by value, or null if none selected.
  */
-function getSearchType() {
+function getSortBy() {
   const form = document.getElementById("dropdownRadioForm");
   if (!form) {
     console.error("dropdownRadioForm not found");
     return null;
   }
-  const checked = form.querySelector('input[name="searchType"]:checked');
+  const checked = form.querySelector('input[name="sortBy"]:checked');
   return checked ? checked.value : null;
 }
 
@@ -76,7 +76,7 @@ function attachDropdownButtonListener() {
  * @returns {void}
  */
 export function attachDropdownRadioListeners() {
-  document.querySelectorAll('input[name="searchType"]').forEach((radio) => {
+  document.querySelectorAll('input[name="sortBy"]').forEach((radio) => {
     radio.addEventListener("change", function () {
       document.getElementById("dropdownSelectedText").textContent = this.value;
       document.getElementById("dropdownMenu").classList.add("hidden");

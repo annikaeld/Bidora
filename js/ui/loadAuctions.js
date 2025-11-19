@@ -1,6 +1,7 @@
 import { getAuctions } from "../api/auctions.js";
 
 export async function loadAuctions(auctions) {
+  console.log("loadAuctions: auctions =", auctions);
   const auctionsContainer = document.getElementById("auctions-container");
   auctionsContainer.innerHTML = ""; // Clear existing auctions
   // ensure the container uses the auctions grid layout
