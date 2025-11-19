@@ -14,6 +14,7 @@ async function loadProfile() {
     setElementContent("profile-name", profile.name);
     setElementContent("profile-email", profile.email);
     setElementContent("profile-credits", profile.credits);
+    setAvatar(profile.avatar);
     return profile;
   } catch (error) {
     console.error("Failed to load profile:", error);
@@ -29,11 +30,20 @@ async function setElementContent(elementId, value) {
   }
 }
 
+async function setAvatar(avatar) {
+  const avatarContainer = document.getElementById("avatar-container");
+  if (avatarContainer) {
+    avatarContainer.innerHTML = `<img src="${avatar.url}" alt="${avatar.alt}"/>`;
+  }
+}
+
 async function loadMyListings(profile) {
   try {
     console.log("Loading my listings for profile:", profile);
     const listingsContainer = document.getElementById("my-listings-container");
     if (!listingsContainer) return;
+    // make the listings container use the auctions grid so cards match auction layout
+    listingsContainer.classList.add("auctions-grid");
     if (!profile || !Array.isArray(profile.listings)) {
       listingsContainer.innerHTML =
         '<p class="text-gray-500">No listings found.</p>';
@@ -93,6 +103,7 @@ function setupWinningsToggleButton() {
   if (winningsBtn && winningsContainer && listingsContainer) {
     winningsBtn.addEventListener("click", function (e) {
       e.preventDefault();
+      console.log("Winnings button clicked");
       winningsContainer.classList.remove("hidden");
       listingsContainer.classList.add("hidden");
     });
@@ -100,6 +111,7 @@ function setupWinningsToggleButton() {
   if (listingsBtn && winningsContainer && listingsContainer) {
     listingsBtn.addEventListener("click", function (e) {
       e.preventDefault();
+      console.log("Listings button clicked");
       listingsContainer.classList.remove("hidden");
       winningsContainer.classList.add("hidden");
     });

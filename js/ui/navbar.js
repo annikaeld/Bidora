@@ -140,6 +140,7 @@ function createBurger() {
 }
 
 function createDesktopLinks(btnBase) {
+  const profile = currentProfile();
   const desktop = el("div", {
     class:
       "nav-links hidden md:flex items-center gap-6 text-[var(--color-text)] font-semibold",
@@ -198,17 +199,44 @@ function createDesktopLinks(btnBase) {
               class:
                 "relative inline-block text-left user-dropdown px-0 md:px-2 focus-within:z-50",
             });
+            let avatarUrl =
+              profile && profile.avatar && profile.avatar.url
+                ? profile.avatar.url
+                : "";
+            let avatarAlt =
+              profile && profile.avatar && profile.avatar.alt
+                ? profile.avatar.alt
+                : "Profile avatar";
             const button = el(
               "button",
               {
                 class:
-                  "hover:underline menu-item px-4 md:px-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-text)] focus-visible:ring-offset-2",
+                  "hover:underline menu-item px-4 md:px-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-text)] focus-visible:ring-offset-2 flex items-center gap-2",
                 "aria-haspopup": "true",
                 "aria-expanded": "false",
                 type: "button",
                 tabIndex: 0,
               },
-              "User \u25BC"
+              el("img", {
+                src: avatarUrl,
+                alt: avatarAlt,
+                class:
+                  "inline-block w-9 h-9 rounded-full object-cover align-middle",
+                onerror: function () {
+                  this.replaceWith(
+                    el(
+                      "span",
+                      {
+                        class:
+                          "material-symbols-outlined avatar-icon align-middle",
+                        role: "img",
+                        "aria-label": "Default avatar",
+                      },
+                      "face"
+                    )
+                  );
+                },
+              })
             );
             const menu = el(
               "div",
@@ -452,6 +480,10 @@ export default function initVanillaNavbar(selector = "#vanilla-navbar") {
 
 function isLoggedIn() {
   return Boolean(load("token"));
+}
+
+function currentProfile() {
+  return load("profile");
 }
 
 function logoutUser() {
