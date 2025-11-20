@@ -89,12 +89,43 @@ export function insertItemText(item) {
     : `<p class="mt-4 text-sm text-gray-500">No bids yet</p>`;
   bidsSection = topOfBidsSectionHtml + bidsSection;
 
-  // Render main item html. Do NOT create a bidding container here —
-  // the page should already include an element with id="bidding-container".
+  // Render main item html.
   container.innerHTML = html;
   const biddingContainer = document.getElementById("bidding-container");
   if (biddingContainer) {
     biddingContainer.innerHTML = bidsSection;
+    // Add event listener for place bid form
+    const placeBidForm = document.getElementById("place-bid-form");
+    if (placeBidForm) {
+      placeBidForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const amountInput = document.getElementById("bid-amount");
+        const amount = amountInput ? Number(amountInput.value) : 0;
+        if (!amount || amount <= 0) {
+          alert("Please enter a valid bid amount.");
+          return;
+        }
+        try {
+          const { placeBid } = await import("../api/item.js");
+          const listingId = item?.data?.id;
+          //Todo: Don't use alert() in real UI - show inline message instead
+          if (!listingId) {
+            alert("Listing ID not found.");
+            return;
+          }
+          const result = await placeBid(listingId, amount);
+          if (result) {
+            alert("Bid placed successfully!");
+            window.location.reload();
+          } else {
+            alert("Failed to place bid. Please try again.");
+          }
+        } catch (err) {
+          alert("Error placing bid. See console for details.");
+          console.error(err);
+        }
+      });
+    }
   }
 }
 

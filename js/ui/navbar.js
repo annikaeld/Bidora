@@ -91,12 +91,9 @@ function el(tag, attrs = {}, ...children) {
 
 function createLogo() {
   const logoImg = el("img", {
-    src: import.meta.env.BASE_URL + "img/logo.svg",
+    src: import.meta.env.BASE_URL + "img/logo.png",
     alt: "Bidora",
-    width: "240",
-    height: "75",
-    class:
-      "min-w-[120px] max-w-[240px] w-[140px] h-[44px] md:w-[200px] md:h-[60px] lg:w-[240px] lg:h-[75px] object-contain",
+    class: "object-contain nav-logo",
   });
   const logo = el(
     "a",
@@ -183,7 +180,7 @@ function createDesktopLinks(btnBase) {
             {
               href: import.meta.env.BASE_URL + "auctions/edit.html",
               class:
-                "inline-flex items-center justify-center w-9 h-9 rounded-full bg-[var(--color-cta)] hover:bg-[var(--color-cta-hover)] text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta)]",
+                "inline-flex items-center justify-center w-9 h-9 rounded-full bg-[var(--accent-color)] hover:bg-[var(--color-text)] text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta)]",
               title: "Create listing",
               "aria-label": "Create listing",
             },
@@ -221,7 +218,7 @@ function createDesktopLinks(btnBase) {
                 src: avatarUrl,
                 alt: avatarAlt,
                 class:
-                  "inline-block w-9 h-9 rounded-full object-cover align-middle border-2 border-[var(--color-cta)]",
+                  "inline-block w-9 h-9 rounded-full object-cover align-middle border-2 border-[var(--accent-color)]",
                 onerror: function () {
                   this.replaceWith(
                     el(
@@ -375,13 +372,9 @@ function createMobileMenu(btnBase) {
     const userSection = el(
       "div",
       { class: "user-dropdown-mobile mt-2" },
-      el(
-        "span",
-        {
-          class: "block font-semibold text-[var(--color-text)] px-2 pt-2 pb-1",
-        },
-        "User"
-      ),
+      el("span", {
+        class: "block font-semibold text-[var(--color-text)] px-2 pt-2 pb-1",
+      }),
       el(
         "a",
         {
@@ -448,9 +441,26 @@ export default function initVanillaNavbar(selector = "#vanilla-navbar") {
   container.appendChild(nav);
 
   // After layout, set spacer height to the actual nav height.
-  requestAnimationFrame(() => {
-    spacer.style.height = nav.offsetHeight + "px";
-  });
+  // Use a small helper and multiple triggers to account for font/icon loading
+  // and any dynamic content that might change the navbar's height.
+  function setSpacerHeight() {
+    // getBoundingClientRect is more reliable for computed height
+    const h = nav.getBoundingClientRect().height || nav.offsetHeight || 0;
+    spacer.style.height = h + "px";
+  }
+  requestAnimationFrame(setSpacerHeight);
+  // Some assets (fonts, icons) may load slightly later; update after load and a short timeout
+  window.addEventListener("load", setSpacerHeight, { once: true });
+  setTimeout(setSpacerHeight, 250);
+  // If the navbar logo image changes or loads after initial render, recalc spacer
+  const logoImgEl = nav.querySelector("img.nav-logo");
+  if (logoImgEl) {
+    if (logoImgEl.complete) {
+      setSpacerHeight();
+    } else {
+      logoImgEl.addEventListener("load", setSpacerHeight, { once: true });
+    }
+  }
 
   // Show nav when scrolling up, hide when scrolling down.
   let lastY = window.scrollY;

@@ -2,6 +2,42 @@ import { API_BASE, API_LISTINGS, API_AUCTION, API_SEARCH } from "./constants.js"
 import { authFetch } from "./fetch.js";
 
 /**
+ * Place a bid on a listing by id.
+ * @param {string} id - The listing/item id.
+ * @param {number} amount - The bid amount.
+ * @returns {Promise<object|null>} The API response data or null on error.
+ */
+export async function placeBid(id, amount) {
+  if (!id || typeof amount !== "number" || amount <= 0) {
+    //TODO: Show errors to users in UI
+    console.error("placeBid: Invalid id or amount", id, amount);
+    return null;
+  }
+  const url = `${API_BASE}${API_AUCTION}${API_LISTINGS}/${id}/bids`;
+  try {
+    const response = await authFetch(url, {
+      method: "POST",
+      body: JSON.stringify({ amount }),
+    });
+    if (!response) {
+      console.warn("placeBid: No response from API");
+      return null;
+    }
+    if (!response.ok) {
+      const errorBody = await response.text();
+      console.error("placeBid: Failed to place bid", response.status, response.statusText, errorBody);
+      return null;
+    }
+    const data = await response.json();
+    console.log("placeBid: API response data:", data);
+    return data;
+  } catch (e) {
+    console.error("placeBid: Error placing bid", e);
+    return null;
+  }
+}
+
+/**
  * Fetch listings/items from the API based on search and sortBy.
  * @param {string} searchFor - The search query string.
  * @param {string|null} sortBy - The sort/filter type (e.g., 'title', 'tag', etc), or null for all.

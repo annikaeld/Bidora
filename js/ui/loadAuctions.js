@@ -14,7 +14,7 @@ export async function loadAuctions(auctions) {
   try {
     auctions.data.forEach((auction) => {
       const auctionElement = document.createElement("div");
-      // use the CSS class we've defined in globals.css
+      // use the CSS class defined in globals.css
       auctionElement.className = "auction-element";
       const hasMedia = auction.media && auction.media.length > 0;
       const imgTag = hasMedia
