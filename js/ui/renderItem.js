@@ -1,3 +1,6 @@
+import { load } from "../storage/load.js";
+import { deleteListing } from "../api/auctions.js";
+
 export function insertItemImage(item) {
   const container =
     document.getElementById("item-image") ||
@@ -77,22 +80,40 @@ export function insertItemText(item) {
     <p>Auction ends in:</p>
     <p>${escapeHtml(endsIn)}</p>
     <br />
-    <h2>${bids && bids.length > 0 ? `${Math.max(...bids.map((bid) => bid.amount))} tokens` : "No bids yet"}</h2>
+    <h2>${bids && bids.length > 0 ? `${Math.max(...bids.map((bid) => bid.amount))} tokens` : "No bids yet"}</h2>`
+  let bidFormHtml
+  if (isSellerCurrentUser(seller)) {
+    bidFormHtml = '';
+    } else {
+    bidFormHtml = `
     <form id="place-bid-form" class="mt-3 flex items-center gap-2" aria-label="Place a bid">
       <label for="bid-amount" class="sr-only">Bid amount</label>
       <input id="bid-amount" name="amount" type="number" min="0" step="1" placeholder="Enter bid" class="px-3 py-2 border rounded-md w-32" />
       <button id="place-bid-btn" type="submit" class="inline-flex items-center px-3 py-2 rounded-md bg-[var(--color-cta)] text-white hover:bg-[var(--color-cta-hover)]">Place bid</button>
     </form>`;
-
+  }
   let bidsSection = bidsHtml
     ? `<div class="mt-4"><h3 class="font-semibold">Bids</h3><ul class="mt-2">${bidsHtml}</ul></div>`
     : `<p class="mt-4 text-sm text-gray-500">No bids yet</p>`;
-  bidsSection = topOfBidsSectionHtml + bidsSection;
+
+  bidsSection = topOfBidsSectionHtml + bidFormHtml + bidsSection;
 
   // Render main item html.
   container.innerHTML = html;
   const biddingContainer = document.getElementById("bidding-container");
+  const deleteItemContainer = document.getElementById("delete-item-container");
   if (biddingContainer) {
+    renderBiddingContainer();
+  }
+  if (deleteItemContainer && isSellerCurrentUser(seller)) {
+    renderDeleteItemContainer();
+  }
+
+
+  /**
+   * Renders the bids section and sets up the bid form event listener.
+   */
+  function renderBiddingContainer() {
     biddingContainer.innerHTML = bidsSection;
     // Add event listener for place bid form
     const placeBidForm = document.getElementById("place-bid-form");
@@ -122,6 +143,34 @@ export function insertItemText(item) {
           }
         } catch (err) {
           alert("Error placing bid. See console for details.");
+          console.error(err);
+        }
+      });
+    }
+  }
+
+  /**
+   * Renders a container with a 'Delete listing' button.
+   * @param {HTMLElement} container - The container to render the button in.
+   */
+  async function renderDeleteItemContainer() {
+    let id = item.data.id;
+    if (!deleteItemContainer) return;
+    deleteItemContainer.innerHTML = `<button id="delete-listing-btn" class="px-3 py-2 rounded-md bg-red-600 text-white hover:bg-red-700">Delete listing</button>`;
+    const btn = deleteItemContainer.querySelector('#delete-listing-btn');
+    if (btn) {
+      btn.addEventListener('click', async () => {
+        if (!confirm('Are you sure you want to delete this listing? This action cannot be undone.')) return;
+        try {
+          const response = await deleteListing(id);
+          if (response) {
+            alert('Listing deleted successfully.');
+            window.location.href = '/auctions/';
+          } else {
+            alert('Failed to delete listing.');
+          }
+        } catch (err) {
+          alert('Error deleting listing. See console for details.');
           console.error(err);
         }
       });
@@ -169,3 +218,14 @@ function formatRemaining(isoDate) {
   const minutes = Math.floor(diffSec / 60);
   return `${days} day${days === 1 ? "" : "s"}  ${hours} hour${hours === 1 ? "" : "s"}  ${minutes} minute${minutes === 1 ? "" : "s"}`;
 }
+
+function isSellerCurrentUser(seller) {
+  try {
+    const profile = load('profile');
+    const currentProfileName = profile?.name || null;
+    return seller && currentProfileName && seller === currentProfileName;
+  } catch {
+    return false;
+  }
+}
+

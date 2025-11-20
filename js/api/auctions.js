@@ -47,3 +47,17 @@ export async function postListing(listingObject) {
     throw error;
   }
 }
+
+/**
+ * Deletes a listing by its ID.
+ * @param {string|number} id - The ID of the listing to delete.
+ * @returns {Promise<Response>} The fetch response.
+ */
+export async function deleteListing(id) {
+  if (!id) throw new Error('Listing ID is required');
+  const url = `${API_BASE}${API_AUCTION}${API_LISTINGS}/${id}`;
+  const response = await authFetch(url, {
+    method: 'DELETE'
+  });
+  return response.status === 204;
+}
