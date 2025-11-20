@@ -1,5 +1,7 @@
 import { load } from "../storage/load.js";
 import { deleteListing } from "../api/auctions.js";
+import { displayMessage } from "./displayMessage.js";
+
 
 export function insertItemImage(item) {
   const container =
@@ -123,27 +125,26 @@ export function insertItemText(item) {
         const amountInput = document.getElementById("bid-amount");
         const amount = amountInput ? Number(amountInput.value) : 0;
         if (!amount || amount <= 0) {
-          alert("Please enter a valid bid amount.");
+          displayMessage("Invalid Bid", "Please enter a valid bid amount.");
           return;
         }
         try {
           const { placeBid } = await import("../api/item.js");
           const listingId = item?.data?.id;
-          //Todo: Don't use alert() in real UI - show inline message instead
           if (!listingId) {
-            alert("Listing ID not found.");
+            displayMessage("Error", "Listing ID not found.");
             return;
           }
           const result = await placeBid(listingId, amount);
           if (result) {
-            alert("Bid placed successfully!");
+            displayMessage("Success", "Bid placed successfully!");
             window.location.reload();
           } else {
-            alert("Failed to place bid. Please try again.");
+            displayMessage("Error placing bid", "Failed to place bid. Please try again.");
           }
         } catch (err) {
-          alert("Error placing bid. See console for details.");
           console.error(err);
+          displayMessage("Error placing bid. See console for details.");
         }
       });
     }
@@ -164,14 +165,14 @@ export function insertItemText(item) {
         try {
           const response = await deleteListing(id);
           if (response) {
-            alert('Listing deleted successfully.');
+            displayMessage("Success", "Listing deleted successfully.");
             window.location.href = '/auctions/';
           } else {
-            alert('Failed to delete listing.');
+            displayMessage("Error", "Failed to delete listing.");
           }
         } catch (err) {
-          alert('Error deleting listing. See console for details.');
           console.error(err);
+          displayMessage("Error", "Error deleting listing. See console for details.");
         }
       });
     }
@@ -228,4 +229,3 @@ function isSellerCurrentUser(seller) {
     return false;
   }
 }
-

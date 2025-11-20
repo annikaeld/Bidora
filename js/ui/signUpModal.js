@@ -4,6 +4,7 @@ import { registerUser } from "../api/auth/registerUser.js";
 import { displayError } from "./displayError.js";
 import { createSignInModal } from "./signInModal.js";
 import { validateEmail } from "./formValidation.js";
+import { displayMessage } from "./displayMessage.js";
 
 function createSignUpNodes(onSubmit, close) {
   const nodes = [];
@@ -115,10 +116,19 @@ function createSignUpNodes(onSubmit, close) {
       // Open sign in modal after successful sign up
       const signInModal = createSignInModal();
       signInModal.openSignInModal();
-      close(); //TODO: After closing, the sign in modal "sign in" button does nothing. Fix it.
+      displayMessage(
+        "Registration Successful",
+        "Your account has been created. Please sign in."
+      );
+      await displayMessage(
+        "Registration Successful",
+        "Your account has been created. Please sign in."
+      );
+      window.location.href = "/";
+      
     } catch (error) {
-      errorContainer.textContent = "Registration failed. Please try again.";
       console.error("Registration failed", error);
+      errorContainer.textContent = "Registration failed. Please try again.";
     }
   });
 

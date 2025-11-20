@@ -1,5 +1,6 @@
 import { el } from "./createElement.js";
 import { postListing } from "../api/auctions.js";
+import { displayMessage } from "./displayMessage.js";
 
 /**
  * Extracts form values including all image URLs and alt-texts from the form.
@@ -10,6 +11,7 @@ function getFormValues(formId) {
   const form = document.getElementById(formId);
   if (!form) {
     console.error(`Form with id "${formId}" not found.`);
+    displayMessage("Error", `Form with id "${formId}" not found.`);
     return {};
   }
   const title = form.querySelector('[name="title"]')?.value || "";
@@ -56,6 +58,7 @@ function attachSubmitEventListener(postId, formId) {
     });
   } else {
     console.error(`Form with id "${formId}" not found.`);
+    displayMessage("Error", `Form with id "${formId}" not found.`);
   }
 }
 
@@ -114,6 +117,7 @@ function savePost(formId, postId) {
     })
     .catch((error) => {
       console.error("Error creating listing:", error);
+      displayMessage("Error creating listing", error.message);
     });
 }
 

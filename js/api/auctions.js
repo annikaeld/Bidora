@@ -1,5 +1,6 @@
 import { API_BASE, API_AUCTION, API_LISTINGS } from "./constants.js";
 import { authFetch } from "./fetch.js";
+import { displayMessage } from "../ui/displayMessage.js";
 
 /**
  * Fetches all auctions with author information.
@@ -21,6 +22,7 @@ export async function getAuctions() {
     return auctions;
   } catch (error) {
     console.error("Error fetching auctions:", error);
+    await displayMessage("Error fetching auctions", error.message);
     throw error;
   }
 }
@@ -44,6 +46,7 @@ export async function postListing(listingObject) {
     return id;
   } catch (error) {
     console.error("Error posting listing:", error);
+    await displayMessage("Error posting listing", error.message);
     throw error;
   }
 }

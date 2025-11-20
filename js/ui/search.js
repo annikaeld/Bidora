@@ -1,6 +1,7 @@
 import { getFormValues } from "./getFormValues.js";
 import { itemsFromApi } from "/js/api/item.js";
 import { loadAuctions } from "./loadAuctions.js";
+import { displayMessage } from "./displayMessage.js";
 
 /**
  * Handles the search form submission:
@@ -22,6 +23,7 @@ function getSortBy() {
   const form = document.getElementById("dropdownRadioForm");
   if (!form) {
     console.error("dropdownRadioForm not found");
+    displayMessage("Error", "Dropdown radio form not found.");
     return null;
   }
   const checked = form.querySelector('input[name="sortBy"]:checked');
@@ -38,6 +40,7 @@ function toggleDropdownMenuVisibility() {
     menu.classList.toggle("hidden");
   } else {
     console.error("Dropdown menu element not found!");
+    displayMessage("Error", "Dropdown menu element not found.");
   }
 }
 
@@ -56,6 +59,7 @@ function attachSubmitEventListener(formId) {
     });
   } else {
     console.error(`Form with id "${formId}" not found.`);
+    displayMessage("Error", `Form with id "${formId}" not found.`);
   }
 }
 

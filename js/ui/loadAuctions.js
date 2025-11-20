@@ -1,4 +1,5 @@
 import { getAuctions } from "../api/auctions.js";
+import { displayMessage } from "./displayMessage.js";
 
 export async function loadAuctions(auctions) {
   console.log("loadAuctions: auctions =", auctions);
@@ -44,6 +45,7 @@ export async function loadAuctions(auctions) {
     });
   } catch (error) {
     console.error("Error loading auctions:", error);
+    await displayMessage("Error loading auctions", error.message);
   }
 }
 
@@ -59,6 +61,7 @@ export async function loadAllAuctions() {
     const auctions = await getAuctions();
     await loadAuctions(auctions);
   } catch (error) {
+    await displayMessage("Error loading auctions", error.message);
     console.error("Error loading auctions:", error);
     window.location.href = "/";
   }

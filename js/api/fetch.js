@@ -1,4 +1,5 @@
 import { headers } from "./headers.js";
+import { displayMessage } from "../ui/displayMessage.js";
 
 /**
  * Performs an authenticated fetch request with the appropriate headers.
@@ -21,10 +22,12 @@ export async function authFetch(url, options = { method: "GET" }) {
     if (!response.ok) {
       const errorBody = await response.text();
       console.error("Response Error Body:", errorBody);
+      await displayMessage("Error", errorBody);
     }
     return response;
   } catch (error) {
     console.error("Fetch Error:", error);
+    await displayMessage("Error", error.message);
     throw error;
   }
 }
