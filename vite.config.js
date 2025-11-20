@@ -1,5 +1,11 @@
 import { defineConfig } from "vite";
 import { resolve } from "path";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+
+// ESM-safe __dirname shim for Node-style path resolution in Vite config
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export default defineConfig({
   base: "/",
