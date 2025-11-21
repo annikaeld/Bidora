@@ -24,6 +24,7 @@
         <!-- Search Form -->
         <form id="searchForm" class="w-full md:flex-1 md:min-w-0 md:max-w-xl">
           <div class="flex flex-row gap-2 w-full">
+            <label for="searchFor" class="sr-only">Search listings</label>
             <input type="text" id="searchFor" name="searchFor" placeholder="I'm looking for..."
               class="h-9 px-4 py-2 border border-[var(--color-text)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-border)] flex-1 min-w-0">
             <button type="submit"
@@ -39,25 +40,29 @@
     <div class="site-container">
       <div class="flex justify-end p-4">
         <div class="relative inline-block md:flex-none border border-[var(--color-text)] rounded-lg">
-          <button id="dropdownDefaultButton" type="button"
+          <button id="dropdownDefaultButton" type="button" aria-labelledby="Sort by"
             class="w-32 h-9 bg-white focus:ring-2 focus:outline-none focus:ring-[var(--color-border)] rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"><span
               id="dropdownSelectedText">Sort by</span>
             <svg class="w-4 h-4 ml-2" id="arrow-down-svg" fill="none" stroke="currentColor" stroke-width="2"
-              viewBox="0 0 24 24" aria-hidden="true">
+              viewBox="0 0 24 24" aria-hidden="true" focusable="false">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
             </svg>
           </button>
           <div id="dropdownMenu"
             class="absolute right-0 top-full mt-2 z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44">
             <form id="dropdownRadioForm" class="py-2 text-lg text-gray-700 flex flex-col gap-2 px-4">
-              <label class="inline-flex items-center cursor-pointer">
-                <input type="radio" name="sortBy" value="endsAt" class="form-radio text-[var(--color-border)]" checked>
-                <span class="ml-2">Ends at</span>
-              </label>
-              <label class="inline-flex items-center cursor-pointer">
-                <input type="radio" name="sortBy" value="created" class="form-radio text-[var(--color-border)]">
-                <span class="ml-2">Created</span>
-              </label>
+              <fieldset class="m-0 p-0 border-0">
+                <legend class="sr-only">Sort listings</legend>
+                <label class="inline-flex items-center cursor-pointer">
+                  <input type="radio" name="sortBy" value="Ends at" class="form-radio text-[var(--color-border)]"
+                    checked>
+                  <span class="ml-2">Ends at</span>
+                </label>
+                <label class="inline-flex items-center cursor-pointer">
+                  <input type="radio" name="sortBy" value="Created" class="form-radio text-[var(--color-border)]">
+                  <span class="ml-2">Created</span>
+                </label>
+              </fieldset>
             </form>
           </div>
         </div>
