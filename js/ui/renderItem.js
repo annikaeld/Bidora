@@ -1,7 +1,7 @@
 import { load } from "../storage/load.js";
 import { deleteListing } from "../api/auctions.js";
 import { displayMessage } from "./displayMessage.js";
-
+import { isLoggedIn } from "../storage/loggedIn.js";
 
 export function insertItemImage(item) {
   const container =
@@ -82,11 +82,11 @@ export function insertItemText(item) {
     <p>Auction ends in:</p>
     <p>${escapeHtml(endsIn)}</p>
     <br />
-    <h2>${bids && bids.length > 0 ? `${Math.max(...bids.map((bid) => bid.amount))} tokens` : "No bids yet"}</h2>`
-  let bidFormHtml
-  if (isSellerCurrentUser(seller)) {
-    bidFormHtml = '';
-    } else {
+    <h2>${bids && bids.length > 0 ? `${Math.max(...bids.map((bid) => bid.amount))} tokens` : "No bids yet"}</h2>`;
+  let bidFormHtml;
+  if (isSellerCurrentUser(seller) || !isLoggedIn()) {
+    bidFormHtml = "";
+  } else {
     bidFormHtml = `
     <form id="place-bid-form" class="mt-3 flex items-center gap-2" aria-label="Place a bid">
       <label for="bid-amount" class="sr-only">Bid amount</label>
@@ -110,7 +110,6 @@ export function insertItemText(item) {
   if (deleteItemContainer && isSellerCurrentUser(seller)) {
     renderDeleteItemContainer();
   }
-
 
   /**
    * Renders the bids section and sets up the bid form event listener.
@@ -140,7 +139,10 @@ export function insertItemText(item) {
             displayMessage("Success", "Bid placed successfully!");
             window.location.reload();
           } else {
-            displayMessage("Error placing bid", "Failed to place bid. Please try again.");
+            displayMessage(
+              "Error placing bid",
+              "Failed to place bid. Please try again."
+            );
           }
         } catch (err) {
           console.error(err);
@@ -157,22 +159,30 @@ export function insertItemText(item) {
   async function renderDeleteItemContainer() {
     let id = item.data.id;
     if (!deleteItemContainer) return;
-    deleteItemContainer.innerHTML = `<button id="delete-listing-btn" class="px-3 py-2 rounded-md bg-red-600 text-white hover:bg-red-700">Delete listing</button>`;
-    const btn = deleteItemContainer.querySelector('#delete-listing-btn');
+    deleteItemContainer.innerHTML = `<button id="delete-listing-btn" class="px-3 py-2 rounded-md bg-[var(--color-cta)] text-white hover:bg-[var(--color-cta-hover)]">Delete listing</button>`;
+    const btn = deleteItemContainer.querySelector("#delete-listing-btn");
     if (btn) {
-      btn.addEventListener('click', async () => {
-        if (!confirm('Are you sure you want to delete this listing? This action cannot be undone.')) return;
+      btn.addEventListener("click", async () => {
+        if (
+          !confirm(
+            "Are you sure you want to delete this listing? This action cannot be undone."
+          )
+        )
+          return;
         try {
           const response = await deleteListing(id);
           if (response) {
             displayMessage("Success", "Listing deleted successfully.");
-            window.location.href = '/auctions/';
+            window.location.href = "/auctions/";
           } else {
             displayMessage("Error", "Failed to delete listing.");
           }
         } catch (err) {
           console.error(err);
-          displayMessage("Error", "Error deleting listing. See console for details.");
+          displayMessage(
+            "Error",
+            "Error deleting listing. See console for details."
+          );
         }
       });
     }
@@ -222,7 +232,7 @@ function formatRemaining(isoDate) {
 
 function isSellerCurrentUser(seller) {
   try {
-    const profile = load('profile');
+    const profile = load("profile");
     const currentProfileName = profile?.name || null;
     return seller && currentProfileName && seller === currentProfileName;
   } catch {
