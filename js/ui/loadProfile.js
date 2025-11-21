@@ -105,7 +105,9 @@ function setupWinningsToggleButton() {
       e.preventDefault();
       console.log("Winnings button clicked");
       winningsContainer.classList.remove("hidden");
+      winningsContainer.classList.add("auctions-grid");
       listingsContainer.classList.add("hidden");
+      listingsContainer.classList.remove("auctions-grid");
     });
   }
   if (listingsBtn && winningsContainer && listingsContainer) {
@@ -113,7 +115,9 @@ function setupWinningsToggleButton() {
       e.preventDefault();
       console.log("Listings button clicked");
       listingsContainer.classList.remove("hidden");
+      listingsContainer.classList.add("auctions-grid");
       winningsContainer.classList.add("hidden");
+      winningsContainer.classList.remove("auctions-grid");
     });
   }
 }
