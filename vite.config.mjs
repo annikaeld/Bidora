@@ -12,12 +12,14 @@ export default defineConfig({
   base: "/",
   build: {
     rollupOptions: {
+      // Use keys that mirror the desired output paths so Rollup/Vite
+      // preserves the `auctions/` and `profile/` folders in `dist/`.
       input: {
         main: resolve(__dirname, "index.html"),
-        auctions: resolve(__dirname, "auctions/index.html"),
-        "auctions-edit": resolve(__dirname, "auctions/edit.html"),
-        "auctions-listing": resolve(__dirname, "auctions/listing.html"),
-        profile: resolve(__dirname, "profile/index.html"),
+        "auctions/index.html": resolve(__dirname, "auctions/index.html"),
+        "auctions/edit.html": resolve(__dirname, "auctions/edit.html"),
+        "auctions/listing.html": resolve(__dirname, "auctions/listing.html"),
+        "profile/index.html": resolve(__dirname, "profile/index.html"),
       },
     },
   },
