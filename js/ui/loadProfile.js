@@ -1,3 +1,4 @@
+import { renderBids } from "./renderBids.js";
 function hideContainer(container) {
   if (container) {
     container.classList.add("hidden");
@@ -115,27 +116,29 @@ function setupWinningsToggleButton() {
   const listingsContainer = document.getElementById("my-listings-container");
   const bidHistoryContainer = document.getElementById("bid-history-container");
   const winningsContainer = document.getElementById("winnings-container");
-  if (listingsBtn && winningsContainer && listingsContainer) {
+  if (listingsBtn && listingsContainer && bidHistoryContainer && winningsContainer) {
     listingsBtn.addEventListener("click", function (e) {
       e.preventDefault();
       console.log("Listings button clicked");
       showContainer(listingsContainer);
       hideContainer(bidHistoryContainer);
       hideContainer(winningsContainer);
+
     });
   }
-  if (bidHistoryBtn) {
+  if (bidHistoryBtn && listingsContainer && bidHistoryContainer && winningsContainer) {
     bidHistoryBtn.addEventListener("click", async function (e) {
       e.preventDefault();
-      const result = await getBids();
+      const bids = await getBids();
       console.log("Bid history button clicked");
-      console.log("Bid History:", result);
+      console.log("Bid History:", bids);
       hideContainer(listingsContainer);
       showContainer(bidHistoryContainer);
       hideContainer(winningsContainer);
+      renderBids(bids, bidHistoryContainer);
     });
   }
-  if (winningsBtn && winningsContainer && listingsContainer) {
+  if (winningsBtn && listingsContainer && bidHistoryContainer && winningsContainer) {
     winningsBtn.addEventListener("click", function (e) {
       e.preventDefault();
       console.log("Winnings button clicked");
