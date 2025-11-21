@@ -88,8 +88,8 @@ function setupAvatarEditButton() {
       setAvatarModal(async (avatarUrl) => {
         await updateAvatar(avatarUrl);
         initVanillaNavbar();
+        window.location.reload();
       });
-      
     });
   }
 }

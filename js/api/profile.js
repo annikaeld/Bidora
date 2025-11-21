@@ -1,10 +1,11 @@
 import { API_BASE, API_AUCTION, API_PROFILES } from "./constants.js";
 import { authFetch } from "./fetch.js";
 import { load } from "../storage/load.js";
+import { save } from "../storage/save.js";
 
 export async function getProfile(username) {
   const response = await authFetch(
-    `${API_BASE}${API_AUCTION}${API_PROFILES}/${username}?_listings=true&_wins=true`,
+    `${API_BASE}${API_AUCTION}${API_PROFILES}/${username}?_listings=true&_wins=true`
   );
   const profile = await response.json();
   return profile;
@@ -46,7 +47,8 @@ export async function saveProfile(profile) {
     {
       method: "PUT",
       body: JSON.stringify(profile),
-    },
+    }
   );
+  save("profile", profile);
   return response.json;
 }
