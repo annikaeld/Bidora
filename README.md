@@ -102,31 +102,33 @@ npx --no-install lint-staged
 
   ### Testing
 
-  This project uses Vitest for unit tests. The test script (`npm test`) runs
-  Vitest in watch mode by default. Below are common commands and tips for
-  running tests locally and in CI.
+  Overview
+  - Unit tests: Vitest (fast, runs in Node and JSDOM where needed).
+  - End-to-end tests: Playwright (automates a real browser to verify pages).
+
+  Quick commands
   - Install dependencies (once):
 
   ```powershell
   npm install
   ```
 
-  - Run tests in watch/dev mode (default):
+  - Run Vitest in watch/dev mode (useful during development):
 
   ```powershell
   npm test
   ```
 
-  - Run tests once (CI / non-interactive):
+  - Run Vitest once (CI / non-interactive):
 
   ```powershell
   npx vitest run
   ```
 
-  - Run the Playwright E2E suite (single run):
+  - Run Vitest with coverage:
 
-  ```bash
-  npm run e2e
+  ```powershell
+  npx vitest run --coverage
   ```
 
   - Run a single test file:
@@ -135,9 +137,75 @@ npx --no-install lint-staged
   npx vitest run tests/formValidation.test.js
   ```
 
+  - Run Playwright E2E tests (single run):
+
+  ```powershell
+  npm run e2e
+  ```
+
+  Playwright prerequisites & modes
+  - Install Playwright browsers (one-time):
+
+  ```powershell
+  npx playwright install
+  ```
+
+  - By default the E2E suite runs headless; to run headed for debugging add
+    Playwright flags in the test runner or run Playwright in headed mode.
+
+  Running E2E against dev vs built preview
+  - Against the dev server (fast feedback):
+
+  ```powershell
+  npm run dev   # in terminal A
+  npm run e2e   # in terminal B
+  ```
+
+  - Against a production build preview (recommended for close-to-prod tests):
+
+  ```powershell
+  npm run build
+  npx vite preview &
+  npm run e2e
+  ```
+
+  Environment / API keys
+  - Set `VITE_API_KEY` (and any other `VITE_` env vars) for E2E tests if the
+    deployed API requires them. Locally, copy `.env.example` → `.env` and add
+    the values. Netlify/CI must also define `VITE_API_KEY` in the project
+    settings.
+
+  Notes for Vitest discovery
+  - Vitest is configured to exclude Playwright E2E tests and vendor tests
+    in `node_modules` (see `vitest.config.js`). This prevents Vitest from
+    attempting to load Playwright test files.
+
+  CI recommendations
+  - In CI (GitHub Actions / Netlify / other), run:
+
+  ```yaml
+  - name: Install
+    run: npm ci
+
+  - name: Build
+    run: npm run build
+
+  - name: Unit tests
+    run: npm test --silent
+
+  - name: E2E tests
+    run: npm run e2e
+  ```
+
+  Troubleshooting
+  - If Playwright tests fail with 401/No API key, ensure `VITE_API_KEY` is
+    set in the environment used to run the tests.
+  - If Vitest attempts to import unexpected files, check `vitest.config.js`
+    `exclude` patterns.
+
 ## Live site
 
-[Bidora]
+[Bidora](https://bidora.netlify.app/)
 
 ## Contributing / Contact
 
