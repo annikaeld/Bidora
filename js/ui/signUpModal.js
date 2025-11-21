@@ -3,6 +3,7 @@ import { el } from "./createElement.js";
 import { registerUser } from "../api/auth/registerUser.js";
 import { displayError } from "./displayError.js";
 import { createSignInModal } from "./signInModal.js";
+import { handleLoginSubmit } from "./handleLoginSubmit.js";
 import { validateEmail } from "./formValidation.js";
 import { displayMessage } from "./displayMessage.js";
 
@@ -96,7 +97,7 @@ function createSignUpNodes(onSubmit, close) {
     if (!validateEmail(email)) {
       displayError(
         errorContainer,
-        "Please enter a valid stud.noroff.no email address.",
+        "Please enter a valid stud.noroff.no email address."
       );
       emailInput.focus();
       return;
@@ -113,19 +114,26 @@ function createSignUpNodes(onSubmit, close) {
         return;
       }
       if (typeof onSubmit === "function") onSubmit(result);
-      // Open sign in modal after successful sign up
-      const signInModal = createSignInModal();
-      signInModal.openSignInModal();
-      displayMessage(
-        "Registration Successful",
-        "Your account has been created. Please sign in."
-      );
+      // Show registration success message, then open sign in modal
       await displayMessage(
-        "Registration Successful",
-        "Your account has been created. Please sign in."
+        "Welcome to Bidora",
+        "On creating your account you earned 1000 credits.\n\nCongratulations!\n\n🎉"
       );
-      window.location.href = "/";
-      
+      const signInModal = createSignInModal({
+        async onSubmit(data) {
+          const result = await handleLoginSubmit(data.email, data.password);
+          if (
+            result &&
+            result.response &&
+            result.response.ok &&
+            typeof window !== "undefined"
+          ) {
+            window.location.reload();
+          }
+          return result;
+        },
+      });
+      signInModal.openSignInModal();
     } catch (error) {
       console.error("Registration failed", error);
       errorContainer.textContent = "Registration failed. Please try again.";

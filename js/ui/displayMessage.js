@@ -6,15 +6,18 @@ import { createBaseModal } from "./baseModal.js";
  * @param {string} message - The message content.
  */
 export function displayMessage(title, message) {
+  function convertSlashNToBr(str) {
+    return typeof str === "string" ? str.replace(/\n/g, "<br>") : str;
+  }
   return new Promise((resolve) => {
     const modal = createBaseModal({}, (onSubmit, close) => {
       const wrapper = document.createElement("div");
       const titleEl = document.createElement("h2");
       titleEl.textContent = title;
-      titleEl.className = "text-lg font-semibold mb-2";
+      titleEl.className = "text-lg font-semibold mb-2 text-center";
       const msgEl = document.createElement("p");
-      msgEl.textContent = message;
-      msgEl.className = "mb-4";
+      msgEl.className = "mb-4 text-center";
+      msgEl.innerHTML = convertSlashNToBr(message);
       const okBtn = document.createElement("button");
       okBtn.textContent = "OK";
       okBtn.className = "px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700";
