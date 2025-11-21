@@ -1,6 +1,19 @@
+function hideContainer(container) {
+  if (container) {
+    container.classList.add("hidden");
+    container.classList.remove("auctions-grid");
+  }
+}
+function showContainer(container) {
+  if (container) {
+    container.classList.remove("hidden");
+    container.classList.add("auctions-grid");
+  }
+}
 import { displayError } from "./displayError.js";
 import { setAvatarModal } from "./setAvatarModal.js";
 import { getCurrentProfile, updateAvatar } from "../api/profile.js";
+import { getBids } from "../api/bids.js";
 import { createListingHtml } from "./createListingHtml.js";
 import { createWinningsHtml } from "./createWinningsHtml.js";
 import initVanillaNavbar from "./navbar.js";
@@ -97,27 +110,38 @@ function setupAvatarEditButton() {
 function setupWinningsToggleButton() {
   const navLinks = document.querySelectorAll(".flex-row a");
   const listingsBtn = navLinks[0];
+  const bidHistoryBtn = navLinks[1];
   const winningsBtn = navLinks[2];
-  const winningsContainer = document.getElementById("winnings-container");
   const listingsContainer = document.getElementById("my-listings-container");
-  if (winningsBtn && winningsContainer && listingsContainer) {
-    winningsBtn.addEventListener("click", function (e) {
-      e.preventDefault();
-      console.log("Winnings button clicked");
-      winningsContainer.classList.remove("hidden");
-      winningsContainer.classList.add("auctions-grid");
-      listingsContainer.classList.add("hidden");
-      listingsContainer.classList.remove("auctions-grid");
-    });
-  }
+  const bidHistoryContainer = document.getElementById("bid-history-container");
+  const winningsContainer = document.getElementById("winnings-container");
   if (listingsBtn && winningsContainer && listingsContainer) {
     listingsBtn.addEventListener("click", function (e) {
       e.preventDefault();
       console.log("Listings button clicked");
-      listingsContainer.classList.remove("hidden");
-      listingsContainer.classList.add("auctions-grid");
-      winningsContainer.classList.add("hidden");
-      winningsContainer.classList.remove("auctions-grid");
+      showContainer(listingsContainer);
+      hideContainer(bidHistoryContainer);
+      hideContainer(winningsContainer);
+    });
+  }
+  if (bidHistoryBtn) {
+    bidHistoryBtn.addEventListener("click", async function (e) {
+      e.preventDefault();
+      const result = await getBids();
+      console.log("Bid history button clicked");
+      console.log("Bid History:", result);
+      hideContainer(listingsContainer);
+      showContainer(bidHistoryContainer);
+      hideContainer(winningsContainer);
+    });
+  }
+  if (winningsBtn && winningsContainer && listingsContainer) {
+    winningsBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      console.log("Winnings button clicked");
+      hideContainer(listingsContainer);
+      hideContainer(bidHistoryContainer);
+      showContainer(winningsContainer);
     });
   }
 }
