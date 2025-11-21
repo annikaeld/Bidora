@@ -35,10 +35,12 @@ export async function updateAvatar(avatar) {
     throw new Error("No current profile found");
   }
   profile.avatar = avatar;
+  console.log("Updated profile to:", profile);
   await saveProfile(profile);
 }
 
 export async function saveProfile(profile) {
+  console.log("Saving profile:", profile);
   const response = await authFetch(
     `${API_BASE}${API_AUCTION}${API_PROFILES}/${profile.name}`,
     {

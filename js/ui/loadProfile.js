@@ -1,13 +1,14 @@
-import { getCurrentProfile } from "../api/profile.js";
 import { displayError } from "./displayError.js";
 import { setAvatarModal } from "./setAvatarModal.js";
 import { updateAvatar } from "../api/profile.js";
 import { createListingHtml } from "./createListingHtml.js";
 import { createWinningsHtml } from "./createWinningsHtml.js";
+import { load } from "../storage/load.js";
+import initVanillaNavbar from "./navbar.js";
 
 async function loadProfile() {
   try {
-    let profile = await getCurrentProfile();
+    let profile = await load("profile");
     if (!profile) {
       profile = { name: "Not logged in", email: "" };
     }
@@ -87,9 +88,11 @@ function setupAvatarEditButton() {
   const editBtn = document.getElementById("edit-avatar-btn");
   if (editBtn) {
     editBtn.addEventListener("click", () => {
-      setAvatarModal((avatarUrl) => {
-        updateAvatar(avatarUrl);
+      setAvatarModal(async (avatarUrl) => {
+        await updateAvatar(avatarUrl);
+        initVanillaNavbar();
       });
+      
     });
   }
 }
