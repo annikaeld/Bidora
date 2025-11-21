@@ -1,6 +1,7 @@
 import { load } from "../storage/load.js";
 import { deleteListing } from "../api/auctions.js";
 import { displayMessage } from "./displayMessage.js";
+import { confirmModal } from "./confirmModal.js";
 import { isLoggedIn } from "../storage/loggedIn.js";
 
 export function insertItemImage(item) {
@@ -163,16 +164,14 @@ export function insertItemText(item) {
     const btn = deleteItemContainer.querySelector("#delete-listing-btn");
     if (btn) {
       btn.addEventListener("click", async () => {
-        if (
-          !confirm(
-            "Are you sure you want to delete this listing? This action cannot be undone."
-          )
-        )
-          return;
+        const confirmed = await confirmModal(
+          "Confirm delete",
+          "Are you sure you want to delete this listing?\nThis action cannot be undone."
+        );
+        if (!confirmed) return;
         try {
           const response = await deleteListing(id);
           if (response) {
-            displayMessage("Success", "Listing deleted successfully.");
             window.location.href = "/auctions/";
           } else {
             displayMessage("Error", "Failed to delete listing.");
