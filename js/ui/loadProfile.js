@@ -1,14 +1,13 @@
 import { displayError } from "./displayError.js";
 import { setAvatarModal } from "./setAvatarModal.js";
-import { updateAvatar } from "../api/profile.js";
+import { getCurrentProfile, updateAvatar } from "../api/profile.js";
 import { createListingHtml } from "./createListingHtml.js";
 import { createWinningsHtml } from "./createWinningsHtml.js";
-import { load } from "../storage/load.js";
 import initVanillaNavbar from "./navbar.js";
 
 async function loadProfile() {
   try {
-    let profile = await load("profile");
+    let profile = await getCurrentProfile();
     if (!profile) {
       profile = { name: "Not logged in", email: "" };
     }
@@ -43,8 +42,6 @@ async function loadMyListings(profile) {
     console.log("Loading my listings for profile:", profile);
     const listingsContainer = document.getElementById("my-listings-container");
     if (!listingsContainer) return;
-    // make the listings container use the auctions grid so cards match auction layout
-    listingsContainer.classList.add("auctions-grid");
     if (!profile || !Array.isArray(profile.listings)) {
       listingsContainer.innerHTML =
         '<p class="text-gray-500">No listings found.</p>';

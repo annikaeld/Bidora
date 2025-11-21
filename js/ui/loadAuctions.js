@@ -5,8 +5,6 @@ export async function loadAuctions(auctions) {
   console.log("loadAuctions: auctions =", auctions);
   const auctionsContainer = document.getElementById("auctions-container");
   auctionsContainer.innerHTML = ""; // Clear existing auctions
-  // ensure the container uses the auctions grid layout
-  auctionsContainer.classList.add("auctions-grid");
   if (!auctions || !auctions.data || auctions.data.length === 0) {
     auctionsContainer.innerHTML =
       '<div class="text-center text-gray-500">No auctions available.</div>';
