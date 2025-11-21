@@ -190,22 +190,6 @@ h3 {
     object-position: var(--object-position, center center);
 }
 
-/* Avatar icon fallback for Material Symbols*/
-.material-symbols-outlined.avatar-icon,
-.avatar-icon.material-symbols-outlined {
-    font-size: 96px !important;
-    /* ensure it overrides other font-size rules */
-    width: 96px;
-    height: 96px;
-    line-height: 1;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    /* Material Symbols variable axes — opsz (optical size) helps visual weight
-       when scaling icons. */
-    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
-}
-
 .auction-meta {
     margin-top: auto;
 
