@@ -337,26 +337,30 @@ function createMobileMenu(btnBase) {
       el("h2", {}, "Auctions")
     )
   );
-  mobileMenu.appendChild(
-    el(
-      "a",
-      {
-        href: import.meta.env.BASE_URL + "#howitworks",
-        class: "block py-2 px-2 hover:underline menu-item",
-      },
-      el("h2", {}, "How it Works")
-    )
+  const howItWorksLink = el(
+    "a",
+    {
+      href: import.meta.env.BASE_URL + "#howitworks",
+      class: "block py-2 px-2 hover:underline menu-item",
+    },
+    el("h2", {}, "How it Works")
   );
-  mobileMenu.appendChild(
-    el(
-      "a",
-      {
-        href: import.meta.env.BASE_URL + "#about",
-        class: "block py-2 px-2 hover:underline menu-item",
-      },
-      el("h2", {}, "About")
-    )
+  howItWorksLink.addEventListener("click", () => {
+    mobileMenu.classList.add("hidden");
+  });
+  mobileMenu.appendChild(howItWorksLink);
+  const aboutLink = el(
+    "a",
+    {
+      href: import.meta.env.BASE_URL + "#about",
+      class: "block py-2 px-2 hover:underline menu-item",
+    },
+    el("h2", {}, "About")
   );
+  aboutLink.addEventListener("click", () => {
+    mobileMenu.classList.add("hidden");
+  });
+  mobileMenu.appendChild(aboutLink);
   // 'Create listing' and 'Profile' links only if logged in
   if (isLoggedIn()) {
     mobileMenu.appendChild(
