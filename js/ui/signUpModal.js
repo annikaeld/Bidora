@@ -6,6 +6,7 @@ import { createSignInModal } from "./signInModal.js";
 import { handleLoginSubmit } from "./handleLoginSubmit.js";
 import { validateEmail } from "./formValidation.js";
 import { displayMessage } from "./displayMessage.js";
+import { createPasswordToggle } from "./createPasswordToggle.js";
 
 function createSignUpNodes(onSubmit, close) {
   const nodes = [];
@@ -37,6 +38,7 @@ function createSignUpNodes(onSubmit, close) {
   const nameInput = el("input", {
     type: "text",
     required: "true",
+    placeholder: "example",
     class: "mt-1 block w-full border rounded px-3 py-2",
   });
   nameLabel.appendChild(nameInput);
@@ -56,16 +58,23 @@ function createSignUpNodes(onSubmit, close) {
   emailLabel.appendChild(emailInput);
   form.appendChild(emailLabel);
 
-  const pwLabel = el("label", { class: "block text-sm mb-4" });
+  const pwLabel = el("label", { class: "block text-sm mb-4 relative" });
   pwLabel.appendChild(
     el("span", { class: "text-[var(--color-text)]" }, "Password")
   );
+  // Password input wrapper for positioning
+  const pwWrapper = el("div", { class: "relative" });
   const pwInput = el("input", {
     type: "password",
     required: "true",
-    class: "mt-1 block w-full border rounded px-3 py-2",
+    class: "mt-1 block w-full border rounded px-3 py-2 pr-10", // pr-10 for space for the button
+    autocomplete: "new-password",
+    placeholder: "8 characters minimum",
   });
-  pwLabel.appendChild(pwInput);
+  // Eye toggle button using Material Symbols (extracted)
+  pwWrapper.appendChild(pwInput);
+  pwWrapper.appendChild(createPasswordToggle(pwInput));
+  pwLabel.appendChild(pwWrapper);
   form.appendChild(pwLabel);
 
   const controls = el("div", {
