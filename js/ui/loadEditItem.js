@@ -16,7 +16,7 @@ function getFormValues(formId) {
   }
   const title = form.querySelector('[name="title"]')?.value || "";
   const description = form.querySelector('[name="description"]')?.value || "";
-  
+
   let endsAt = form.querySelector('[name="ends-at"]')?.value || "";
   // Convert local datetime to UTC ISO string if value exists
   if (endsAt) {
@@ -75,7 +75,7 @@ function attachAddImageEventListener(buttonId, containerId) {
         type: "url",
         id: urlId,
         name: urlId,
-        class: "w-full border",
+        class: "w-full border h-9 rounded-md",
         required: true,
       });
       const labelAlt = el("label", { for: altId }, "Image alt-text");
@@ -83,7 +83,7 @@ function attachAddImageEventListener(buttonId, containerId) {
         type: "text",
         id: altId,
         name: altId,
-        class: "w-full border",
+        class: "w-full border h-9 rounded-md",
       });
       container.appendChild(labelUrl);
       container.appendChild(inputUrl);

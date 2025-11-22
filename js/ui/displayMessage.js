@@ -20,7 +20,8 @@ export function displayMessage(title, message) {
       msgEl.innerHTML = convertSlashNToBr(message);
       const okBtn = document.createElement("button");
       okBtn.textContent = "OK";
-      okBtn.className = "px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700";
+      okBtn.className =
+        "px-4 py-2 rounded btn-primary text-sm hover:btn-primary:hover mx-auto block";
       okBtn.addEventListener("click", () => {
         close();
         resolve();
