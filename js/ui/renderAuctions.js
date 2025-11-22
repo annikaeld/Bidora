@@ -4,13 +4,13 @@ export async function renderAuctions(auctions) {
   console.log("renderAuctions: auctions =", auctions);
   const auctionsContainer = document.getElementById("auctions-container");
   auctionsContainer.innerHTML = ""; // Clear existing auctions
-  if (!auctions || !auctions.data || auctions.data.length === 0) {
+  if (!auctions || auctions.length === 0) {
     auctionsContainer.innerHTML =
       '<div class="text-center text-gray-500">No auctions available.</div>';
     return;
   }
   try {
-    auctions.data.forEach((auction) => {
+    auctions.forEach((auction) => {
       const auctionElement = document.createElement("div");
       // use the CSS class defined in globals.css
       auctionElement.className = "auction-element";

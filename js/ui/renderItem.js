@@ -9,7 +9,15 @@ export function insertItemImage(item) {
     document.getElementById("item-image") ||
     document.getElementById("image-container");
   if (!container) return;
-  container.innerHTML = "";
+  // Clear only the main image, not the thumbnails
+  const thumbnailsContainer = document.getElementById("thumbnail-images");
+  if (thumbnailsContainer) thumbnailsContainer.innerHTML = "";
+  // Remove all children except the thumbnails div
+  Array.from(container.childNodes).forEach((child) => {
+    if (!(child.id && child.id === "thumbnail-images")) {
+      container.removeChild(child);
+    }
+  });
   const hasMedia =
     item && Array.isArray(item.data.media) && item.data.media.length > 0;
   if (hasMedia) {
@@ -17,9 +25,34 @@ export function insertItemImage(item) {
     img.src = item.data.media[0].url;
     img.alt = item.data.media[0].alt || item.data.title || "Item image";
     img.className = "w-full h-full object-cover";
-    container.appendChild(img);
+    // Insert the main image before the thumbnails div
+    if (thumbnailsContainer) {
+      container.insertBefore(img, thumbnailsContainer);
+    } else {
+      container.appendChild(img);
+    }
+    // Thumbnails for additional images
+    if (thumbnailsContainer && item.data.media.length > 1) {
+      for (let i = 1; i < item.data.media.length; i++) {
+        const thumb = document.createElement("img");
+        thumb.src = item.data.media[i].url;
+        thumb.alt = item.data.media[i].alt || item.data.title || `Thumbnail ${i + 1}`;
+        thumb.className =
+          "h-20 w-20 object-cover rounded cursor-pointer border border-gray-300 hover:border-blue-500";
+        thumbnailsContainer.appendChild(thumb);
+      }
+    }
   } else {
-    container.innerHTML = '<div class="no-image">No Image</div>';
+    // No image
+    if (thumbnailsContainer) thumbnailsContainer.innerHTML = "";
+    const noImgDiv = document.createElement("div");
+    noImgDiv.className = "no-image";
+    noImgDiv.textContent = "No Image";
+    if (thumbnailsContainer) {
+      container.insertBefore(noImgDiv, thumbnailsContainer);
+    } else {
+      container.appendChild(noImgDiv);
+    }
   }
 }
 

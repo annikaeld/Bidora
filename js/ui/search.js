@@ -3,12 +3,16 @@ import { getFormValues } from "./getFormValues.js";
 import { itemsFromApi } from "/js/api/item.js";
 import { renderAuctions } from "./renderAuctions.js";
 import { displayMessage } from "./displayMessage.js";
+
+let allAuctions = [];
+let currentIndex = 0;
+const PAGE_SIZE = 12;
 /**
  * Loads all auctions from the API and displays them in the feed container.
  * Redirects to the homepage if fetching auctions fails (e.g., not logged in).
  * @returns {void}
  */
-export async function loadAuctions() {
+async function loadAuctions(reset = true) {
   try {
     let { searchFor } = getFormValues("searchForm");
     const sortBy = getSortBy();
@@ -18,13 +22,61 @@ export async function loadAuctions() {
     if (!searchActive) {
       searchFor = "";
     }
-    const auctions = await itemsFromApi(searchFor, sortBy);
-    await renderAuctions(auctions);
+    if (reset) {
+      const result = await itemsFromApi(searchFor, sortBy);
+      console.log("Fetched auctions:", result);
+      if (result && Array.isArray(result.data)) {
+        allAuctions = result.data;
+      } else if (Array.isArray(result)) {
+        allAuctions = result;
+      } else {
+        allAuctions = [];
+      }
+      currentIndex = 0;
+    }
+    renderCurrentAuctions();
+    updateLoadMoreButton();
   } catch (error) {
     await displayMessage("Error loading auctions", error.message);
     console.error("Error loading auctions:", error);
     window.location.href = "/";
   }
+}
+
+function renderCurrentAuctions() {
+  const feedContainer = document.getElementById("feedContainer");
+  if (feedContainer) {
+    feedContainer.innerHTML = "";
+  }
+  const toShow = allAuctions.slice(0, currentIndex + PAGE_SIZE);
+  renderAuctions(toShow);
+}
+
+function updateLoadMoreButton() {
+  let btn = document.getElementById("loadMoreBtn");
+  if (!btn) {
+    // Create button if not exists
+    btn = document.createElement("button");
+    btn.id = "loadMoreBtn";
+    btn.textContent = "Load more";
+    btn.className = "mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 mx-auto block";
+    btn.addEventListener("click", handleLoadMore);
+    const feedContainer = document.getElementById("feedContainer");
+    if (feedContainer && feedContainer.parentNode) {
+      feedContainer.parentNode.appendChild(btn);
+    }
+  }
+  if (allAuctions.length > currentIndex + PAGE_SIZE) {
+    btn.style.display = "block";
+  } else {
+    btn.style.display = "none";
+  }
+}
+
+function handleLoadMore() {
+  currentIndex += PAGE_SIZE;
+  renderCurrentAuctions();
+  updateLoadMoreButton();
 }
 
 let searchActive = false;
@@ -36,7 +88,7 @@ let searchActive = false;
  */
 async function doSearch() {
   searchActive = true;
-  await loadAuctions();
+  await loadAuctions(true);
 }
 
 /**
@@ -120,12 +172,18 @@ document.addEventListener("DOMContentLoaded", () => {
   attachSubmitEventListener("searchForm");
   attachDropdownButtonListener();
   attachDropdownRadioListeners();
-  loadAuctions();
+  if (!document.getElementById("feedContainer")) {
+    const container = document.createElement("div");
+    container.id = "feedContainer";
+    const main = document.querySelector("main") || document.body;
+    main.appendChild(container);
+  }
+  loadAuctions(true);
   // Trigger loadAuctions when dropdownRadioForm changes
   const dropdownRadioForm = document.getElementById("dropdownRadioForm");
   if (dropdownRadioForm) {
     dropdownRadioForm.addEventListener("change", () => {
-      loadAuctions();
+      loadAuctions(true);
     });
   }
 });
