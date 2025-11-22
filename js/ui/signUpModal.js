@@ -133,6 +133,7 @@ function createSignUpNodes(onSubmit, close) {
           return result;
         },
       });
+      close();
       signInModal.openSignInModal();
     } catch (error) {
       console.error("Registration failed", error);
