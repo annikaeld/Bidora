@@ -1,4 +1,3 @@
-
 import { getFormValues } from "./getFormValues.js";
 import { itemsFromApi } from "/js/api/item.js";
 import { renderAuctions } from "./renderAuctions.js";
@@ -59,7 +58,8 @@ function updateLoadMoreButton() {
     btn = document.createElement("button");
     btn.id = "loadMoreBtn";
     btn.textContent = "Load more";
-    btn.className = "mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 mx-auto block";
+    btn.className =
+      "h-9 items-center btn-primary btn-primary-hover px-3 rounded-md mx-auto block mt-4";
     btn.addEventListener("click", handleLoadMore);
     const feedContainer = document.getElementById("feedContainer");
     if (feedContainer && feedContainer.parentNode) {

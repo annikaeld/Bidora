@@ -36,7 +36,8 @@ export function insertItemImage(item) {
       for (let i = 1; i < item.data.media.length; i++) {
         const thumb = document.createElement("img");
         thumb.src = item.data.media[i].url;
-        thumb.alt = item.data.media[i].alt || item.data.title || `Thumbnail ${i + 1}`;
+        thumb.alt =
+          item.data.media[i].alt || item.data.title || `Thumbnail ${i + 1}`;
         thumb.className =
           "h-20 w-20 object-cover rounded cursor-pointer border border-gray-300 hover:border-blue-500";
         thumbnailsContainer.appendChild(thumb);
@@ -187,7 +188,13 @@ export function insertItemText(item) {
   async function renderDeleteItemContainer() {
     let id = item.data.id;
     if (!deleteItemContainer) return;
-    deleteItemContainer.innerHTML = `<button id="delete-listing-btn" class="px-3 py-2 rounded-md bg-[var(--color-cta)] text-white hover:bg-[var(--color-cta-hover)]">Delete listing</button>`;
+    deleteItemContainer.innerHTML = `<button id="delete-listing-btn" class="bg-cta border-2 border-cta hover:bg-cta-hover text-white px-3 py-2 rounded">Delete listing</button>`;
+    const editItemContainer = document.getElementById("edit-item-container");
+    if (editItemContainer) {
+      // Use an anchor so navigation works without extra JS; include the listing id as a query param.
+      const editHref = `/auctions/edit.html?id=${encodeURIComponent(id)}`;
+      editItemContainer.innerHTML = `<a id="edit-listing-btn" href="${escapeHtml(editHref)}" class="border-2 border-cta text-text-primary bg-transparent px-3 py-2 rounded hover:bg-cta hover:text-white focus:outline-none focus:ring-2 focus:ring-cta">Edit listing</a>`;
+    }
     const btn = deleteItemContainer.querySelector("#delete-listing-btn");
     if (btn) {
       btn.addEventListener("click", async () => {

@@ -2,6 +2,34 @@ import { API_BASE, API_AUCTION, API_LISTINGS } from "./constants.js";
 import { authFetch } from "./fetch.js";
 import { displayMessage } from "../ui/displayMessage.js";
 
+/**
+ * Updates a listing by its ID.
+ * @param {string|number} id - The ID of the listing to update.
+ * @param {object} listingObject - The updated listing data.
+ * @returns {Promise<object>} The updated listing data.
+ */
+export async function updateListing(id, listingObject) {
+  if (!id) throw new Error('Listing ID is required');
+  try {
+    const response = await authFetch(
+      `${API_BASE}${API_AUCTION}${API_LISTINGS}/${id}`,
+      {
+        method: "PUT",
+        body: JSON.stringify(listingObject),
+      },
+    );
+    if (!response.ok) {
+      throw new Error(`Failed to update listing: ${response.statusText}`);
+    }
+    const responseBody = await response.json();
+    return responseBody;
+  } catch (error) {
+    console.error("Error updating listing:", error);
+    await displayMessage("Error updating listing", error.message);
+    throw error;
+  }
+}
+
 export async function postListing(listingObject) {
   try {
     const response = await authFetch(

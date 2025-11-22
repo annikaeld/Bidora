@@ -1,6 +1,7 @@
 import { el } from "./createElement.js";
-import { postListing } from "../api/auctions.js";
+import { postListing, updateListing } from "../api/auctions.js";
 import { displayMessage } from "./displayMessage.js";
+import { itemFromApi } from "../api/item.js";
 
 /**
  * Extracts form values including all image URLs and alt-texts from the form.
@@ -95,11 +96,83 @@ function attachAddImageEventListener(buttonId, containerId) {
 }
 
 async function initPage() {
-  attachSubmitEventListener(null, "edit-listing-form");
+  // Check for id param in URL
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+  if (id) {
+    try {
+      const item = await itemFromApi(id);
+      if (item && item.data) {
+        // Populate form fields
+        const form = document.getElementById("edit-listing-form");
+        if (form) {
+          form.querySelector('[name="title"]').value = item.data.title || "";
+          form.querySelector('[name="description"]').value = item.data.description || "";
+          if (item.data.endsAt) {
+            const dt = new Date(item.data.endsAt);
+            form.querySelector('[name="ends-at"]').value = dt.toISOString().slice(0, 16);
+          }
+
+          populateImageFields(form, item.data.media);
+
+          // Change button text to 'Update listing'
+          const submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
+          if (submitBtn) {
+            submitBtn.textContent = "Update listing";
+          }
+        }
+        // Change heading to 'Edit Listing'
+        const heading = document.querySelector("#post-container h1");
+        if (heading) {
+          heading.textContent = "Edit Listing";
+        }
+      }
+    } catch (e) {
+      console.error("Error loading item for edit:", e);
+      displayMessage("Error loading item for edit", e.message);
+    }
+  }
+  attachSubmitEventListener(id, "edit-listing-form");
   attachAddImageEventListener("add-image-button", "add-images-container");
+
+  function populateImageFields(form, media) {
+    if (!Array.isArray(media) || media.length === 0) return;
+    form.querySelector('[name="image-url-1"]').value = media[0].url || "";
+    form.querySelector('[name="image-alt-text-1"]').value = media[0].alt || "";
+    const container = document.getElementById("add-images-container");
+    let imageCounter = 2;
+    for (let i = 1; i < media.length; i++) {
+      const urlId = `image-url-${imageCounter}`;
+      const altId = `image-alt-text-${imageCounter}`;
+      if (!form.querySelector(`[name="${urlId}"]`)) {
+        const labelUrl = el("label", { for: urlId }, "Image URL");
+        const inputUrl = el("input", {
+          type: "url",
+          id: urlId,
+          name: urlId,
+          class: "w-full border h-9 rounded-md",
+          required: true,
+        });
+        const labelAlt = el("label", { for: altId }, "Image alt-text");
+        const inputAlt = el("input", {
+          type: "text",
+          id: altId,
+          name: altId,
+          class: "w-full border h-9 rounded-md",
+        });
+        container.appendChild(labelUrl);
+        container.appendChild(inputUrl);
+        container.appendChild(labelAlt);
+        container.appendChild(inputAlt);
+      }
+      form.querySelector(`[name="${urlId}"]`).value = media[i].url || "";
+      form.querySelector(`[name="${altId}"]`).value = media[i].alt || "";
+      imageCounter++;
+    }
+  }
 }
 
-function savePost(formId, postId) {
+async function savePost(formId, postId) {
   console.log(`Saving post with ID: ${postId}`);
   const { title, description, endsAt, media } = getFormValues(formId);
   console.log("Form Values:", { title, description, endsAt, media });
@@ -110,15 +183,20 @@ function savePost(formId, postId) {
     media: media,
   };
   console.log("Listing Object to be sent:", listingObject);
-  postListing(listingObject)
-    .then((id) => {
-      console.log("Listing created with ID:", id);
+  try {
+    if (postId) {
+      // Update existing listing
+      await updateListing(postId, listingObject);
+      window.location.href = `listing.html?id=${postId}`;
+    } else {
+      // Create new listing
+      const id = await postListing(listingObject);
       window.location.href = `listing.html?id=${id}`;
-    })
-    .catch((error) => {
-      console.error("Error creating listing:", error);
-      displayMessage("Error creating listing", error.message);
-    });
+    }
+  } catch (error) {
+    console.error(postId ? "Error updating listing:" : "Error creating listing:", error);
+    displayMessage(postId ? "Error updating listing" : "Error creating listing", error.message);
+  }
 }
 
 initPage();
