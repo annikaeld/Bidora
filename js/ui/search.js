@@ -1,7 +1,33 @@
+
 import { getFormValues } from "./getFormValues.js";
 import { itemsFromApi } from "/js/api/item.js";
-import { loadAuctions } from "./loadAuctions.js";
+import { renderAuctions } from "./renderAuctions.js";
 import { displayMessage } from "./displayMessage.js";
+/**
+ * Loads all auctions from the API and displays them in the feed container.
+ * Redirects to the homepage if fetching auctions fails (e.g., not logged in).
+ * @returns {void}
+ */
+export async function loadAuctions() {
+  try {
+    let { searchFor } = getFormValues("searchForm");
+    const sortBy = getSortBy();
+    if (searchFor.trim() == "") {
+      searchActive = false;
+    }
+    if (!searchActive) {
+      searchFor = "";
+    }
+    const auctions = await itemsFromApi(searchFor, sortBy);
+    await renderAuctions(auctions);
+  } catch (error) {
+    await displayMessage("Error loading auctions", error.message);
+    console.error("Error loading auctions:", error);
+    window.location.href = "/";
+  }
+}
+
+let searchActive = false;
 
 /**
  * Handles the search form submission:
@@ -9,10 +35,8 @@ import { displayMessage } from "./displayMessage.js";
  * @returns {Promise<void>}
  */
 async function doSearch() {
-  const { searchFor } = getFormValues("searchForm");
-  const sortBy = getSortBy();
-  const auctions = await itemsFromApi(searchFor, sortBy);
-  await loadAuctions(auctions);
+  searchActive = true;
+  await loadAuctions();
 }
 
 /**
@@ -96,4 +120,12 @@ document.addEventListener("DOMContentLoaded", () => {
   attachSubmitEventListener("searchForm");
   attachDropdownButtonListener();
   attachDropdownRadioListeners();
+  loadAuctions();
+  // Trigger loadAuctions when dropdownRadioForm changes
+  const dropdownRadioForm = document.getElementById("dropdownRadioForm");
+  if (dropdownRadioForm) {
+    dropdownRadioForm.addEventListener("change", () => {
+      loadAuctions();
+    });
+  }
 });

@@ -1,8 +1,7 @@
-import { getAuctions } from "../api/auctions.js";
 import { displayMessage } from "./displayMessage.js";
 
-export async function loadAuctions(auctions) {
-  console.log("loadAuctions: auctions =", auctions);
+export async function renderAuctions(auctions) {
+  console.log("renderAuctions: auctions =", auctions);
   const auctionsContainer = document.getElementById("auctions-container");
   auctionsContainer.innerHTML = ""; // Clear existing auctions
   if (!auctions || !auctions.data || auctions.data.length === 0) {
@@ -29,16 +28,16 @@ export async function loadAuctions(auctions) {
 
       // Wrap the card content in a link so clicking anywhere navigates to the details page
       auctionElement.innerHTML = `
-                <a href="${detailsUrl}" class="block h-full no-underline text-inherit">
-                  ${imgTag}
-                  <h3 class="mt-2">${auction.title}</h3>
-                  <div class="auction-meta">
-                    <p><small>Ends at: ${new Date(auction.endsAt).toLocaleString()}</small></p>
-                    <p><small>Bids: ${auction._Count || (auction._count && auction._count.bids) || 0}</small></p>
-                    <p><small>${auction.bids && auction.bids.length > 0 ? `Highest Bid: ${Math.max(...auction.bids.map((bid) => bid.amount))} tokens` : "No bids yet"}</small></p>
-                  </div>
-                </a>
-            `;
+								<a href="${detailsUrl}" class="block h-full no-underline text-inherit">
+									${imgTag}
+									<h3 class="mt-2">${auction.title}</h3>
+									<div class="auction-meta">
+										<p><small>Ends at: ${new Date(auction.endsAt).toLocaleString()}</small></p>
+										<p><small>Bids: ${auction._Count || (auction._count && auction._count.bids) || 0}</small></p>
+										<h3 class="text-end">${auction.bids && auction.bids.length > 0 ? `${Math.max(...auction.bids.map((bid) => bid.amount))} tokens` : "No bids yet"}</h3>
+									</div>
+								</a>
+						`;
       auctionsContainer.appendChild(auctionElement);
     });
   } catch (error) {
@@ -46,22 +45,3 @@ export async function loadAuctions(auctions) {
     await displayMessage("Error loading auctions", error.message);
   }
 }
-
-/**
- * Loads all auctions from the API and displays them in the feed container.
- * Redirects to the homepage if fetching auctions fails (e.g., not logged in).
- * @returns {void}
- */
-export async function loadAllAuctions() {
-  const auctionsContainer = document.getElementById("auctions-container");
-  auctionsContainer.innerHTML = ""; // Clear existing auctions
-  try {
-    const auctions = await getAuctions();
-    await loadAuctions(auctions);
-  } catch (error) {
-    await displayMessage("Error loading auctions", error.message);
-    console.error("Error loading auctions:", error);
-    window.location.href = "/";
-  }
-}
-loadAllAuctions();

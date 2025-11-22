@@ -54,13 +54,22 @@ export async function placeBid(id, amount) {
  * @returns {Promise<Array>} Array of items/listings from the API.
  */
 export async function itemsFromApi(searchFor, sortBy) {
-  let url = `${API_BASE}${API_AUCTION}${API_LISTINGS}${API_SEARCH}?_seller=true&_bids=true`;
+  const searchUrlPart = (searchFor === "") ? "" : API_SEARCH;
+  let url = `${API_BASE}${API_AUCTION}${API_LISTINGS}${searchUrlPart}?_seller=true&_bids=true&_active=true`;
   if (searchFor) {
     url += `&q=${encodeURIComponent(searchFor)}`;
   }
-  if (sortBy && (sortBy === "endsAt" || sortBy === "created")) {
-    url += `&sort=${encodeURIComponent(sortBy)}`;
+  let sortOrderPart = "asc";
+  if (sortBy === "Ends at") {
+    sortBy = "endsAt";
+    sortOrderPart = "&sortOrder=asc";
   }
+  else if (sortBy === "Created") {
+    sortBy = "created";
+    sortOrderPart = "&sortOrder=desc";
+  }
+  url += `&sort=${encodeURIComponent(sortBy)}${sortOrderPart}`;
+
   const response = await authFetch(url);
   if (!response) {
     return [];
@@ -78,7 +87,10 @@ export async function itemsFromApi(searchFor, sortBy) {
     return [];
   }
   try {
-    const data = await response.json();
+    let data = await response.json();
+    if (searchFor) {
+      data = await filterActiveItems(data);
+    }
     return data;
   } catch (e) {
     console.error("itemsFromApi: Error parsing items JSON", e);
@@ -110,4 +122,14 @@ export async function itemFromApi(id) {
     displayMessage("Error", "Unexpected response format from API");
     return null;
   }
+}
+
+export function filterActiveItems(items) {
+  const now = new Date();
+  var filteredItems = items.data.filter(item => {
+    if (!item.endsAt) return true; // keep if no endsAt
+    const endsAtDate = new Date(item.endsAt);
+    return endsAtDate.getTime() > now.getTime();
+  });
+  return { data: filteredItems };
 }
