@@ -168,15 +168,9 @@ export function insertItemText(item) {
             displayMessage("Error", "Listing ID not found.");
             return;
           }
-          const result = await placeBid(listingId, amount);
+          var result = await placeBid(listingId, amount);
           if (result) {
-            displayMessage("Success", "Bid placed successfully!");
             window.location.reload();
-          } else {
-            displayMessage(
-              "Error placing bid",
-              "Failed to place bid. Please try again."
-            );
           }
         } catch (err) {
           console.error(err);

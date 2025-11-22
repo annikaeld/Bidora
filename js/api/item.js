@@ -14,6 +14,7 @@ import { displayMessage } from "../ui/displayMessage.js";
  * @returns {Promise<object|null>} The API response data or null on error.
  */
 export async function placeBid(id, amount) {
+  console.log("placeBid: amount =", amount);
   if (!id || typeof amount !== "number" || amount <= 0) {
     displayMessage("placeBid: Invalid id or amount", id, amount);
     return null;
@@ -30,16 +31,15 @@ export async function placeBid(id, amount) {
       return null;
     }
     if (!response.ok) {
-      const errorBody = await response.text();
-      displayMessage(
-        "Error placing bid",
-        "Failed to place bid",
-        `${response.status} ${response.statusText} ${errorBody}`
-      );
+      const errorBody = await response.json();
+      const errors = errorBody.errors || [];
+      const errorMessages = errors.map(err => err.message).join("; ");
+      displayMessage("Failed to place bid.", errorMessages);
       return null;
+    } else {
+      const data = await response.json();
+      return data;
     }
-    const data = await response.json();
-    return data;
   } catch (e) {
     console.error("placeBid: Error placing bid", e);
     displayMessage("Error", e.message);
