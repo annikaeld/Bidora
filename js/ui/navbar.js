@@ -334,7 +334,7 @@ function createMobileMenu(btnBase) {
         href: import.meta.env.BASE_URL + "auctions/",
         class: "block py-2 px-2 hover:underline menu-item",
       },
-      "Auctions"
+      el("h2", {}, "Auctions")
     )
   );
   mobileMenu.appendChild(
@@ -344,7 +344,7 @@ function createMobileMenu(btnBase) {
         href: import.meta.env.BASE_URL + "#howitworks",
         class: "block py-2 px-2 hover:underline menu-item",
       },
-      "How it Works"
+      el("h2", {}, "How it Works")
     )
   );
   mobileMenu.appendChild(
@@ -354,7 +354,7 @@ function createMobileMenu(btnBase) {
         href: import.meta.env.BASE_URL + "#about",
         class: "block py-2 px-2 hover:underline menu-item",
       },
-      "About"
+      el("h2", {}, "About")
     )
   );
   // 'Create listing' and 'Profile' links only if logged in
@@ -366,7 +366,7 @@ function createMobileMenu(btnBase) {
           href: import.meta.env.BASE_URL + "auctions/edit.html",
           class: "block py-2 px-2 hover:underline menu-item",
         },
-        "Create listing"
+        el("h2", {}, "Create listing")
       )
     );
     // User dropdown for mobile
@@ -382,7 +382,7 @@ function createMobileMenu(btnBase) {
           href: import.meta.env.BASE_URL + "profile/",
           class: "block py-2 px-2 hover:underline menu-item",
         },
-        "Profile"
+        el("h2", {}, "Profile")
       ),
       (() => {
         const logout = el(
@@ -395,7 +395,7 @@ function createMobileMenu(btnBase) {
             style:
               "background:none;border:none;color:inherit;font:inherit;cursor:pointer;outline:inherit;",
           },
-          "Log out"
+          el("h2", {}, "Log out")
         );
         logout.addEventListener("click", logoutUser);
         return logout;
