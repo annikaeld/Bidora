@@ -13,15 +13,15 @@ function createSignUpNodes(onSubmit, close) {
     el(
       "h2",
       { class: "text-xl font-semibold mb-4 heading-color" },
-      "Create your Bidora account",
-    ),
+      "Create your Bidora account"
+    )
   );
   nodes.push(
     el(
       "p",
       { class: "text-sm text-[var(--color-text)] mb-4" },
-      "Sign up to start bidding on amazing items.",
-    ),
+      "Sign up to start bidding on amazing items."
+    )
   );
 
   // Error message container
@@ -32,7 +32,7 @@ function createSignUpNodes(onSubmit, close) {
 
   const nameLabel = el("label", { class: "block text-sm mb-2" });
   nameLabel.appendChild(
-    el("span", { class: "text-[var(--color-text)]" }, "Name"),
+    el("span", { class: "text-[var(--color-text)]" }, "Username")
   );
   const nameInput = el("input", {
     type: "text",
@@ -44,11 +44,12 @@ function createSignUpNodes(onSubmit, close) {
 
   const emailLabel = el("label", { class: "block text-sm mb-2" });
   emailLabel.appendChild(
-    el("span", { class: "text-[var(--color-text)]" }, "Email"),
+    el("span", { class: "text-[var(--color-text)]" }, "Email")
   );
   const emailInput = el("input", {
     type: "email",
     required: "true",
+    placeholder: "example@stud.noroff.no",
     class: "mt-1 block w-full border rounded px-3 py-2",
     autocomplete: "email",
   });
@@ -57,7 +58,7 @@ function createSignUpNodes(onSubmit, close) {
 
   const pwLabel = el("label", { class: "block text-sm mb-4" });
   pwLabel.appendChild(
-    el("span", { class: "text-[var(--color-text)]" }, "Password"),
+    el("span", { class: "text-[var(--color-text)]" }, "Password")
   );
   const pwInput = el("input", {
     type: "password",
@@ -74,7 +75,7 @@ function createSignUpNodes(onSubmit, close) {
   const cancel = el(
     "button",
     { type: "button", class: "px-4 py-2 rounded text-sm" },
-    "Cancel",
+    "Cancel"
   );
   const submit = el(
     "button",
@@ -82,7 +83,7 @@ function createSignUpNodes(onSubmit, close) {
       type: "submit",
       class: "px-4 py-2 rounded btn-primary text-sm hover:btn-primary:hover",
     },
-    "Sign up",
+    "Sign up"
   );
   controls.appendChild(cancel);
   controls.appendChild(submit);
@@ -97,7 +98,7 @@ function createSignUpNodes(onSubmit, close) {
     if (!validateEmail(email)) {
       displayError(
         errorContainer,
-        "Please enter a valid stud.noroff.no email address."
+        "Please enter an email address ending with @stud.noroff.no"
       );
       emailInput.focus();
       return;
@@ -150,7 +151,7 @@ function createSignUpNodes(onSubmit, close) {
 export function createSignUpModal(options = {}) {
   const { openModal, close } = createBaseModal(
     { ...options },
-    createSignUpNodes,
+    createSignUpNodes
   );
   // Optionally, you can return dialog if needed for direct DOM manipulation
   return { openModal, close };
