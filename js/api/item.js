@@ -14,7 +14,7 @@ import { displayMessage } from "../ui/displayMessage.js";
  * @returns {Promise<object|null>} The API response data or null on error.
  */
 export async function placeBid(id, amount) {
-  console.log("placeBid: amount =", amount);
+  
   if (!id || typeof amount !== "number" || amount <= 0) {
     displayMessage("placeBid: Invalid id or amount", id, amount);
     return null;

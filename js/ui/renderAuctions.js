@@ -13,7 +13,6 @@ function formatTimeLeft(endTime) {
 import { displayMessage } from "./displayMessage.js";
 
 export async function renderAuctions(auctions) {
-  console.log("renderAuctions: auctions =", auctions);
   const auctionsContainer = document.getElementById("auctions-container");
   auctionsContainer.innerHTML = ""; // Clear existing auctions
   if (!auctions || auctions.length === 0) {

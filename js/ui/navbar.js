@@ -158,7 +158,6 @@ function createBurger() {
 
 function createDesktopLinks(btnBase) {
   const profile = currentProfile();
-  console.log("Navbar current profile:", profile);
   const desktop = el("div", {
     class:
       "nav-links hidden md:flex items-center gap-6 text-[var(--color-text)] font-semibold",
@@ -518,7 +517,6 @@ function isLoggedIn() {
 }
 
 function currentProfile() {
-  console.log("Loading current profile for navbar");
   return load("profile");
 }
 

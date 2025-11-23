@@ -53,7 +53,6 @@ async function setAvatar(avatar) {
 
 async function loadMyListings(profile) {
   try {
-    console.log("Loading my listings for profile:", profile);
     const listingsContainer = document.getElementById("my-listings-container");
     if (!listingsContainer) return;
     if (!profile || !Array.isArray(profile.listings)) {
@@ -75,7 +74,6 @@ async function loadMyListings(profile) {
 
 async function loadWinnings(profile) {
   try {
-    console.log("Loading winnings for profile:", profile);
     const winningsContainer = document.getElementById("winnings-container");
     if (!winningsContainer) return;
     if (!profile || !Array.isArray(profile.wins)) {
@@ -119,7 +117,6 @@ function setupWinningsToggleButton() {
   if (listingsBtn && listingsContainer && bidHistoryContainer && winningsContainer) {
     listingsBtn.addEventListener("click", function (e) {
       e.preventDefault();
-      console.log("Listings button clicked");
       showContainer(listingsContainer);
       hideContainer(bidHistoryContainer);
       hideContainer(winningsContainer);
@@ -130,8 +127,6 @@ function setupWinningsToggleButton() {
     bidHistoryBtn.addEventListener("click", async function (e) {
       e.preventDefault();
       const bids = await getBids();
-      console.log("Bid history button clicked");
-      console.log("Bid History:", bids);
       hideContainer(listingsContainer);
       showContainer(bidHistoryContainer);
       hideContainer(winningsContainer);
@@ -141,7 +136,6 @@ function setupWinningsToggleButton() {
   if (winningsBtn && listingsContainer && bidHistoryContainer && winningsContainer) {
     winningsBtn.addEventListener("click", function (e) {
       e.preventDefault();
-      console.log("Winnings button clicked");
       hideContainer(listingsContainer);
       hideContainer(bidHistoryContainer);
       showContainer(winningsContainer);

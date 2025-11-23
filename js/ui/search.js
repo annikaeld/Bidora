@@ -23,7 +23,6 @@ async function loadAuctions(reset = true) {
     }
     if (reset) {
       const result = await itemsFromApi(searchFor, sortBy);
-      console.log("Fetched auctions:", result);
       if (result && Array.isArray(result.data)) {
         allAuctions = result.data;
       } else if (Array.isArray(result)) {

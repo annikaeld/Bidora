@@ -29,9 +29,7 @@ function getFormValues(formId) {
   // Convert local datetime to UTC ISO string if value exists
   if (endsAt) {
     const localDate = new Date(endsAt);
-    console.log("Local date for endsAt:", localDate);
     endsAt = localDate.toISOString();
-    console.log("Converted endsAt to ISO string:", endsAt);
   }
   // Collect all image-url and image-alt-text pairs
   const media = [];
@@ -180,9 +178,7 @@ async function initPage() {
 }
 
 async function savePost(formId, postId) {
-  console.log(`Saving post with ID: ${postId}`);
   const { title, description, endsAt, media } = getFormValues(formId);
-  console.log("Form Values:", { title, description, endsAt, media });
 
   if (!validateAuctionFormFields({ title, description, endsAt, media })) {
     return;
@@ -194,7 +190,6 @@ async function savePost(formId, postId) {
     endsAt: endsAt,
     media: media,
   };
-  console.log("Listing Object to be sent:", listingObject);
   try {
     if (postId) {
       // Update existing listing

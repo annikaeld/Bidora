@@ -45,7 +45,6 @@ export async function postListing(listingObject) {
     const responseBody = await response.json();
     const data = responseBody.data;
     const id = data.id;
-    console.log("Created listing with ID:", id);
     return id;
   } catch (error) {
     console.error("Error posting listing:", error);
@@ -60,7 +59,6 @@ export async function postListing(listingObject) {
  * @returns {Promise<Response>} The fetch response.
  */
 export async function deleteListing(id) {
-  console.log("Deleting listing with ID:", id);
   if (!id) throw new Error('Listing ID is required');
   const url = `${API_BASE}${API_AUCTION}${API_LISTINGS}/${id}`;
   const response = await authFetch(url, {

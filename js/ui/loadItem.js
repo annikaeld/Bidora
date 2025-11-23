@@ -5,11 +5,6 @@ import { setPageTitle } from "./setPageTitle.js";
 
 const id = getIdQueryParameter();
 const item = await itemFromApi(id);
-console.log("Fetched item:", item);
-
-//TODO: Handle missing/404 item gracefully
-//{"errors":[{"message":"ID must be a valid UUID","code":"invalid_string","path":["id"]}],"status":"Bad Request","statusCode":400}
-//Error fetching item 400
 
 if (!item) {
   // Set a clear page title
@@ -42,6 +37,5 @@ if (!item) {
 } else {
   insertItemImage(item);
   insertItemText(item);
-  console.log("Rendering item:", item);
   setPageTitle(`Bidora | ${item?.data?.title ? item.data.title : "Item"}`);
 }
