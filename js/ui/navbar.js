@@ -30,6 +30,9 @@ function createNavbar() {
   nav.appendChild(mobileMenu);
   handleBurgerClick(burger, mobileMenu);
 
+  window.addEventListener("scroll", autoHideMobileMenuOnScroll);
+  document.addEventListener("click", hideMobileMenuOnClickOutside);
+
   const modal = createSignInModal({
     async onSubmit(data) {
       const result = await handleLoginSubmit(data.email, data.password);
@@ -71,6 +74,23 @@ function createNavbar() {
   }
 
   return nav;
+
+  function autoHideMobileMenuOnScroll() {
+    if (!mobileMenu.classList.contains("hidden")) {
+      mobileMenu.classList.add("hidden");
+      burger.setAttribute("aria-expanded", "false");
+    }
+  }
+
+  function hideMobileMenuOnClickOutside(e) {
+    const isMenuOpen = !mobileMenu.classList.contains("hidden");
+    if (!isMenuOpen) return;
+    // If click is not inside the menu or the burger
+    if (!mobileMenu.contains(e.target) && !burger.contains(e.target)) {
+      mobileMenu.classList.add("hidden");
+      burger.setAttribute("aria-expanded", "false");
+    }
+  }
 }
 
 function el(tag, attrs = {}, ...children) {
@@ -176,132 +196,132 @@ function createDesktopLinks(btnBase) {
     // 'Create listing' and 'Profile' links only if logged in
     ...(isLoggedIn()
       ? [
+        el(
+          "a",
+          {
+            href: import.meta.env.BASE_URL + "auctions/edit.html",
+            class:
+              "inline-flex items-center justify-center w-9 h-9 rounded-full bg-[var(--accent-color)] hover:bg-[var(--color-text)] text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta)]",
+            title: "Create listing",
+            "aria-label": "Create listing",
+          },
           el(
-            "a",
+            "span",
+            { class: "material-symbols-outlined text-[20px] leading-none" },
+            "add_2"
+          )
+        ),
+        // User dropdown
+        (() => {
+          const dropdown = el("div", {
+            class:
+              "relative inline-block text-left user-dropdown px-0 md:px-2 focus-within:z-50",
+          });
+          let avatarUrl =
+            profile && profile.avatar && profile.avatar.url
+              ? profile.avatar.url
+              : "";
+          let avatarAlt =
+            profile && profile.avatar && profile.avatar.alt
+              ? profile.avatar.alt
+              : "Profile avatar";
+          const button = el(
+            "button",
             {
-              href: import.meta.env.BASE_URL + "auctions/edit.html",
               class:
-                "inline-flex items-center justify-center w-9 h-9 rounded-full bg-[var(--accent-color)] hover:bg-[var(--color-text)] text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta)]",
-              title: "Create listing",
-              "aria-label": "Create listing",
+                "hover:underline menu-item px-4 md:px-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-text)] focus-visible:ring-offset-2 flex items-center gap-2",
+              "aria-haspopup": "true",
+              "aria-expanded": "false",
+              type: "button",
+              tabIndex: 0,
+            },
+            el("img", {
+              src: avatarUrl,
+              alt: avatarAlt,
+              class:
+                "inline-block w-9 h-9 rounded-full object-cover align-middle border-2 border-[var(--accent-color)]",
+              onerror: function () {
+                this.replaceWith(
+                  el(
+                    "span",
+                    {
+                      class:
+                        "material-symbols-outlined avatar-icon align-middle",
+                      role: "img",
+                      "aria-label": "Default avatar",
+                    },
+                    "face"
+                  )
+                );
+              },
+            })
+          );
+          const menu = el(
+            "div",
+            {
+              class:
+                "hidden absolute left-0 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50 user-dropdown-menu",
             },
             el(
-              "span",
-              { class: "material-symbols-outlined text-[20px] leading-none" },
-              "add_2"
-            )
-          ),
-          // User dropdown
-          (() => {
-            const dropdown = el("div", {
-              class:
-                "relative inline-block text-left user-dropdown px-0 md:px-2 focus-within:z-50",
-            });
-            let avatarUrl =
-              profile && profile.avatar && profile.avatar.url
-                ? profile.avatar.url
-                : "";
-            let avatarAlt =
-              profile && profile.avatar && profile.avatar.alt
-                ? profile.avatar.alt
-                : "Profile avatar";
-            const button = el(
-              "button",
+              "a",
               {
+                href: import.meta.env.BASE_URL + "profile/",
                 class:
-                  "hover:underline menu-item px-4 md:px-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-text)] focus-visible:ring-offset-2 flex items-center gap-2",
-                "aria-haspopup": "true",
-                "aria-expanded": "false",
-                type: "button",
-                tabIndex: 0,
+                  "block px-4 py-2 text-sm text-[var(--color-text)] hover:bg-gray-100",
               },
-              el("img", {
-                src: avatarUrl,
-                alt: avatarAlt,
-                class:
-                  "inline-block w-9 h-9 rounded-full object-cover align-middle border-2 border-[var(--accent-color)]",
-                onerror: function () {
-                  this.replaceWith(
-                    el(
-                      "span",
-                      {
-                        class:
-                          "material-symbols-outlined avatar-icon align-middle",
-                        role: "img",
-                        "aria-label": "Default avatar",
-                      },
-                      "face"
-                    )
-                  );
-                },
-              })
-            );
-            const menu = el(
-              "div",
-              {
-                class:
-                  "hidden absolute left-0 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50 user-dropdown-menu",
-              },
-              el(
-                "a",
+              "Profile"
+            ),
+            (() => {
+              const logout = el(
+                "button",
                 {
-                  href: import.meta.env.BASE_URL + "profile/",
+                  type: "button",
                   class:
-                    "block px-4 py-2 text-sm text-[var(--color-text)] hover:bg-gray-100",
+                    "block w-full text-left px-4 py-2 text-sm text-[var(--color-text)] hover:bg-gray-100",
                 },
-                "Profile"
-              ),
-              (() => {
-                const logout = el(
-                  "button",
-                  {
-                    type: "button",
-                    class:
-                      "block w-full text-left px-4 py-2 text-sm text-[var(--color-text)] hover:bg-gray-100",
-                  },
-                  "Log out"
-                );
-                logout.addEventListener("click", logoutUser);
-                return logout;
-              })()
-            );
-            // Show/hide menu on mouseenter/mouseleave for both button and menu
-            let menuVisible = false;
-            function showMenu() {
-              menu.classList.remove("hidden");
-              button.setAttribute("aria-expanded", "true");
-              menuVisible = true;
-            }
-            function hideMenu() {
-              menu.classList.add("hidden");
-              button.setAttribute("aria-expanded", "false");
-              menuVisible = false;
-            }
-            button.addEventListener("mouseenter", showMenu);
-            button.addEventListener("focus", showMenu);
-            button.addEventListener("mouseleave", () => {
-              setTimeout(() => {
-                if (!menuVisible) hideMenu();
-              }, 100);
-            });
-            button.addEventListener("blur", () => {
-              setTimeout(() => {
-                if (!menuVisible) hideMenu();
-              }, 100);
-            });
-            menu.addEventListener("mouseenter", () => {
-              menuVisible = true;
-              showMenu();
-            });
-            menu.addEventListener("mouseleave", () => {
-              menuVisible = false;
-              hideMenu();
-            });
-            dropdown.appendChild(button);
-            dropdown.appendChild(menu);
-            return dropdown;
-          })(),
-        ]
+                "Log out"
+              );
+              logout.addEventListener("click", logoutUser);
+              return logout;
+            })()
+          );
+          // Show/hide menu on mouseenter/mouseleave for both button and menu
+          let menuVisible = false;
+          function showMenu() {
+            menu.classList.remove("hidden");
+            button.setAttribute("aria-expanded", "true");
+            menuVisible = true;
+          }
+          function hideMenu() {
+            menu.classList.add("hidden");
+            button.setAttribute("aria-expanded", "false");
+            menuVisible = false;
+          }
+          button.addEventListener("mouseenter", showMenu);
+          button.addEventListener("focus", showMenu);
+          button.addEventListener("mouseleave", () => {
+            setTimeout(() => {
+              if (!menuVisible) hideMenu();
+            }, 100);
+          });
+          button.addEventListener("blur", () => {
+            setTimeout(() => {
+              if (!menuVisible) hideMenu();
+            }, 100);
+          });
+          menu.addEventListener("mouseenter", () => {
+            menuVisible = true;
+            showMenu();
+          });
+          menu.addEventListener("mouseleave", () => {
+            menuVisible = false;
+            hideMenu();
+          });
+          dropdown.appendChild(button);
+          dropdown.appendChild(menu);
+          return dropdown;
+        })(),
+      ]
       : [])
   );
   let desktopSignIn = null;
