@@ -8,7 +8,7 @@ import { el } from "./createElement.js";
 import { createSignUpModal } from "./signUpModal.js";
 import { createPasswordToggle } from "./createPasswordToggle.js";
 import { displayError } from "./displayError.js";
-import { validateEmail } from "./formValidation.js";
+import { validateEmail, validateSignInPassword } from "./validation/formValidation.js";
 import { createBaseModal } from "./baseModal.js";
 
 export function createSignInModal(options = {}) {
@@ -111,12 +111,15 @@ function createSignInNodes(onSubmit, close) {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     errorContainer.textContent = "";
-    if (!validateEmail(emailInput.value)) {
-      displayError(
-        errorContainer,
-        "Please enter an email address ending with @stud.noroff.no"
-      );
+    let errorMsg;
+    if (!validateEmail(emailInput.value, (msg) => (errorMsg = msg))) {
+      displayError(errorContainer, errorMsg);
       emailInput.focus();
+      return;
+    }
+    if (!validateSignInPassword(pwInput.value, (msg) => (errorMsg = msg))) {
+      displayError(errorContainer, errorMsg);
+      pwInput.focus();
       return;
     }
     const data = { email: emailInput.value, password: pwInput.value };

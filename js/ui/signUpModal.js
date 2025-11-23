@@ -4,7 +4,7 @@ import { registerUser } from "../api/auth/registerUser.js";
 import { displayError } from "./displayError.js";
 import { createSignInModal } from "./signInModal.js";
 import { handleLoginSubmit } from "./handleLoginSubmit.js";
-import { validateEmail } from "./formValidation.js";
+import { validateEmail, validateUsername, validateSignUpPassword } from "./validation/formValidation.js";
 import { displayMessage } from "./displayMessage.js";
 import { createPasswordToggle } from "./createPasswordToggle.js";
 
@@ -104,12 +104,20 @@ function createSignUpNodes(onSubmit, close) {
     const name = nameInput.value;
     const email = emailInput.value;
     const password = pwInput.value;
-    if (!validateEmail(email)) {
-      displayError(
-        errorContainer,
-        "Please enter an email address ending with @stud.noroff.no"
-      );
+    let errorMsg;
+    if (!validateUsername(nameInput.value, (msg) => (errorMsg = msg))) {
+      displayError(errorContainer, errorMsg);
+      nameInput.focus();
+      return;
+    }
+    if (!validateEmail(emailInput.value, (msg) => (errorMsg = msg))) {
+      displayError(errorContainer, errorMsg);
       emailInput.focus();
+      return;
+    }
+    if (!validateSignUpPassword(pwInput.value, (msg) => (errorMsg = msg))) {
+      displayError(errorContainer, errorMsg);
+      pwInput.focus();
       return;
     }
     try {
