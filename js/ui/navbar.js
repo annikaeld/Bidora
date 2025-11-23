@@ -431,9 +431,9 @@ function createMobileMenu(btnBase) {
     mobileSignIn = el(
       "button",
       {
-        class: `${btnBase} btn-signin-lg mt-2 text-m px-10 text-center`,
+        class: `${btnBase} btn-signin-2xl mt-2 text-m px-10 text-center`,
       },
-      el("span", { class: "menu-sign-in text-md" }, "Sign In")
+      el("span", { class: "menu-sign-in text-2xl" }, "Sign In")
     );
     mobileMenu.appendChild(mobileSignIn);
   }
