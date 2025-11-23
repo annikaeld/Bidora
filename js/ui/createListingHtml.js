@@ -1,3 +1,4 @@
+import { formatTimeLeft } from "./formatTimeLeft.js";
 // Returns HTML string for a single listing
 export function createListingHtml(listing) {
   const title = listing.title || "Untitled";
@@ -19,16 +20,16 @@ export function createListingHtml(listing) {
     ? `<div class="auction-image-wrap"><img src="${imgUrl}" alt="${imgAlt.replace(/"/g, "&quot;")}" class="auction-image"/></div>`
     : `<div class="no-image">No Image</div>`;
 
-  return `
-    <div class="auction-element">
-      <a href="${detailsUrl}" class="block h-full no-underline text-inherit">
-        ${imgTag}
-        <h3 class="mt-2">${title}</h3>
-        <div class="auction-meta">
-          <p><small>${description}</small></p>
-          <p><small>Ends: ${endsAt ? new Date(endsAt).toLocaleString() : "-"}</small></p>
-        </div>
-      </a>
-    </div>
-  `;
+    return `
+      <div class="auction-element">
+        <a href="${detailsUrl}" class="block h-full no-underline text-inherit">
+          ${imgTag}
+          <h3 class="mt-2">${title}</h3>
+          <div class="auction-meta">
+            <p><small>${description}</small></p>
+            <p><small>Ends in: ${endsAt ? formatTimeLeft(endsAt) : "-"}</small></p>
+          </div>
+        </a>
+      </div>
+    `;
 }

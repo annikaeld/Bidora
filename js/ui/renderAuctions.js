@@ -1,3 +1,15 @@
+// Helper to format time left as 'X days Y hours Z minutes'
+function formatTimeLeft(endTime) {
+  const now = new Date();
+  const end = new Date(endTime);
+  let diff = Math.max(0, end - now);
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  diff -= days * 1000 * 60 * 60 * 24;
+  const hours = Math.floor(diff / (1000 * 60 * 60));
+  diff -= hours * 1000 * 60 * 60;
+  const minutes = Math.floor(diff / (1000 * 60));
+  return `${days} day${days !== 1 ? 's' : ''} ${hours} hour${hours !== 1 ? 's' : ''} ${minutes} minute${minutes !== 1 ? 's' : ''}`;
+}
 import { displayMessage } from "./displayMessage.js";
 
 export async function renderAuctions(auctions) {
@@ -28,16 +40,16 @@ export async function renderAuctions(auctions) {
 
       // Wrap the card content in a link so clicking anywhere navigates to the details page
       auctionElement.innerHTML = `
-								<a href="${detailsUrl}" class="block h-full no-underline text-inherit">
-									${imgTag}
-									<h3 class="mt-2">${auction.title}</h3>
-									<div class="auction-meta">
-										<p><small>Ends at: ${new Date(auction.endsAt).toLocaleString()}</small></p>
-										<p><small>Bids: ${auction._Count || (auction._count && auction._count.bids) || 0}</small></p>
-										<h3 class="text-end">${auction.bids && auction.bids.length > 0 ? `${Math.max(...auction.bids.map((bid) => bid.amount))} tokens` : "No bids yet"}</h3>
-									</div>
-								</a>
-						`;
+        <a href="${detailsUrl}" class="block h-full no-underline text-inherit">
+          ${imgTag}
+          <h3 class="mt-2">${auction.title}</h3>
+          <div class="auction-meta">
+            <p><small>Ends in: ${formatTimeLeft(auction.endsAt)}</small></p>
+            <p><small>Bids: ${auction._Count || (auction._count && auction._count.bids) || 0}</small></p>
+            <h3 class="text-end">${auction.bids && auction.bids.length > 0 ? `${Math.max(...auction.bids.map((bid) => bid.amount))} tokens` : "No bids yet"}</h3>
+          </div>
+        </a>
+      `;
       auctionsContainer.appendChild(auctionElement);
     });
   } catch (error) {

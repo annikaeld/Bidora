@@ -1,3 +1,4 @@
+import { formatTimeLeft } from "./formatTimeLeft.js";
 // createWinningsHtml.js
 
 /**
@@ -14,7 +15,7 @@ export function createWinningsHtml(win) {
   const imageAlt = win.media?.[0]?.alt || win.title || "";
   const title = win.title || "Untitled";
   const description = win.description || "";
-  const endsAt = win.endsAt ? new Date(win.endsAt).toLocaleString() : "-";
+  const endsAt = win.endsAt || "";
 
   return `
     <div class="auction-element">
@@ -23,7 +24,7 @@ export function createWinningsHtml(win) {
         <h3 class="mt-2">${title}</h3>
         <div class="auction-meta">
           <p><small>${description}</small></p>
-          <p><small>Ends: ${endsAt}</small></p>
+          <p><small>Ends in: ${endsAt ? formatTimeLeft(endsAt) : "-"}</small></p>
         </div>
       </a>
     </div>
