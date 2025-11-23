@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { validateEmail } from "../js/ui/formValidation.js";
+import { validateEmail } from "../js/ui/validation/userValidation.js";
 
 describe("validateEmail", () => {
   it("accepts a valid stud.noroff.no address", () => {
