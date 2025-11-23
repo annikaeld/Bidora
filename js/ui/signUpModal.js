@@ -4,7 +4,7 @@ import { registerUser } from "../api/auth/registerUser.js";
 import { displayError } from "./displayError.js";
 import { createSignInModal } from "./signInModal.js";
 import { handleLoginSubmit } from "./handleLoginSubmit.js";
-import { validateEmail, validateUsername, validateSignUpPassword } from "./validation/formValidation.js";
+import { validateEmail, validateUsername, validateSignUpPassword } from "./validation/userValidation.js";
 import { displayMessage } from "./displayMessage.js";
 import { createPasswordToggle } from "./createPasswordToggle.js";
 

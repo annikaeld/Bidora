@@ -8,7 +8,7 @@ import { el } from "./createElement.js";
 import { createSignUpModal } from "./signUpModal.js";
 import { createPasswordToggle } from "./createPasswordToggle.js";
 import { displayError } from "./displayError.js";
-import { validateEmail, validateSignInPassword } from "./validation/formValidation.js";
+import { validateEmail, validateSignInPassword } from "./validation/userValidation.js";
 import { createBaseModal } from "./baseModal.js";
 
 export function createSignInModal(options = {}) {

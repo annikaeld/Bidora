@@ -2,6 +2,13 @@ import { el } from "./createElement.js";
 import { postListing, updateListing } from "../api/auctions.js";
 import { displayMessage } from "./displayMessage.js";
 import { itemFromApi } from "../api/item.js";
+import {
+  validateAuctionTitle,
+  validateAuctionDescription,
+  validateAuctionEndDate,
+  validateAuctionImageUrl,
+  validateAuctionImageAltText
+} from "./validation/auctionValidation.js";
 
 /**
  * Extracts form values including all image URLs and alt-texts from the form.
@@ -176,6 +183,11 @@ async function savePost(formId, postId) {
   console.log(`Saving post with ID: ${postId}`);
   const { title, description, endsAt, media } = getFormValues(formId);
   console.log("Form Values:", { title, description, endsAt, media });
+
+  if (!validateAuctionFormFields({ title, description, endsAt, media })) {
+    return;
+  }
+
   const listingObject = {
     title: title,
     description: description,
@@ -197,6 +209,41 @@ async function savePost(formId, postId) {
     console.error(postId ? "Error updating listing:" : "Error creating listing:", error);
     displayMessage(postId ? "Error updating listing" : "Error creating listing", error.message);
   }
+}
+
+/**
+ * Validates all auction form fields and displays error messages if invalid.
+ * Returns true if all fields are valid, false otherwise.
+ */
+function validateAuctionFormFields({ title, description, endsAt, media }) {
+  let errorMsg = "";
+  if (!validateAuctionTitle(title, msg => errorMsg = msg)) {
+    displayMessage("Validation Error", errorMsg);
+    return false;
+  }
+  if (!validateAuctionDescription(description, msg => errorMsg = msg)) {
+    displayMessage("Validation Error", errorMsg);
+    return false;
+  }
+  if (!validateAuctionEndDate(endsAt, msg => errorMsg = msg)) {
+    displayMessage("Validation Error", errorMsg);
+    return false;
+  }
+  if (!Array.isArray(media) || media.length === 0) {
+    displayMessage("Validation Error", "At least one image is required.");
+    return false;
+  }
+  for (let i = 0; i < media.length; i++) {
+    if (!validateAuctionImageUrl(media[i].url, msg => errorMsg = msg)) {
+      displayMessage("Validation Error", `Image ${i + 1}: ${errorMsg}`);
+      return false;
+    }
+    if (!validateAuctionImageAltText(media[i].alt, msg => errorMsg = msg)) {
+      displayMessage("Validation Error", `Image ${i + 1}: ${errorMsg}`);
+      return false;
+    }
+  }
+  return true;
 }
 
 initPage();
