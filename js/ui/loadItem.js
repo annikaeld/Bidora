@@ -42,5 +42,6 @@ if (!item) {
 } else {
   insertItemImage(item);
   insertItemText(item);
-  setPageTitle(item?.name || "Item");
+  console.log("Rendering item:", item);
+  setPageTitle(`Bidora | ${item?.data?.title ? item.data.title : "Item"}`);
 }
