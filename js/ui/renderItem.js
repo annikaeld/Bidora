@@ -9,7 +9,6 @@ export function insertItemImage(item) {
     document.getElementById("item-image") ||
     document.getElementById("image-container");
   if (!container) return;
-  // Clear only the main image, not the thumbnails
   const thumbnailsContainer = document.getElementById("thumbnail-images");
   if (thumbnailsContainer) thumbnailsContainer.innerHTML = "";
   // Remove all children except the thumbnails div
@@ -21,27 +20,45 @@ export function insertItemImage(item) {
   const hasMedia =
     item && Array.isArray(item.data.media) && item.data.media.length > 0;
   if (hasMedia) {
-    const img = document.createElement("img");
-    img.src = item.data.media[0].url;
-    img.alt = item.data.media[0].alt || item.data.title || "Item image";
-    img.className = "w-full h-full object-cover";
-    // Insert the main image before the thumbnails div
+    // Show image 0 by default in the main image area
+    const mainImg = document.createElement("img");
+    mainImg.src = item.data.media[0].url;
+    mainImg.alt = item.data.media[0].alt || item.data.title || "Item image";
+    mainImg.className = "w-full h-full object-cover";
+    mainImg.id = "main-item-image";
     if (thumbnailsContainer) {
-      container.insertBefore(img, thumbnailsContainer);
+      container.insertBefore(mainImg, thumbnailsContainer);
     } else {
-      container.appendChild(img);
+      container.appendChild(mainImg);
     }
-    // Thumbnails for additional images
-    if (thumbnailsContainer && item.data.media.length > 1) {
-      for (let i = 1; i < item.data.media.length; i++) {
+    // Render all images as thumbnails (including image 0)
+    if (thumbnailsContainer) {
+      item.data.media.forEach((media, i) => {
         const thumb = document.createElement("img");
-        thumb.src = item.data.media[i].url;
-        thumb.alt =
-          item.data.media[i].alt || item.data.title || `Thumbnail ${i + 1}`;
+        thumb.src = media.url;
+        thumb.alt = media.alt || item.data.title || `Thumbnail ${i}`;
         thumb.className =
-          "h-20 w-20 object-cover rounded cursor-pointer border border-gray-300 hover:border-blue-500";
+          "h-20 w-20 object-cover rounded cursor-pointer border border-gray-300 hover:border-blue-500" +
+          (i === 0 ? " border-blue-500" : "");
+        thumb.dataset.index = i;
+        // Highlight the selected thumbnail
+        thumb.addEventListener("click", () => {
+          // Update main image
+          mainImg.src = media.url;
+          mainImg.alt = media.alt || item.data.title || `Item image`;
+          // Update thumbnail highlight
+          Array.from(thumbnailsContainer.children).forEach((el, idx) => {
+            if (el.tagName === "IMG") {
+              if (Number(el.dataset.index) === i) {
+                el.classList.add("border-blue-500");
+              } else {
+                el.classList.remove("border-blue-500");
+              }
+            }
+          });
+        });
         thumbnailsContainer.appendChild(thumb);
-      }
+      });
     }
   } else {
     // No image
