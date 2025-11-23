@@ -1,4 +1,5 @@
 import { createBaseModal } from "./baseModal.js";
+import { validateAvatarImageUrl, validateAvatarAltText } from "./validation/userValidation.js";
 
 /**
  * Opens a modal to set a new avatar image.
@@ -13,8 +14,6 @@ export function setAvatarModal(onSubmit) {
       <input
         id="avatar-url"
         name="avatar-url"
-        type="url"
-        required
         placeholder="Paste image URL here"
         class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-300"
       />
@@ -22,8 +21,6 @@ export function setAvatarModal(onSubmit) {
       <input
         id="avatar-alt"
         name="avatar-alt"
-        type="text"
-        required
         placeholder="Describe the image (for accessibility)"
         class="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-300"
       />
@@ -39,10 +36,30 @@ export function setAvatarModal(onSubmit) {
       e.preventDefault();
       const avatarUrl = form.querySelector("#avatar-url").value.trim();
       const altText = form.querySelector("#avatar-alt").value.trim();
-      if (avatarUrl && typeof onSubmit === "function") {
-        onSubmit({ url: avatarUrl, alt: altText });
+
+      // Remove any previous error messages
+      form.querySelectorAll('.avatar-error').forEach(el => el.remove());
+      let valid = true;
+
+      function showError(inputId, message) {
+        const input = form.querySelector(inputId);
+        const error = document.createElement('div');
+        error.className = 'avatar-error text-red-600 mb-2';
+        error.textContent = message;
+        input.insertAdjacentElement('afterend', error);
       }
-      close();
+
+      if (!validateAvatarImageUrl(avatarUrl, (msg) => showError('#avatar-url', msg))) {
+        valid = false;
+      }
+      if (!validateAvatarAltText(altText, (msg) => showError('#avatar-alt', msg))) {
+        valid = false;
+      }
+
+      if (valid && typeof onSubmit === "function") {
+        onSubmit({ url: avatarUrl, alt: altText });
+        close();
+      }
     };
     return [form];
   }

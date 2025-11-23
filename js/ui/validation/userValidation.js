@@ -86,3 +86,49 @@ export function validateEmail(email, messageCallback) {
 	}
 	return true;
 }
+
+/**
+ * Validates an avatar image URL (must be a valid http(s) image URL).
+ * @param {string} url - The image URL to validate.
+ * @param {function} [messageCallback] - Optional callback for explanatory messages.
+ * @returns {boolean} True if valid, false otherwise.
+ */
+export function validateAvatarImageUrl(url, messageCallback) {
+	if (!url || typeof url !== "string") {
+		if (typeof messageCallback === "function") {
+			messageCallback("Image URL is required.");
+		}
+		return false;
+	}
+	// Basic check for http(s) and image extension
+	const imagePattern = /^https?:\/\/.+\.(jpg|jpeg|png|gif|webp|svg)$/i;
+	if (!imagePattern.test(url.trim())) {
+		if (typeof messageCallback === "function") {
+			messageCallback("Please provide a valid image URL (jpg, jpeg, png, gif, webp, svg).");
+		}
+		return false;
+	}
+	return true;
+}
+
+/**
+ * Validates avatar alt text (must be a non-empty string, reasonable length).
+ * @param {string} altText - The alt text to validate.
+ * @param {function} [messageCallback] - Optional callback for explanatory messages.
+ * @returns {boolean} True if valid, false otherwise.
+ */
+export function validateAvatarAltText(altText, messageCallback) {
+	if (!altText || typeof altText !== "string" || altText.trim().length === 0) {
+		if (typeof messageCallback === "function") {
+			messageCallback("Alt text is required.");
+		}
+		return false;
+	}
+	if (altText.length > 100) {
+		if (typeof messageCallback === "function") {
+			messageCallback("Alt text should be 100 characters or less.");
+		}
+		return false;
+	}
+	return true;
+}
