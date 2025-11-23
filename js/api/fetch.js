@@ -19,7 +19,20 @@ export async function authFetch(url, options = { method: "GET" }) {
     if (response.status === 404) {
       return null; // Handle 404 by returning null
     }
-    // Do not read the body or display messages here; let the caller handle it
+    if (!response.ok) {
+      let errorMsg = `Error: ${response.status} ${response.statusText}`;
+      try {
+        const data = await response.json();
+        if (data && data.errors && Array.isArray(data.errors) && data.errors[0] && data.errors[0].message) {
+          errorMsg = data.errors[0].message;
+        } else if (data && data.message) {
+          errorMsg = data.message;
+        }
+      } catch {
+        // Ignore JSON parse errors, use default errorMsg
+      }
+      await displayMessage("Error", errorMsg);
+    }
     return response;
   } catch (error) {
     console.error("Fetch Error:", error);

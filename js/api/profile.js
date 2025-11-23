@@ -49,6 +49,8 @@ export async function saveProfile(profile) {
       body: JSON.stringify(profile),
     }
   );
-  save("profile", profile);
+  if (response && response.ok) {
+    save("profile", profile);
+  }
   return response.json;
 }
