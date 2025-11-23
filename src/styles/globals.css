@@ -135,12 +135,36 @@ h3 {
     margin-right: auto;
 }
 
+/* Default (mobile): let the edit card fill available width but respect
+   parent padding and avoid overflow. */
+.edit-card {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
 @media (min-width: 768px) {
     .edit-card {
-        width: 500px;
+        width: 473.55px;
         margin-left: auto;
         margin-right: auto;
     }
+}
+
+/* Ensure the action buttons on the edit form wrap instead of overlapping
+     on narrow screens. Keep them horizontally spaced on wider viewports. */
+#edit-listing-form .form-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+#edit-listing-form .form-actions .create-listing-btn {
+    /* Keep the submit pushed to the end on wide screens, but allow it to
+         appear below the add-image button when wrapped. */
+    margin-left: auto;
 }
 
 @screen md {
