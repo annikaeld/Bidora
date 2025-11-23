@@ -78,7 +78,7 @@ function attachAddImageEventListener(buttonId, containerId) {
     button.addEventListener("click", function () {
       const urlId = `image-url-${imageCounter}`;
       const altId = `image-alt-text-${imageCounter}`;
-      const labelUrl = el("label", { for: urlId }, "Image URL");
+      const labelUrl = el("label", { for: urlId, class: "block" }, "Image URL");
       const inputUrl = el("input", {
         type: "url",
         id: urlId,
@@ -86,7 +86,7 @@ function attachAddImageEventListener(buttonId, containerId) {
         class: "w-full border h-9 rounded-md",
         required: true,
       });
-      const labelAlt = el("label", { for: altId }, "Image alt-text");
+      const labelAlt = el("label", { for: altId, class: "block mt-2" }, "Image alt-text");
       const inputAlt = el("input", {
         type: "text",
         id: altId,
@@ -152,7 +152,7 @@ async function initPage() {
       const urlId = `image-url-${imageCounter}`;
       const altId = `image-alt-text-${imageCounter}`;
       if (!form.querySelector(`[name="${urlId}"]`)) {
-        const labelUrl = el("label", { for: urlId }, "Image URL");
+        const labelUrl = el("label", { for: urlId, class: "block" }, "Image URL");
         const inputUrl = el("input", {
           type: "url",
           id: urlId,
@@ -160,7 +160,7 @@ async function initPage() {
           class: "w-full border h-9 rounded-md",
           required: true,
         });
-        const labelAlt = el("label", { for: altId }, "Image alt-text");
+        const labelAlt = el("label", { for: altId, class: "block mt-2" }, "Image alt-text");
         const inputAlt = el("input", {
           type: "text",
           id: altId,
@@ -217,15 +217,15 @@ async function savePost(formId, postId) {
  */
 function validateAuctionFormFields({ title, description, endsAt, media }) {
   let errorMsg = "";
-  if (!validateAuctionTitle(title, msg => errorMsg = msg)) {
+  if (!validateAuctionTitle(title, (msg) => (errorMsg = msg))) {
     displayMessage("Validation Error", errorMsg);
     return false;
   }
-  if (!validateAuctionDescription(description, msg => errorMsg = msg)) {
+  if (!validateAuctionDescription(description, (msg) => (errorMsg = msg))) {
     displayMessage("Validation Error", errorMsg);
     return false;
   }
-  if (!validateAuctionEndDate(endsAt, msg => errorMsg = msg)) {
+  if (!validateAuctionEndDate(endsAt, (msg) => (errorMsg = msg))) {
     displayMessage("Validation Error", errorMsg);
     return false;
   }
@@ -234,11 +234,11 @@ function validateAuctionFormFields({ title, description, endsAt, media }) {
     return false;
   }
   for (let i = 0; i < media.length; i++) {
-    if (!validateAuctionImageUrl(media[i].url, msg => errorMsg = msg)) {
+    if (!validateAuctionImageUrl(media[i].url, (msg) => (errorMsg = msg))) {
       displayMessage("Validation Error", `Image ${i + 1}: ${errorMsg}`);
       return false;
     }
-    if (!validateAuctionImageAltText(media[i].alt, msg => errorMsg = msg)) {
+    if (!validateAuctionImageAltText(media[i].alt, (msg) => (errorMsg = msg))) {
       displayMessage("Validation Error", `Image ${i + 1}: ${errorMsg}`);
       return false;
     }

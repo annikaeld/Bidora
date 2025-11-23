@@ -129,6 +129,19 @@ h3 {
     }
 }
 
+.edit-card {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (min-width: 768px) {
+    .edit-card {
+        width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
 
 @screen md {
     .auctions-grid {
@@ -264,6 +277,25 @@ h3 {
         align-items: center;
         gap: 1rem;
         /* matches Tailwind gap-4 */
+    }
+}
+
+/* Ensure labels in the edit listing form sit above their inputs to avoid
+   inline layout that can cause horizontal overflow when many fields are added. */
+#edit-listing-form label {
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+/* Make the edit listing card slightly wider on desktop so the form
+   matches the intended layout (~473px). We keep it fluid on small
+   screens and constrain on md+ viewports. */
+@screen md {
+    #post-container {
+        max-width: 520px;
+        /* a little above 473.55 to provide padding */
+        margin-left: auto;
+        margin-right: auto;
     }
 }
 

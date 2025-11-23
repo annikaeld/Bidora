@@ -47,7 +47,7 @@ export function insertItemImage(item) {
           mainImg.src = media.url;
           mainImg.alt = media.alt || item.data.title || `Item image`;
           // Update thumbnail highlight
-          Array.from(thumbnailsContainer.children).forEach((el, idx) => {
+          Array.from(thumbnailsContainer.children).forEach((el) => {
             if (el.tagName === "IMG") {
               if (Number(el.dataset.index) === i) {
                 el.classList.add("border-blue-500");
